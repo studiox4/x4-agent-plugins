@@ -1,0 +1,8 @@
+{
+  "name": "agent-team-ops",
+  "description": "Agent team coordination, feature dispatching, test running, review cycles, and hook-based guardrails for multi-agent development workflows",
+  "author": {
+    "name": "Corban Baxter",
+    "email": "corban@example.com"
+  }
+}
