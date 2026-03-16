@@ -1,0 +1,8 @@
+{
+  "name": "project-tracker",
+  "description": "Backlog capture, triage, PRD generation, and project status tracking for any software project",
+  "author": {
+    "name": "Corban Baxter",
+    "email": "corban@example.com"
+  }
+}
