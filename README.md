@@ -1,6 +1,6 @@
 # x4-agent-plugins
 
-Reusable workflow plugins for Claude Code: project tracking, agent team ops, and llms.txt management.
+A Claude Code plugin marketplace with reusable workflow plugins: project tracking, agent team ops, and llms.txt management.
 
 ## Plugins
 
@@ -32,23 +32,59 @@ Scan project dependencies, discover llms.txt documentation endpoints, download a
 
 ## Installation
 
-```bash
-# Install individual plugins
-claude plugin install corbanbaxter/x4-agent-plugins/project-tracker
-claude plugin install corbanbaxter/x4-agent-plugins/agent-team-ops
-claude plugin install corbanbaxter/x4-agent-plugins/llmstxt-manager
+### Add the marketplace
+
+```
+/plugin marketplace add corbanbaxter/x4-agent-plugins
+```
+
+### Install plugins
+
+```
+/plugin install project-tracker@x4-agent-plugins
+/plugin install agent-team-ops@x4-agent-plugins
+/plugin install llmstxt-manager@x4-agent-plugins
+```
+
+### Auto-suggest plugins for your team
+
+Add this to your project's `.claude/settings.json` so team members are prompted to install the marketplace and plugins when they trust the project:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "x4-agent-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "corbanbaxter/x4-agent-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "project-tracker@x4-agent-plugins": true,
+    "agent-team-ops@x4-agent-plugins": true,
+    "llmstxt-manager@x4-agent-plugins": true
+  }
+}
 ```
 
 ## Local Development
 
 ```bash
-# Link plugins for local testing
+# Test the marketplace locally
+/plugin marketplace add ./path/to/x4-agent-plugins
+/plugin install project-tracker@x4-agent-plugins
+
+# Validate marketplace structure
+claude plugin validate .
+
+# Run structural checks
+bash tests/validate.sh
+
+# Link individual plugins for iterative development
 claude plugin link ./plugins/project-tracker
 claude plugin link ./plugins/agent-team-ops
 claude plugin link ./plugins/llmstxt-manager
-
-# Validate all plugins
-bash tests/validate.sh
 ```
 
 ## License
