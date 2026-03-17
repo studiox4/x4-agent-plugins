@@ -8,9 +8,9 @@ This guide walks through migrating the Daykeep project from its current inline `
 
 1. [Pre-Migration Checklist](#1-pre-migration-checklist)
 2. [Migration Order](#2-migration-order)
-3. [Step-by-Step: llmstxt-manager](#3-step-by-step-llmstxt-manager)
-4. [Step-by-Step: project-tracker](#4-step-by-step-project-tracker)
-5. [Step-by-Step: agent-team-ops](#5-step-by-step-agent-team-ops)
+3. [Step-by-Step: x4-llmstxt-manager](#3-step-by-step-x4-llmstxt-manager)
+4. [Step-by-Step: x4-project-tracker](#4-step-by-step-x4-project-tracker)
+5. [Step-by-Step: x4-agent-team-ops](#5-step-by-step-x4-agent-team-ops)
 6. [CLAUDE.md Updates](#6-claudemd-updates)
 7. [Rollback Plan](#7-rollback-plan)
 8. [Post-Migration Cleanup](#8-post-migration-cleanup)
@@ -61,17 +61,17 @@ Current Daykeep local files that will be affected:
 
 | File                                     | Action                                                       | Plugin          |
 | ---------------------------------------- | ------------------------------------------------------------ | --------------- |
-| `.claude/skills/btw/SKILL.md`            | Remove (replaced by plugin)                                  | project-tracker |
-| `.claude/skills/plan-backlog/SKILL.md`   | Remove (replaced by plugin)                                  | project-tracker |
-| `.claude/commands/btw.md`                | Remove (replaced by plugin)                                  | project-tracker |
-| `.claude/skills/work/SKILL.md`           | Remove (replaced by plugin)                                  | agent-team-ops  |
-| `.claude/skills/run-tests/SKILL.md`      | Remove (replaced by plugin)                                  | agent-team-ops  |
-| `.claude/skills/llmstxt-update/SKILL.md` | Remove (replaced by plugin)                                  | llmstxt-manager |
-| `.claude/agents/backend.md`              | Keep (locally owned, regenerated once by `/init-agents`)     | agent-team-ops  |
-| `.claude/agents/frontend.md`             | Keep                                                         | agent-team-ops  |
-| `.claude/agents/reviewer.md`             | Keep                                                         | agent-team-ops  |
-| `.claude/agents/tester.md`               | Keep                                                         | agent-team-ops  |
-| `.claude/settings.json` (hooks section)  | Migrate hook config to plugin, remove local hook definitions | agent-team-ops  |
+| `.claude/skills/btw/SKILL.md`            | Remove (replaced by plugin)                                  | x4-project-tracker |
+| `.claude/skills/plan-backlog/SKILL.md`   | Remove (replaced by plugin)                                  | x4-project-tracker |
+| `.claude/commands/btw.md`                | Remove (replaced by plugin)                                  | x4-project-tracker |
+| `.claude/skills/work/SKILL.md`           | Remove (replaced by plugin)                                  | x4-agent-team-ops  |
+| `.claude/skills/run-tests/SKILL.md`      | Remove (replaced by plugin)                                  | x4-agent-team-ops  |
+| `.claude/skills/llmstxt-update/SKILL.md` | Remove (replaced by plugin)                                  | x4-llmstxt-manager |
+| `.claude/agents/backend.md`              | Keep (locally owned, regenerated once by `/init-agents`)     | x4-agent-team-ops  |
+| `.claude/agents/frontend.md`             | Keep                                                         | x4-agent-team-ops  |
+| `.claude/agents/reviewer.md`             | Keep                                                         | x4-agent-team-ops  |
+| `.claude/agents/tester.md`               | Keep                                                         | x4-agent-team-ops  |
+| `.claude/settings.json` (hooks section)  | Migrate hook config to plugin, remove local hook definitions | x4-agent-team-ops  |
 | `CLAUDE.md`                              | Update references                                            | all             |
 
 ### 1c. Create a migration branch
@@ -90,15 +90,15 @@ Install plugins from simplest to most complex. Each step is independently verifi
 
 | Order | Plugin          | Risk   | Why this order                                                               |
 | ----- | --------------- | ------ | ---------------------------------------------------------------------------- |
-| 1     | llmstxt-manager | Low    | One skill, no hooks, no agent templates. Isolated.                           |
-| 2     | project-tracker | Low    | Two skills + one command. No hooks that affect other plugins.                |
-| 3     | agent-team-ops  | Medium | Touches hooks in settings.json, agent files, cross-references other plugins. |
+| 1     | x4-llmstxt-manager | Low    | One skill, no hooks, no agent templates. Isolated.                           |
+| 2     | x4-project-tracker | Low    | Two skills + one command. No hooks that affect other plugins.                |
+| 3     | x4-agent-team-ops  | Medium | Touches hooks in settings.json, agent files, cross-references other plugins. |
 
-Never install agent-team-ops before the other two. Its `/work` skill can invoke project-tracker's `/plan-backlog`, and its agent templates reference docs managed by llmstxt-manager. Those soft dependencies work best when the other plugins are already in place.
+Never install x4-agent-team-ops before the other two. Its `/work` skill can invoke x4-project-tracker's `/plan-backlog`, and its agent templates reference docs managed by x4-llmstxt-manager. Those soft dependencies work best when the other plugins are already in place.
 
 ---
 
-## 3. Step-by-Step: llmstxt-manager
+## 3. Step-by-Step: x4-llmstxt-manager
 
 ### 3a. Install the plugin
 
@@ -107,7 +107,7 @@ In `.claude/settings.json`, add to the `enabledPlugins` section:
 ```json
 {
   "enabledPlugins": {
-    "llmstxt-manager@corbanbaxter/claude-workflow-plugins": true
+    "x4-llmstxt-manager@corbanbaxter/claude-workflow-plugins": true
   }
 }
 ```
@@ -115,7 +115,7 @@ In `.claude/settings.json`, add to the `enabledPlugins` section:
 Or install via Claude Code CLI if supported:
 
 ```bash
-claude plugin install corbanbaxter/claude-workflow-plugins/plugins/llmstxt-manager
+claude plugin install corbanbaxter/claude-workflow-plugins/plugins/x4-llmstxt-manager
 ```
 
 ### 3b. Verify plugin manifest
@@ -195,12 +195,12 @@ Run `/llmstxt-update` once more. It should work identically through the plugin. 
 ```bash
 git add .claude/settings.json .claude/llmstxt-manager.config.md
 git rm -r .claude/skills/llmstxt-update/
-git commit -m "chore: migrate llmstxt-update skill to llmstxt-manager plugin"
+git commit -m "chore: migrate llmstxt-update skill to x4-llmstxt-manager plugin"
 ```
 
 ---
 
-## 4. Step-by-Step: project-tracker
+## 4. Step-by-Step: x4-project-tracker
 
 ### 4a. Install the plugin
 
@@ -209,7 +209,7 @@ Add to `.claude/settings.json`:
 ```json
 {
   "enabledPlugins": {
-    "project-tracker@corbanbaxter/claude-workflow-plugins": true
+    "x4-project-tracker@corbanbaxter/claude-workflow-plugins": true
   }
 }
 ```
@@ -321,12 +321,12 @@ Run `/btw "verify plugin reads backlog correctly"` and confirm the entry appears
 ```bash
 git add .claude/settings.json .claude/project-tracker.config.md
 git rm -r .claude/skills/btw/ .claude/skills/plan-backlog/ .claude/commands/btw.md
-git commit -m "chore: migrate btw and plan-backlog skills to project-tracker plugin"
+git commit -m "chore: migrate btw and plan-backlog skills to x4-project-tracker plugin"
 ```
 
 ---
 
-## 5. Step-by-Step: agent-team-ops
+## 5. Step-by-Step: x4-agent-team-ops
 
 This is the most involved migration. It touches hooks, agent files, and the `/work` orchestration pipeline.
 
@@ -337,7 +337,7 @@ Add to `.claude/settings.json`:
 ```json
 {
   "enabledPlugins": {
-    "agent-team-ops@corbanbaxter/claude-workflow-plugins": true
+    "x4-agent-team-ops@corbanbaxter/claude-workflow-plugins": true
   }
 }
 ```
@@ -517,7 +517,7 @@ Verify it:
 
 ### 5e. Migrate hooks from settings.json to plugin
 
-The current `.claude/settings.json` has three hook sections. After installing agent-team-ops, the plugin provides these hooks via its `.claude-plugin/plugin.json` manifest. You need to remove the local hook definitions from settings.json to avoid duplication.
+The current `.claude/settings.json` has three hook sections. After installing x4-agent-team-ops, the plugin provides these hooks via its `.claude-plugin/plugin.json` manifest. You need to remove the local hook definitions from settings.json to avoid duplication.
 
 In the official plugin convention, hooks are defined in the plugin's `.claude-plugin/plugin.json` and reference shell scripts stored in the plugin's `hooks/` directory using `${CLAUDE_PLUGIN_ROOT}`:
 
@@ -621,9 +621,9 @@ The hook scripts (e.g., `hooks/protected-files.sh`, `hooks/auto-format.sh`, `hoo
   },
   "hooks": {},
   "enabledPlugins": {
-    "llmstxt-manager@corbanbaxter/claude-workflow-plugins": true,
-    "project-tracker@corbanbaxter/claude-workflow-plugins": true,
-    "agent-team-ops@corbanbaxter/claude-workflow-plugins": true,
+    "x4-llmstxt-manager@corbanbaxter/claude-workflow-plugins": true,
+    "x4-project-tracker@corbanbaxter/claude-workflow-plugins": true,
+    "x4-agent-team-ops@corbanbaxter/claude-workflow-plugins": true,
     "feature-dev@claude-code-plugins": true,
     "frontend-design@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
@@ -641,7 +641,7 @@ The hook scripts (e.g., `hooks/protected-files.sh`, `hooks/auto-format.sh`, `hoo
 }
 ```
 
-The `agent-team-ops` plugin defines its hooks in `.claude-plugin/plugin.json` using shell scripts in its `hooks/` directory. The hook behavior is identical to the old inline commands -- the logic is the same, just packaged as standalone scripts referenced via `${CLAUDE_PLUGIN_ROOT}` instead of hardcoded in settings.json. The plugin's config file (`.claude/agent-team-ops.config.md`) provides project-specific values that the hook scripts read at runtime.
+The `x4-agent-team-ops` plugin defines its hooks in `.claude-plugin/plugin.json` using shell scripts in its `hooks/` directory. The hook behavior is identical to the old inline commands -- the logic is the same, just packaged as standalone scripts referenced via `${CLAUDE_PLUGIN_ROOT}` instead of hardcoded in settings.json. The plugin's config file (`.claude/agent-team-ops.config.md`) provides project-specific values that the hook scripts read at runtime.
 
 ### 5f. Remove local skill files
 
@@ -658,18 +658,18 @@ Do NOT delete `.claude/agents/`. Those files are now locally owned by the projec
 
 Run through the complete pipeline:
 
-1. `/btw "integration test idea"` — should work via project-tracker plugin
-2. `/work` — should show dispatch menu via agent-team-ops plugin
+1. `/btw "integration test idea"` — should work via x4-project-tracker plugin
+2. `/work` — should show dispatch menu via x4-agent-team-ops plugin
 3. Make a small edit to any `.ts` file — Prettier hook should fire (via plugin)
 4. Try to edit a `.env` file — should be blocked (via plugin)
-5. `/llmstxt-update` — should work via llmstxt-manager plugin
+5. `/llmstxt-update` — should work via x4-llmstxt-manager plugin
 
 ### 5i. Verify plugin manifests are detected
 
 Confirm that all three plugins have valid `.claude-plugin/plugin.json` manifests and that Claude Code recognizes them:
 
 1. Run `/help` in Claude Code and verify the plugin-provided skills (`/btw`, `/plan-backlog`, `/work`, `/run-tests`, `/init-agents`, `/llmstxt-update`) appear in the skill listings.
-2. Make a small edit to a `.ts` file and confirm the Prettier hook fires (provided by the agent-team-ops plugin's `.claude-plugin/plugin.json`).
+2. Make a small edit to a `.ts` file and confirm the Prettier hook fires (provided by the x4-agent-team-ops plugin's `.claude-plugin/plugin.json`).
 3. Attempt to edit a `.env` file and confirm it is blocked by the PreToolUse hook.
 
 If any plugin does not appear, check that:
@@ -683,7 +683,7 @@ If any plugin does not appear, check that:
 ```bash
 git add .claude/settings.json .claude/agent-team-ops.config.md .claude/agents/
 git rm -r .claude/skills/work/ .claude/skills/run-tests/
-git commit -m "chore: migrate work, run-tests skills and hooks to agent-team-ops plugin"
+git commit -m "chore: migrate work, run-tests skills and hooks to x4-agent-team-ops plugin"
 ```
 
 ---
@@ -705,7 +705,7 @@ Before:
 After:
 
 ```markdown
-### Available Agents (`.claude/agents/`, generated by agent-team-ops plugin)
+### Available Agents (`.claude/agents/`, generated by x4-agent-team-ops plugin)
 ```
 
 **`/work` reference** — Update the description:
@@ -721,9 +721,9 @@ Run `/work` to pick up the next piece of work. It reads `docs/STATUS.md`...
 After:
 
 ```markdown
-### `/work` — Work Dispatcher (agent-team-ops plugin)
+### `/work` — Work Dispatcher (x4-agent-team-ops plugin)
 
-Run `/work` to pick up the next piece of work. Provided by the `agent-team-ops` plugin.
+Run `/work` to pick up the next piece of work. Provided by the `x4-agent-team-ops` plugin.
 Reads `docs/STATUS.md`...
 Config: `.claude/agent-team-ops.config.md`
 ```
@@ -758,16 +758,16 @@ Three plugins from `corbanbaxter/claude-workflow-plugins` provide the project wo
 
 | Plugin          | Skills                                | Config                              |
 | --------------- | ------------------------------------- | ----------------------------------- |
-| project-tracker | `/btw`, `/plan-backlog`               | `.claude/project-tracker.config.md` |
-| agent-team-ops  | `/work`, `/run-tests`, `/init-agents` | `.claude/agent-team-ops.config.md`  |
-| llmstxt-manager | `/llmstxt-update`, `/llmstxt-status`  | `.claude/llmstxt-manager.config.md` |
+| x4-project-tracker | `/btw`, `/plan-backlog`               | `.claude/project-tracker.config.md` |
+| x4-agent-team-ops  | `/work`, `/run-tests`, `/init-agents` | `.claude/agent-team-ops.config.md`  |
+| x4-llmstxt-manager | `/llmstxt-update`, `/llmstxt-status`  | `.claude/llmstxt-manager.config.md` |
 
-Hooks (protected files, auto-format, teammate idle gate) are provided by agent-team-ops
+Hooks (protected files, auto-format, teammate idle gate) are provided by x4-agent-team-ops
 and configured in `.claude/agent-team-ops.config.md`.
 
 ````
 
-**Reference Docs section** — Add note about llmstxt-manager:
+**Reference Docs section** — Add note about x4-llmstxt-manager:
 
 Before:
 ```markdown
@@ -783,7 +783,7 @@ After:
 ## Reference Docs (llms.txt)
 
 Library documentation lives in `docs/llms-txt/`. Read the relevant file when you need API details...
-Refresh with `/llmstxt-update` (provided by the llmstxt-manager plugin).
+Refresh with `/llmstxt-update` (provided by the x4-llmstxt-manager plugin).
 Config: `.claude/llmstxt-manager.config.md`
 ```
 
@@ -817,8 +817,8 @@ git branch -D chore/migrate-to-plugins
 If only one plugin is causing issues, revert just its changes:
 
 ```bash
-# Example: revert agent-team-ops but keep the other two
-git revert <commit-hash-of-agent-team-ops-migration>
+# Example: revert x4-agent-team-ops but keep the other two
+git revert <commit-hash-of-x4-agent-team-ops-migration>
 ```
 
 Then manually:
@@ -937,9 +937,9 @@ For a project that wants the full workflow:
 
 ```bash
 # 1. Install all three plugins (note: plugins live under the plugins/ subdirectory)
-claude plugin install corbanbaxter/claude-workflow-plugins/plugins/llmstxt-manager
-claude plugin install corbanbaxter/claude-workflow-plugins/plugins/project-tracker
-claude plugin install corbanbaxter/claude-workflow-plugins/plugins/agent-team-ops
+claude plugin install corbanbaxter/claude-workflow-plugins/plugins/x4-llmstxt-manager
+claude plugin install corbanbaxter/claude-workflow-plugins/plugins/x4-project-tracker
+claude plugin install corbanbaxter/claude-workflow-plugins/plugins/x4-agent-team-ops
 ```
 
 Or add them to `.claude/settings.json` manually:
@@ -947,9 +947,9 @@ Or add them to `.claude/settings.json` manually:
 ```json
 {
   "enabledPlugins": {
-    "llmstxt-manager@corbanbaxter/claude-workflow-plugins": true,
-    "project-tracker@corbanbaxter/claude-workflow-plugins": true,
-    "agent-team-ops@corbanbaxter/claude-workflow-plugins": true
+    "x4-llmstxt-manager@corbanbaxter/claude-workflow-plugins": true,
+    "x4-project-tracker@corbanbaxter/claude-workflow-plugins": true,
+    "x4-agent-team-ops@corbanbaxter/claude-workflow-plugins": true
   }
 }
 ```
@@ -1099,9 +1099,9 @@ Each installed plugin contains a `.claude-plugin/plugin.json` manifest in its ow
 {
   "hooks": {},
   "enabledPlugins": {
-    "llmstxt-manager@corbanbaxter/claude-workflow-plugins": true,
-    "project-tracker@corbanbaxter/claude-workflow-plugins": true,
-    "agent-team-ops@corbanbaxter/claude-workflow-plugins": true
+    "x4-llmstxt-manager@corbanbaxter/claude-workflow-plugins": true,
+    "x4-project-tracker@corbanbaxter/claude-workflow-plugins": true,
+    "x4-agent-team-ops@corbanbaxter/claude-workflow-plugins": true
   }
 }
 ```
@@ -1164,6 +1164,6 @@ The plugins handle all the workflow orchestration. The project only needs to mai
 
 Not every project needs all three plugins. They are independent:
 
-- **Just backlog tracking?** Install only `project-tracker`. Get `/btw` and `/plan-backlog`.
-- **Just reference docs?** Install only `llmstxt-manager`. Get `/llmstxt-update`.
-- **Full workflow?** Install all three. The `/work` skill in `agent-team-ops` will automatically detect and use the other plugins when they are available.
+- **Just backlog tracking?** Install only `x4-project-tracker`. Get `/btw` and `/plan-backlog`.
+- **Just reference docs?** Install only `x4-llmstxt-manager`. Get `/llmstxt-update`.
+- **Full workflow?** Install all three. The `/work` skill in `x4-agent-team-ops` will automatically detect and use the other plugins when they are available.

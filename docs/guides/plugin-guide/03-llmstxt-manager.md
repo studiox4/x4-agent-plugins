@@ -1,4 +1,4 @@
-# 03 — llmstxt-manager Plugin
+# 03 — x4-llmstxt-manager Plugin
 
 A Claude Code plugin that scans your project dependencies, discovers llms.txt documentation endpoints, downloads them locally, and keeps your CLAUDE.md reference table in sync. Works with any ecosystem: JavaScript/Bun, Python, Rust, Go, and Ruby.
 
@@ -30,7 +30,7 @@ Two commands are provided:
 
 ```json
 {
-  "name": "llmstxt-manager",
+  "name": "x4-llmstxt-manager",
   "description": "Scan project dependencies, discover llms.txt documentation files, download and manage AI-readable reference docs",
   "author": {
     "name": "Corban Baxter",
@@ -330,7 +330,7 @@ Every file needed for the plugin, ready to copy into the `llmstxt-manager/` dire
 
 ```json
 {
-  "name": "llmstxt-manager",
+  "name": "x4-llmstxt-manager",
   "description": "Scan project dependencies, discover llms.txt documentation files, download and manage AI-readable reference docs",
   "author": {
     "name": "Corban Baxter",

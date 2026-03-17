@@ -6,9 +6,9 @@ This guide tells a Claude agent how to extract three reusable Claude Code plugin
 
 Three Claude Code plugins, packaged in `corbanbaxter/claude-workflow-plugins/`, that any project can install to get the same workflow automation currently hardcoded into Daykeep's `.claude/` directory:
 
-1. **project-tracker** -- Backlog capture, triage, PRD generation, status tracking
-2. **agent-team-ops** -- Feature dispatching, agent templates, test running, hooks
-3. **llmstxt-manager** -- Dependency scanning, llms.txt discovery, download, reference updates
+1. **x4-project-tracker** -- Backlog capture, triage, PRD generation, status tracking
+2. **x4-agent-team-ops** -- Feature dispatching, agent templates, test running, hooks
+3. **x4-llmstxt-manager** -- Dependency scanning, llms.txt discovery, download, reference updates
 
 After extraction, Daykeep itself becomes a consumer of these plugins rather than the owner of their source code.
 
@@ -37,15 +37,15 @@ The root `.claude-plugin/marketplace.json` registers all plugins for Claude Code
 Each plugin is a self-contained Claude Code plugin following the official plugin directory structure (see below). Plugins are independent -- installing one does not require the others -- but they complement each other:
 
 ```
-llmstxt-manager          (standalone, no deps on other plugins)
+x4-llmstxt-manager       (standalone, no deps on other plugins)
        |
-project-tracker          (standalone, no deps on other plugins)
+x4-project-tracker       (standalone, no deps on other plugins)
        |
-agent-team-ops           (references project-tracker skills for /work dispatch,
-                          references llmstxt-manager for agent reference docs)
+x4-agent-team-ops        (references x4-project-tracker skills for /work dispatch,
+                          references x4-llmstxt-manager for agent reference docs)
 ```
 
-`agent-team-ops` has soft dependencies: it works without the other two, but its `/work` skill can invoke `project-tracker`'s `/plan-backlog` when the build queue is empty, and its agent templates reference docs managed by `llmstxt-manager`. These are graceful fallbacks, not hard requirements.
+`x4-agent-team-ops` has soft dependencies: it works without the other two, but its `/work` skill can invoke `x4-project-tracker`'s `/plan-backlog` when the build queue is empty, and its agent templates reference docs managed by `x4-llmstxt-manager`. These are graceful fallbacks, not hard requirements.
 
 ## Official Plugin Directory Structure
 
@@ -82,7 +82,7 @@ The manifest is minimal -- only `name`, `description`, and `author` are required
 
 ```json
 {
-  "name": "project-tracker",
+  "name": "x4-project-tracker",
   "description": "Backlog capture, triage, PRD generation, and status tracking for Claude Code projects",
   "author": {
     "name": "Corban Baxter",
@@ -131,7 +131,7 @@ model: "sonnet" # which model to use
 
 ## Plugin Map
 
-### Plugin 1: project-tracker
+### Plugin 1: x4-project-tracker
 
 | Component         | Type            | Source in Daykeep                                                 |
 | ----------------- | --------------- | ----------------------------------------------------------------- |
@@ -141,7 +141,7 @@ model: "sonnet" # which model to use
 | SessionStart hook | Hook            | New -- reads STATUS.md on session start, prints current phase     |
 | Status tracking   | Convention      | Operates on `docs/STATUS.md` and `docs/BACKLOG.md` (user's files) |
 
-### Plugin 2: agent-team-ops
+### Plugin 2: x4-agent-team-ops
 
 | Component               | Type              | Source in Daykeep                                                      |
 | ----------------------- | ----------------- | ---------------------------------------------------------------------- |
@@ -153,7 +153,7 @@ model: "sonnet" # which model to use
 | Auto-format hook        | PostToolUse hook  | `.claude/settings.json` hooks.PostToolUse                              |
 | Teammate idle test gate | TeammateIdle hook | `.claude/settings.json` hooks.TeammateIdle                             |
 
-### Plugin 3: llmstxt-manager
+### Plugin 3: x4-llmstxt-manager
 
 | Component         | Type           | Source in Daykeep                                              |
 | ----------------- | -------------- | -------------------------------------------------------------- |
@@ -175,7 +175,7 @@ Build the plugins in this order (simplest to most complex):
 
 Each doc is self-contained. The building agent should read 04 (dev workflow) first to understand the repo structure and manifest format, then build plugins in order 3, 1, 2.
 
-**Recommended build order: llmstxt-manager first** (smallest surface area, no agent templates, no hooks), **then project-tracker** (skills + commands + one hook, no agent templates), **then agent-team-ops** (skills + commands + hooks + agent templates + the `/work` orchestration logic).
+**Recommended build order: x4-llmstxt-manager first** (smallest surface area, no agent templates, no hooks), **then x4-project-tracker** (skills + commands + one hook, no agent templates), **then x4-agent-team-ops** (skills + commands + hooks + agent templates + the `/work` orchestration logic).
 
 ## What Stays Project-Specific vs What Gets Extracted
 
@@ -316,21 +316,21 @@ This table maps every relevant file in the current Daykeep `.claude/` directory 
 
 | Current Daykeep Path                     | Plugin          | Destination in Plugin Repo                               | Notes                                                                                                   |
 | ---------------------------------------- | --------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `.claude/skills/btw/SKILL.md`            | project-tracker | `plugins/project-tracker/skills/btw/SKILL.md`            | Generalized (remove Daykeep-specific scope definitions)                                                 |
-| `.claude/commands/btw.md`                | project-tracker | `plugins/project-tracker/commands/btw.md`                | Unchanged                                                                                               |
-| `.claude/skills/plan-backlog/SKILL.md`   | project-tracker | `plugins/project-tracker/skills/plan-backlog/SKILL.md`   | Generalized                                                                                             |
-| `.claude/skills/work/SKILL.md`           | agent-team-ops  | `plugins/agent-team-ops/skills/work/SKILL.md`            | Heavily generalized -- remove Daykeep-specific agent prompts, Railway/Neon references; read from config |
-| `.claude/skills/run-tests/SKILL.md`      | agent-team-ops  | `plugins/agent-team-ops/skills/run-tests/SKILL.md`       | Generalized -- test command comes from config                                                           |
-| `.claude/agents/backend.md`              | agent-team-ops  | `plugins/agent-team-ops/templates/backend.md`            | Template with placeholders, not a ready-to-use agent                                                    |
-| `.claude/agents/frontend.md`             | agent-team-ops  | `plugins/agent-team-ops/templates/frontend.md`           | Template with placeholders                                                                              |
-| `.claude/agents/reviewer.md`             | agent-team-ops  | `plugins/agent-team-ops/templates/reviewer.md`           | Template with placeholders                                                                              |
-| `.claude/agents/tester.md`               | agent-team-ops  | `plugins/agent-team-ops/templates/tester.md`             | Template with placeholders                                                                              |
-| `.claude/settings.json` (hooks section)  | agent-team-ops  | `plugins/agent-team-ops/hooks/`                          | Hooks extracted; commands read from config instead of hardcoded                                         |
-| `.claude/skills/llmstxt-update/SKILL.md` | llmstxt-manager | `plugins/llmstxt-manager/skills/llmstxt-update/SKILL.md` | Generalized -- paths and agent mapping come from config                                                 |
-| `scripts/download-ai-docs.ts`            | llmstxt-manager | Not in plugin -- generated per-project                   | The skill generates/updates this file in the consuming project                                          |
-| (new)                                    | project-tracker | `plugins/project-tracker/.claude-plugin/plugin.json`     | Required manifest -- name, description, author only                                                     |
-| (new)                                    | agent-team-ops  | `plugins/agent-team-ops/.claude-plugin/plugin.json`      | Required manifest -- name, description, author only                                                     |
-| (new)                                    | llmstxt-manager | `plugins/llmstxt-manager/.claude-plugin/plugin.json`     | Required manifest -- name, description, author only                                                     |
+| `.claude/skills/btw/SKILL.md`            | x4-project-tracker | `plugins/project-tracker/skills/btw/SKILL.md`            | Generalized (remove Daykeep-specific scope definitions)                                                 |
+| `.claude/commands/btw.md`                | x4-project-tracker | `plugins/project-tracker/commands/btw.md`                | Unchanged                                                                                               |
+| `.claude/skills/plan-backlog/SKILL.md`   | x4-project-tracker | `plugins/project-tracker/skills/plan-backlog/SKILL.md`   | Generalized                                                                                             |
+| `.claude/skills/work/SKILL.md`           | x4-agent-team-ops  | `plugins/agent-team-ops/skills/work/SKILL.md`            | Heavily generalized -- remove Daykeep-specific agent prompts, Railway/Neon references; read from config |
+| `.claude/skills/run-tests/SKILL.md`      | x4-agent-team-ops  | `plugins/agent-team-ops/skills/run-tests/SKILL.md`       | Generalized -- test command comes from config                                                           |
+| `.claude/agents/backend.md`              | x4-agent-team-ops  | `plugins/agent-team-ops/templates/backend.md`            | Template with placeholders, not a ready-to-use agent                                                    |
+| `.claude/agents/frontend.md`             | x4-agent-team-ops  | `plugins/agent-team-ops/templates/frontend.md`           | Template with placeholders                                                                              |
+| `.claude/agents/reviewer.md`             | x4-agent-team-ops  | `plugins/agent-team-ops/templates/reviewer.md`           | Template with placeholders                                                                              |
+| `.claude/agents/tester.md`               | x4-agent-team-ops  | `plugins/agent-team-ops/templates/tester.md`             | Template with placeholders                                                                              |
+| `.claude/settings.json` (hooks section)  | x4-agent-team-ops  | `plugins/agent-team-ops/hooks/`                          | Hooks extracted; commands read from config instead of hardcoded                                         |
+| `.claude/skills/llmstxt-update/SKILL.md` | x4-llmstxt-manager | `plugins/llmstxt-manager/skills/llmstxt-update/SKILL.md` | Generalized -- paths and agent mapping come from config                                                 |
+| `scripts/download-ai-docs.ts`            | x4-llmstxt-manager | Not in plugin -- generated per-project                   | The skill generates/updates this file in the consuming project                                          |
+| (new)                                    | x4-project-tracker | `plugins/project-tracker/.claude-plugin/plugin.json`     | Required manifest -- name, description, author only                                                     |
+| (new)                                    | x4-agent-team-ops  | `plugins/agent-team-ops/.claude-plugin/plugin.json`      | Required manifest -- name, description, author only                                                     |
+| (new)                                    | x4-llmstxt-manager | `plugins/llmstxt-manager/.claude-plugin/plugin.json`     | Required manifest -- name, description, author only                                                     |
 | (new)                                    | all             | `plugins/*/LICENSE`                                      | Apache 2.0 license required per official convention                                                     |
 | (new)                                    | all             | `plugins/*/README.md`                                    | Plugin readme required per official convention                                                          |
 | (new)                                    | repo root       | `.claude-plugin/marketplace.json`                        | Marketplace registry listing all 3 plugins with category, tags, source, homepage, version               |
@@ -345,8 +345,8 @@ This table maps every relevant file in the current Daykeep `.claude/` directory 
 
 4. **Templates, not copies.** Agent .md files are templates in the plugin. `/init-agents` generates project-specific agents from them once. After that, the project owns the agent files and can customize freely.
 
-5. **Soft dependencies between plugins.** `agent-team-ops` can call `project-tracker`'s `/plan-backlog` if installed, but works without it (just skips the auto-triage step). Same for llmstxt-manager references in agent templates.
+5. **Soft dependencies between plugins.** `x4-agent-team-ops` can call `x4-project-tracker`'s `/plan-backlog` if installed, but works without it (just skips the auto-triage step). Same for x4-llmstxt-manager references in agent templates.
 
 6. **Config-driven hooks.** The current Daykeep hooks hardcode `bun test`, `prettier`, and specific protected file patterns. The plugins read these from config so any project can define its own test command, formatter, and protected file list. Hook scripts use `${CLAUDE_PLUGIN_ROOT}` for path resolution.
 
-7. **Build order: 3, 1, 2.** `llmstxt-manager` has the smallest surface area (two skills, no hooks, no agent templates). `project-tracker` adds hooks and the backlog/PRD workflow. `agent-team-ops` is the most complex (orchestration, agent templates, three hook types, cross-plugin references).
+7. **Build order: 3, 1, 2.** `x4-llmstxt-manager` has the smallest surface area (two skills, no hooks, no agent templates). `x4-project-tracker` adds hooks and the backlog/PRD workflow. `x4-agent-team-ops` is the most complex (orchestration, agent templates, three hook types, cross-plugin references).

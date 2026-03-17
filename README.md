@@ -4,16 +4,16 @@ A Claude Code plugin marketplace with reusable workflow plugins: project trackin
 
 ## Plugins
 
-### project-tracker
+### x4-project-tracker
 
 Backlog capture, triage, PRD generation, and project status tracking.
 
 **Commands:**
-- `/btw <idea>` — Capture a feature idea to the backlog
+- `/idea <idea>` — Capture a feature idea to the backlog
 - `/plan-backlog` — Triage backlog items into PRDs
 - `/init-tracker` — Scaffold tracking files for a new project
 
-### agent-team-ops
+### x4-agent-team-ops
 
 Agent team coordination, feature dispatching, test running, review cycles, and hook-based guardrails.
 
@@ -22,7 +22,7 @@ Agent team coordination, feature dispatching, test running, review cycles, and h
 - `/run-tests` — Run configured test commands
 - `/init-agents` — Generate project-specific agent files from templates
 
-### llmstxt-manager
+### x4-llmstxt-manager
 
 Scan project dependencies, discover llms.txt documentation endpoints, download and manage AI-readable reference docs.
 
@@ -41,9 +41,9 @@ Scan project dependencies, discover llms.txt documentation endpoints, download a
 ### Install plugins
 
 ```
-/plugin install project-tracker@x4-agent-plugins
-/plugin install agent-team-ops@x4-agent-plugins
-/plugin install llmstxt-manager@x4-agent-plugins
+/plugin install x4-project-tracker@x4-agent-plugins
+/plugin install x4-agent-team-ops@x4-agent-plugins
+/plugin install x4-llmstxt-manager@x4-agent-plugins
 ```
 
 ### Auto-suggest plugins for your team
@@ -61,9 +61,22 @@ Add this to your project's `.claude/settings.json` so team members are prompted 
     }
   },
   "enabledPlugins": {
-    "project-tracker@x4-agent-plugins": true,
-    "agent-team-ops@x4-agent-plugins": true,
-    "llmstxt-manager@x4-agent-plugins": true
+    "x4-project-tracker@x4-agent-plugins": true,
+    "x4-agent-team-ops@x4-agent-plugins": true,
+    "x4-llmstxt-manager@x4-agent-plugins": true,
+    "feature-dev@claude-code-plugins": true,
+    "frontend-design@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "railway@railway-skills": true
   }
 }
 ```
@@ -73,7 +86,7 @@ Add this to your project's `.claude/settings.json` so team members are prompted 
 ```bash
 # Test the marketplace locally
 /plugin marketplace add ./path/to/x4-agent-plugins
-/plugin install project-tracker@x4-agent-plugins
+/plugin install x4-project-tracker@x4-agent-plugins
 
 # Validate marketplace structure
 claude plugin validate .

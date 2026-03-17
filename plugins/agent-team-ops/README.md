@@ -1,4 +1,4 @@
-# agent-team-ops
+# x4-agent-team-ops
 
 A Claude Code plugin for agent team coordination, feature dispatching, test running, review cycles, and hook-based guardrails.
 
@@ -36,7 +36,7 @@ Place `.claude/agent-team.config.md` in your project root with YAML frontmatter.
 ## Installation
 
 ```bash
-claude plugin install corbanbaxter/x4-agent-plugins/agent-team-ops
+claude plugin install corbanbaxter/x4-agent-plugins/x4-agent-team-ops
 ```
 
 ## License

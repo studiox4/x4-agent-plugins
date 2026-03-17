@@ -1,4 +1,4 @@
-# Project Tracker Plugin — Full Spec
+# x4-project-tracker Plugin — Full Spec
 
 A Claude Code plugin that provides backlog capture, triage, PRD generation, and status tracking for any software project. Extracted and generified from the Daykeep project's `/btw` and `/plan-backlog` workflows.
 
@@ -6,7 +6,7 @@ A Claude Code plugin that provides backlog capture, triage, PRD generation, and 
 
 ## 1. Overview
 
-The project-tracker plugin gives any project three capabilities:
+The x4-project-tracker plugin gives any project three capabilities:
 
 1. **`/btw` (Backlog Capture)** — Quickly capture a feature idea, improvement, or note into a structured backlog file without interrupting active work. The agent reads just enough project context to make the entry useful.
 
@@ -28,7 +28,7 @@ The manifest follows the official Claude Code plugins convention: minimal metada
 
 ```json
 {
-  "name": "project-tracker",
+  "name": "x4-project-tracker",
   "description": "Backlog capture, triage, PRD generation, and project status tracking for any software project",
   "author": {
     "name": "Corban Baxter",
@@ -539,7 +539,7 @@ Every file in the plugin is reproduced below in its final, ready-to-copy form. T
 
 ```json
 {
-  "name": "project-tracker",
+  "name": "x4-project-tracker",
   "description": "Backlog capture, triage, PRD generation, and project status tracking for any software project",
   "author": {
     "name": "Corban Baxter",

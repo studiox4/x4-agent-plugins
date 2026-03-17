@@ -87,7 +87,7 @@ claude-workflow-plugins/
 
 - Each plugin is fully self-contained under `plugins/<name>/`, with its own `.claude-plugin/plugin.json`, `LICENSE`, and `README.md`.
 - The root `.claude-plugin/marketplace.json` is the central registry that lists all plugins in the repo. This follows the official `anthropics/claude-plugins-official` convention.
-- Agent templates for `agent-team-ops` live in `agents/` (not `templates/`), matching the standard plugin directory names.
+- Agent templates for `x4-agent-team-ops` live in `agents/` (not `templates/`), matching the standard plugin directory names.
 - The `tests/fixtures/` directory contains minimal project skeletons for validation. These are not full apps -- just enough file structure for skills and hooks to read and write against.
 - The repo's own `.claude/CLAUDE.md` provides context when using Claude Code to develop the plugins.
 - Every plugin includes an Apache 2.0 `LICENSE` file, matching the repo-level license.
@@ -107,7 +107,7 @@ The root `.claude-plugin/marketplace.json` registers all plugins so they can be 
   },
   "plugins": [
     {
-      "name": "project-tracker",
+      "name": "x4-project-tracker",
       "description": "Backlog capture, triage, PRD generation, and status tracking",
       "category": "productivity",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
@@ -117,7 +117,7 @@ The root `.claude-plugin/marketplace.json` registers all plugins so they can be 
       "tags": ["backlog", "planning", "prd", "status-tracking"]
     },
     {
-      "name": "agent-team-ops",
+      "name": "x4-agent-team-ops",
       "description": "Agent team coordination, feature dispatching, and review cycles",
       "category": "development",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
@@ -127,7 +127,7 @@ The root `.claude-plugin/marketplace.json` registers all plugins so they can be 
       "tags": ["agents", "teams", "workflow", "ci-cd"]
     },
     {
-      "name": "llmstxt-manager",
+      "name": "x4-llmstxt-manager",
       "description": "Scan dependencies and manage llms.txt reference documentation",
       "category": "development",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
@@ -160,7 +160,7 @@ claude plugin link /path/to/claude-workflow-plugins/plugins/llmstxt-manager
 Linked plugins override any installed version of the same plugin. To unlink:
 
 ```bash
-claude plugin unlink project-tracker
+claude plugin unlink x4-project-tracker
 ```
 
 ### Using --plugin-dir flag
@@ -213,13 +213,13 @@ Every change should be validated against at least two project types before publi
 
 | Plugin          | Daykeep (complex monorepo) | simple-app (single app) | python-project (non-JS) |
 | --------------- | -------------------------- | ----------------------- | ----------------------- |
-| project-tracker | Required                   | Required                | Required                |
-| agent-team-ops  | Required                   | Required                | Optional                |
-| llmstxt-manager | Required                   | Required                | Required                |
+| x4-project-tracker | Required                   | Required                | Required                |
+| x4-agent-team-ops  | Required                   | Required                | Optional                |
+| x4-llmstxt-manager | Required                   | Required                | Required                |
 
 ### What to verify per plugin
 
-**project-tracker:**
+**x4-project-tracker:**
 
 - `/btw` appends items to `docs/BACKLOG.md` with correct formatting
 - `/plan-backlog` reads BACKLOG.md, presents triage menu, updates STATUS.md
@@ -227,7 +227,7 @@ Every change should be validated against at least two project types before publi
 - SessionStart hook prints current phase from STATUS.md
 - Config file (`.claude/project-tracker.config.md`) is read when present, defaults used when absent
 
-**agent-team-ops:**
+**x4-agent-team-ops:**
 
 - `/work` reads STATUS.md, identifies next task, proposes agent team
 - `/run-tests` executes the configured test command
@@ -237,7 +237,7 @@ Every change should be validated against at least two project types before publi
 - TeammateIdle hook enforces test pass before idle
 - Works with and without the other two plugins installed
 
-**llmstxt-manager:**
+**x4-llmstxt-manager:**
 
 - `/llmstxt-update` scans dependencies (package.json, pyproject.toml, go.mod)
 - Discovers llms.txt URLs for detected dependencies
@@ -250,14 +250,14 @@ Every change should be validated against at least two project types before publi
 Run through this before every publish:
 
 ```
-[ ] project-tracker against daykeep fixture -- all skills produce correct output
-[ ] project-tracker against simple-app fixture -- defaults work without config file
-[ ] project-tracker against python-project fixture -- STATUS.md and BACKLOG.md work
-[ ] agent-team-ops against daykeep fixture -- all hooks fire correctly
-[ ] agent-team-ops against simple-app fixture -- works without other plugins
-[ ] llmstxt-manager against daykeep fixture -- finds all monorepo dependencies
-[ ] llmstxt-manager against simple-app fixture -- single package.json scan works
-[ ] llmstxt-manager against python-project fixture -- pyproject.toml scan works
+[ ] x4-project-tracker against daykeep fixture -- all skills produce correct output
+[ ] x4-project-tracker against simple-app fixture -- defaults work without config file
+[ ] x4-project-tracker against python-project fixture -- STATUS.md and BACKLOG.md work
+[ ] x4-agent-team-ops against daykeep fixture -- all hooks fire correctly
+[ ] x4-agent-team-ops against simple-app fixture -- works without other plugins
+[ ] x4-llmstxt-manager against daykeep fixture -- finds all monorepo dependencies
+[ ] x4-llmstxt-manager against simple-app fixture -- single package.json scan works
+[ ] x4-llmstxt-manager against python-project fixture -- pyproject.toml scan works
 [ ] Each plugin has .claude-plugin/plugin.json, LICENSE, and README.md
 [ ] Root .claude-plugin/marketplace.json lists all plugins with correct versions
 [ ] Each plugin installs cleanly from a fresh state (no leftover links)
@@ -275,7 +275,7 @@ Each plugin is versioned independently via the `version` field in its `.claude-p
 | Bump  | When                                                                                      | Example                                            |
 | ----- | ----------------------------------------------------------------------------------------- | -------------------------------------------------- |
 | Patch | Bug fixes, wording changes in skills, no behavior change                                  | Fix typo in `/btw` output format                   |
-| Minor | New skill/command added, new config option (backward-compatible), improved behavior       | Add `/prd-generate` skill to project-tracker       |
+| Minor | New skill/command added, new config option (backward-compatible), improved behavior       | Add `/prd-generate` skill to x4-project-tracker       |
 | Major | Breaking config changes, renamed skills/commands, removed features, changed hook behavior | Rename `backlog_file` config key to `backlog_path` |
 
 ### .claude-plugin/plugin.json version field
@@ -283,7 +283,7 @@ Each plugin is versioned independently via the `version` field in its `.claude-p
 ```json
 // plugins/project-tracker/.claude-plugin/plugin.json
 {
-  "name": "project-tracker",
+  "name": "x4-project-tracker",
   "version": "1.2.0",
   "description": "Backlog capture, triage, PRD generation, status tracking"
 }
@@ -296,7 +296,7 @@ Maintain a single `CHANGELOG.md` at the repo root, organized by plugin and versi
 ```markdown
 # Changelog
 
-## project-tracker
+## x4-project-tracker
 
 ### 1.2.0 (2026-03-20)
 
@@ -312,13 +312,13 @@ Maintain a single `CHANGELOG.md` at the repo root, organized by plugin and versi
 
 - Initial release: `/btw`, `/plan-backlog`, SessionStart hook
 
-## agent-team-ops
+## x4-agent-team-ops
 
 ### 1.0.0 (2026-03-15)
 
 - Initial release: `/work`, `/run-tests`, `/init-agents`, all hooks
 
-## llmstxt-manager
+## x4-llmstxt-manager
 
 ### 1.0.0 (2026-03-15)
 
@@ -327,7 +327,7 @@ Maintain a single `CHANGELOG.md` at the repo root, organized by plugin and versi
 
 ### Independent versioning
 
-Plugins version independently. A change to `project-tracker` does not require bumping `agent-team-ops`. The CHANGELOG groups entries by plugin so consumers can track what changed in the plugins they use.
+Plugins version independently. A change to `x4-project-tracker` does not require bumping `x4-agent-team-ops`. The CHANGELOG groups entries by plugin so consumers can track what changed in the plugins they use.
 
 ---
 
@@ -355,14 +355,14 @@ Users install by specifying the repo and plugin path:
 
 ```bash
 # Install individual plugins
-claude plugin install corbanbaxter/claude-workflow-plugins/project-tracker
-claude plugin install corbanbaxter/claude-workflow-plugins/agent-team-ops
-claude plugin install corbanbaxter/claude-workflow-plugins/llmstxt-manager
+claude plugin install corbanbaxter/claude-workflow-plugins/x4-project-tracker
+claude plugin install corbanbaxter/claude-workflow-plugins/x4-agent-team-ops
+claude plugin install corbanbaxter/claude-workflow-plugins/x4-llmstxt-manager
 
 # Or install all three at once if supported
-claude plugin install corbanbaxter/claude-workflow-plugins/project-tracker \
-                      corbanbaxter/claude-workflow-plugins/agent-team-ops \
-                      corbanbaxter/claude-workflow-plugins/llmstxt-manager
+claude plugin install corbanbaxter/claude-workflow-plugins/x4-project-tracker \
+                      corbanbaxter/claude-workflow-plugins/x4-agent-team-ops \
+                      corbanbaxter/claude-workflow-plugins/x4-llmstxt-manager
 ```
 
 After installation, the plugin's skills, commands, and hooks are available in any Claude Code session within the project.
@@ -383,7 +383,7 @@ Shows installed plugins with their versions and source.
 
 ```bash
 # Update a specific plugin
-claude plugin update project-tracker
+claude plugin update x4-project-tracker
 
 # Update all installed plugins
 claude plugin update
@@ -496,7 +496,7 @@ Test:
   it detects the duplicate and prompts.
 
 Version:
-  Bump project-tracker from 1.0.0 to 1.1.0 (new behavior, backward-compatible).
+  Bump x4-project-tracker from 1.0.0 to 1.1.0 (new behavior, backward-compatible).
 
 Publish and update.
 ```

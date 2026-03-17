@@ -1,4 +1,4 @@
-# llmstxt-manager
+# x4-llmstxt-manager
 
 A Claude Code plugin that scans your project dependencies, discovers llms.txt documentation endpoints, downloads them locally, and keeps your CLAUDE.md reference table in sync.
 
@@ -38,7 +38,7 @@ All fields are optional. Defaults apply for any omitted field.
 ## Installation
 
 ```bash
-claude plugin install corbanbaxter/x4-agent-plugins/llmstxt-manager
+claude plugin install corbanbaxter/x4-agent-plugins/x4-llmstxt-manager
 ```
 
 ## License

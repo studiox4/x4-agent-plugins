@@ -1,12 +1,12 @@
-# Plugin 2: agent-team-ops
+# Plugin 2: x4-agent-team-ops
 
-Full specification for the `agent-team-ops` Claude Code plugin. This is the most complex of the three plugins -- it extracts agent team coordination, feature dispatching, test running, review cycles, and hook-based guardrails into a project-agnostic system driven by a single config file.
+Full specification for the `x4-agent-team-ops` Claude Code plugin. This is the most complex of the three plugins -- it extracts agent team coordination, feature dispatching, test running, review cycles, and hook-based guardrails into a project-agnostic system driven by a single config file.
 
 ---
 
 ## 1. Overview
 
-The `agent-team-ops` plugin provides:
+The `x4-agent-team-ops` plugin provides:
 
 - **`/work`** -- A 7-phase feature dispatch pipeline: orient, setup, build (agent team), review, ship, memory sweep, cleanup.
 - **`/run-tests`** -- Runs unit and e2e test commands defined in config.
@@ -18,8 +18,8 @@ Everything is config-driven. No project-specific paths, commands, or service nam
 
 ### Soft dependencies
 
-- If `project-tracker` plugin is installed, `/work` Phase 1 can invoke `/plan-backlog` when the build queue is empty. Without it, `/work` simply tells the user there is nothing ready to build.
-- If `llmstxt-manager` plugin is installed, generated agent files include a "Reference Docs" section pointing to managed docs. Without it, agents skip that section.
+- If `x4-project-tracker` plugin is installed, `/work` Phase 1 can invoke `/plan-backlog` when the build queue is empty. Without it, `/work` simply tells the user there is nothing ready to build.
+- If `x4-llmstxt-manager` plugin is installed, generated agent files include a "Reference Docs" section pointing to managed docs. Without it, agents skip that section.
 
 ---
 
@@ -31,7 +31,7 @@ The manifest lives inside `.claude-plugin/` per the official plugins repo conven
 
 ```json
 {
-  "name": "agent-team-ops",
+  "name": "x4-agent-team-ops",
   "description": "Agent team coordination, feature dispatching, test running, review cycles, and hook-based guardrails for multi-agent development workflows",
   "author": {
     "name": "Corban Baxter",
@@ -409,9 +409,9 @@ user and offer to run `/init-agents` first.
 4. Wait for the user to pick a number or describe custom work.
 
 5. **If nothing is ready to build:**
-- **If `project-tracker` plugin is installed:** Suggest running `/plan-backlog`
+- **If `x4-project-tracker` plugin is installed:** Suggest running `/plan-backlog`
   to triage backlog items into buildable features.
-- **If `project-tracker` plugin is NOT installed:** Tell the user:
+- **If `x4-project-tracker` plugin is NOT installed:** Tell the user:
   "No features are marked as ready to build in {status_file}. Add a feature
   to the build progress table with status READY, or describe what you'd like
   to work on."
@@ -1404,5 +1404,5 @@ Quick reference for which features activate based on config presence:
 | Teammate idle gates      | `teammate_idle_gates.<role>`                                 | Run gate command when agent goes idle           | Agent can go idle freely           |
 | PR draft mode            | `pr.draft`                                                   | Open as draft, convert in Phase 5               | Open as ready immediately          |
 | PR labels                | `pr.labels`                                                  | Apply labels on PR creation                     | No labels                          |
-| Plan-backlog fallback    | `project-tracker` plugin installed                           | Invoke `/plan-backlog` when queue empty         | Tell user to add features manually |
-| Reference docs in agents | `llmstxt-manager` plugin installed + `docs/llms-txt/` exists | Include reference doc table in generated agents | Omit reference docs section        |
+| Plan-backlog fallback    | `x4-project-tracker` plugin installed                           | Invoke `/plan-backlog` when queue empty         | Tell user to add features manually |
+| Reference docs in agents | `x4-llmstxt-manager` plugin installed + `docs/llms-txt/` exists | Include reference doc table in generated agents | Omit reference docs section        |

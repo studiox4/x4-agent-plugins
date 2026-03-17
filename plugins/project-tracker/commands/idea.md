@@ -4,6 +4,6 @@ argument-hint: "<your idea or note>"
 allowed-tools: [Read, Write, Edit, Glob, Grep]
 ---
 
-Use the btw skill to add the following to the backlog:
+Use the idea skill to add the following to the backlog:
 
 $ARGUMENTS

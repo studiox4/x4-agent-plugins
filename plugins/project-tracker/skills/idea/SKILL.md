@@ -1,11 +1,11 @@
 ---
-name: btw
+name: idea
 description: Use when the user wants to capture a feature idea, improvement, or note into the project backlog without interrupting active work
 version: 1.0.0
 license: MIT
 ---
 
-# /btw — Context-Aware Backlog Capture
+# /idea — Context-Aware Backlog Capture
 
 ## Overview
 

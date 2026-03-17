@@ -79,4 +79,4 @@ Initialize the project tracker for this repository.
    > - Planning: `<planning_dir>`
    > - Config: `.claude/project-tracker.config.md`
    >
-   > Customize your config, then use `/btw` to capture ideas and `/plan-backlog` to turn them into PRDs.
+   > Customize your config, then use `/idea` to capture ideas and `/plan-backlog` to turn them into PRDs.

@@ -10,7 +10,7 @@
   },
   "plugins": [
     {
-      "name": "project-tracker",
+      "name": "x4-project-tracker",
       "description": "Backlog capture, triage, PRD generation, and status tracking",
       "category": "productivity",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
@@ -20,7 +20,7 @@
       "keywords": ["backlog", "planning", "prd", "status-tracking"]
     },
     {
-      "name": "agent-team-ops",
+      "name": "x4-agent-team-ops",
       "description": "Agent team coordination, feature dispatching, and review cycles",
       "category": "development",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
@@ -30,7 +30,7 @@
       "keywords": ["agents", "teams", "workflow", "ci-cd"]
     },
     {
-      "name": "llmstxt-manager",
+      "name": "x4-llmstxt-manager",
       "description": "Scan dependencies and manage llms.txt reference documentation",
       "category": "development",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },

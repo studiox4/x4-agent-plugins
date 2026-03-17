@@ -1,8 +1,15 @@
 {
-  "name": "project-tracker",
+  "name": "x4-project-tracker",
   "description": "Backlog capture, triage, PRD generation, and project status tracking for any software project",
   "author": {
     "name": "Corban Baxter",
     "email": "corban@example.com"
-  }
+  },
+  "recommendations": [
+    {
+      "name": "example-plugin",
+      "marketplace": "owner/marketplace-repo",
+      "reason": "Enhances project tracking with time estimates"
+    }
+  ]
 }

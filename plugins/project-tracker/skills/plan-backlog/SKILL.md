@@ -168,4 +168,4 @@ Status file updated — <Feature Name> is now in the build queue.
 - Remove the item from the backlog file once it becomes a PRD — no duplicates
 - If the backlog file does not exist, tell the user to run `/init-tracker` first
 - If the backlog file is empty or all items are already tracked in the status file,
-  respond: "Backlog is empty or fully planned. Use `/btw` to capture new ideas."
+  respond: "Backlog is empty or fully planned. Use `/idea` to capture new ideas."

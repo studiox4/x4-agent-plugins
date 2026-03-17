@@ -55,9 +55,9 @@ user and offer to run `/init-agents` first.
 4. Wait for the user to pick a number or describe custom work.
 
 5. **If nothing is ready to build:**
-- **If `project-tracker` plugin is installed:** Suggest running `/plan-backlog`
+- **If `x4-project-tracker` plugin is installed:** Suggest running `/plan-backlog`
   to triage backlog items into buildable features.
-- **If `project-tracker` plugin is NOT installed:** Tell the user:
+- **If `x4-project-tracker` plugin is NOT installed:** Tell the user:
   "No features are marked as ready to build in {status_file}. Add a feature
   to the build progress table with status READY, or describe what you'd like
   to work on."

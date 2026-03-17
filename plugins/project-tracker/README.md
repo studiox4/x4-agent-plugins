@@ -1,10 +1,10 @@
-# project-tracker
+# x4-project-tracker
 
 A Claude Code plugin that provides backlog capture, triage, PRD generation, and status tracking for any software project.
 
 ## Commands
 
-### `/btw <idea>`
+### `/idea <idea>`
 
 Quickly capture a feature idea, improvement, or note into a structured backlog file without interrupting active work.
 
@@ -29,7 +29,7 @@ All settings have sensible defaults. No configuration required to get started.
 ## Installation
 
 ```bash
-claude plugin install corbanbaxter/x4-agent-plugins/project-tracker
+claude plugin install corbanbaxter/x4-agent-plugins/x4-project-tracker
 ```
 
 ## License
