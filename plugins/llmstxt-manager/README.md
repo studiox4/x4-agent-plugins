@@ -38,7 +38,7 @@ All fields are optional. Defaults apply for any omitted field.
 ## Installation
 
 ```bash
-claude plugin install corbanbaxter/x4-agent-plugins/x4-llmstxt-manager
+claude plugin install studiox4/x4-agent-plugins/x4-llmstxt-manager
 ```
 
 ## License

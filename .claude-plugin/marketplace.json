@@ -15,7 +15,7 @@
       "category": "productivity",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
       "source": "./plugins/project-tracker",
-      "homepage": "https://github.com/corbanbaxter/x4-agent-plugins",
+      "homepage": "https://github.com/studiox4/x4-agent-plugins",
       "version": "1.0.0",
       "keywords": ["backlog", "planning", "prd", "status-tracking"]
     },
@@ -25,7 +25,7 @@
       "category": "development",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
       "source": "./plugins/agent-team-ops",
-      "homepage": "https://github.com/corbanbaxter/x4-agent-plugins",
+      "homepage": "https://github.com/studiox4/x4-agent-plugins",
       "version": "1.0.0",
       "keywords": ["agents", "teams", "workflow", "ci-cd"]
     },
@@ -35,7 +35,7 @@
       "category": "development",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
       "source": "./plugins/llmstxt-manager",
-      "homepage": "https://github.com/corbanbaxter/x4-agent-plugins",
+      "homepage": "https://github.com/studiox4/x4-agent-plugins",
       "version": "1.0.0",
       "keywords": ["llms-txt", "documentation", "dependencies"]
     }

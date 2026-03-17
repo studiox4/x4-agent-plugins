@@ -36,7 +36,7 @@ Place `.claude/agent-team.config.md` in your project root with YAML frontmatter.
 ## Installation
 
 ```bash
-claude plugin install corbanbaxter/x4-agent-plugins/x4-agent-team-ops
+claude plugin install studiox4/x4-agent-plugins/x4-agent-team-ops
 ```
 
 ## License

@@ -35,7 +35,7 @@ Scan project dependencies, discover llms.txt documentation endpoints, download a
 ### Add the marketplace
 
 ```
-/plugin marketplace add corbanbaxter/x4-agent-plugins
+/plugin marketplace add studiox4/x4-agent-plugins
 ```
 
 ### Install plugins
@@ -56,7 +56,7 @@ Add this to your project's `.claude/settings.json` so team members are prompted 
     "x4-agent-plugins": {
       "source": {
         "source": "github",
-        "repo": "corbanbaxter/x4-agent-plugins"
+        "repo": "studiox4/x4-agent-plugins"
       }
     }
   },

@@ -29,7 +29,7 @@ All settings have sensible defaults. No configuration required to get started.
 ## Installation
 
 ```bash
-claude plugin install corbanbaxter/x4-agent-plugins/x4-project-tracker
+claude plugin install studiox4/x4-agent-plugins/x4-project-tracker
 ```
 
 ## License
