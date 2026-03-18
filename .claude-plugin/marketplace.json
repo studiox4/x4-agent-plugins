@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Reusable workflow plugins for Claude Code: project tracking, agent team ops, and llms.txt management",
-    "version": "1.0.0"
+    "version": "2.0.0"
   },
   "plugins": [
     {
@@ -16,7 +16,7 @@
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
       "source": "./plugins/project-tracker",
       "homepage": "https://github.com/studiox4/x4-agent-plugins",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "keywords": ["backlog", "planning", "prd", "status-tracking"]
     },
     {
@@ -26,7 +26,7 @@
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
       "source": "./plugins/agent-team-ops",
       "homepage": "https://github.com/studiox4/x4-agent-plugins",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "keywords": ["agents", "teams", "workflow", "ci-cd"]
     },
     {
@@ -36,7 +36,7 @@
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
       "source": "./plugins/llmstxt-manager",
       "homepage": "https://github.com/studiox4/x4-agent-plugins",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "keywords": ["llms-txt", "documentation", "dependencies"]
     }
   ]
