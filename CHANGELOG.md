@@ -1,5 +1,14 @@
 # Changelog
 
+## x4-scaffold
+
+### 1.0.0 (2026-03-18)
+
+- Initial release: `/x4-create`, `/x4-add`, `/x4-env`
+- `/x4-create`: interactive wizard wrapping `bunx create-x4` with presets (full-stack, saas, landing, api-only), platform selection, env setup, post-scaffold init
+- `/x4-add`: add mobile (Expo 52) or web (Next.js 15) apps to existing projects
+- `/x4-env`: database setup (Neon auto-create or paste), auth secret generation, AI key config
+
 ## project-tracker
 
 ### 2.0.0 (2026-03-18)

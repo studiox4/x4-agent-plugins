@@ -38,6 +38,16 @@
       "homepage": "https://github.com/studiox4/x4-agent-plugins",
       "version": "2.0.0",
       "keywords": ["llms-txt", "documentation", "dependencies"]
+    },
+    {
+      "name": "x4-scaffold",
+      "description": "Scaffold and manage x4-mono full-stack TypeScript monorepo projects",
+      "category": "development",
+      "author": { "name": "Corban Baxter", "email": "corban@example.com" },
+      "source": "./plugins/x4-scaffold",
+      "homepage": "https://github.com/studiox4/x4-agent-plugins",
+      "version": "1.0.0",
+      "keywords": ["scaffold", "monorepo", "expo", "nextjs", "hono", "create-x4"]
     }
   ]
 }

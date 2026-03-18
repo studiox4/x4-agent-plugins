@@ -1,18 +1,19 @@
 # x4-agent-plugins
 
-A Claude Code plugin marketplace for structured development workflows: project tracking, agent team ops, and llms.txt management.
+A Claude Code plugin marketplace for structured development workflows: project scaffolding, tracking, agent team ops, and llms.txt management.
 
 ## Pipeline Overview
 
 The plugins work together as a full development pipeline:
 
 ```
-/idea → /plan-backlog → /work → shipped PR
+/x4-create → /init-tracker → /idea → /plan-backlog → /work → shipped PR
 ```
 
-1. **`/idea`** — Capture feature ideas to a structured backlog
-2. **`/plan-backlog`** — Triage backlog items, brainstorm, create implementation plans, write PRDs (→ `docs/planning/todo/`)
-3. **`/work`** — Pick a feature, dispatch an agent team, build, review, verify, ship (PRD moves: `todo/` → `in-progress/` → `complete/`)
+1. **`/x4-create`** — Scaffold a new x4-mono full-stack TypeScript monorepo
+2. **`/idea`** — Capture feature ideas to a structured backlog
+3. **`/plan-backlog`** — Triage backlog items, brainstorm, create implementation plans, write PRDs (→ `docs/planning/todo/`)
+4. **`/work`** — Pick a feature, dispatch an agent team, build, review, verify, ship (PRD moves: `todo/` → `in-progress/` → `complete/`)
 
 ## Quick Start
 
@@ -21,17 +22,32 @@ The plugins work together as a full development pipeline:
 /plugin marketplace add studiox4/x4-agent-plugins
 
 # 2. Install plugins
+/plugin install x4-scaffold@x4-agent-plugins
 /plugin install x4-project-tracker@x4-agent-plugins
 /plugin install x4-agent-team-ops@x4-agent-plugins
 /plugin install x4-llmstxt-manager@x4-agent-plugins
 
-# 3. Set up your project
+# 3. Scaffold a new project
+/x4-create my-app   # Interactive wizard: preset, platforms, env setup
+
+# 4. Set up workflow tools (inside the new project)
 /init-tracker    # Create STATUS.md, BACKLOG.md, planning directories
 /init-setup      # Configure database, hosting, CI, package manager, tests
 /init-agents     # Generate project-specific agent files from templates
 ```
 
 ## Plugins
+
+### x4-scaffold
+
+Scaffold and manage x4-mono full-stack TypeScript monorepo projects.
+
+**Commands:**
+| Command | Description |
+|---------|-------------|
+| `/x4-create [name]` | Scaffold a new project (presets: full-stack, saas, landing, api-only) |
+| `/x4-add` | Add a mobile or web app to an existing project |
+| `/x4-env` | Set up environment variables (database, auth, AI keys) |
 
 ### x4-project-tracker
 
@@ -114,6 +130,7 @@ These are optional — features degrade gracefully with inline alternatives when
 ### Install plugins
 
 ```
+/plugin install x4-scaffold@x4-agent-plugins
 /plugin install x4-project-tracker@x4-agent-plugins
 /plugin install x4-agent-team-ops@x4-agent-plugins
 /plugin install x4-llmstxt-manager@x4-agent-plugins
@@ -134,6 +151,7 @@ Add this to your project's `.claude/settings.json` so team members are prompted 
     }
   },
   "enabledPlugins": {
+    "x4-scaffold@x4-agent-plugins": true,
     "x4-project-tracker@x4-agent-plugins": true,
     "x4-agent-team-ops@x4-agent-plugins": true,
     "x4-llmstxt-manager@x4-agent-plugins": true,
@@ -171,6 +189,7 @@ bash tests/validate.sh
 claude plugin link ./plugins/project-tracker
 claude plugin link ./plugins/agent-team-ops
 claude plugin link ./plugins/llmstxt-manager
+claude plugin link ./plugins/x4-scaffold
 ```
 
 ## License
