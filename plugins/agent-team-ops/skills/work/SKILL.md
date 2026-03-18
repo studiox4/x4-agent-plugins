@@ -10,7 +10,7 @@ that activate only when the relevant infrastructure is configured.
 
 **Before starting:** Read `.claude/agent-team.config.md` to load all
 project-specific settings. If the config file does not exist, inform the
-user and offer to run `/init-agents` first.
+user and offer to run `/init-setup` first.
 
 ---
 
@@ -24,9 +24,9 @@ user and offer to run `/init-agents` first.
 
 2. Parse the **Feature Build Progress** table (or equivalent tracker).
    Categorize features into:
-   - **READY TO BUILD** -- Has a PRD, all prerequisites met, not started.
+   - **READY TO BUILD** -- Has a PRD in `docs/planning/todo/`, all prerequisites met, not started.
    - **IN PROGRESS** -- Build started but not shipped. Show current state
-     (which columns are complete).
+     (which columns are complete), plus PR URL and preview URL if available.
    - **STANDALONE TASKS** -- Items that don't follow the full feature pipeline
      (e.g., "add tests for X", "refactor Y"). These may be listed in a
      separate section or tagged differently.
@@ -43,6 +43,7 @@ user and offer to run `/init-agents` first.
 ### In Progress
 
 3.  [Feature Name] -- [current state: Backend done, Frontend in progress]
+    PR: <url> | Preview: <url> [if available]
 
 ### Standalone Tasks
 
@@ -78,48 +79,32 @@ User has confirmed a piece of work to build.
 
 ### Steps
 
-1. **Create git branch.**
-- Feature work: `{branch_prefixes.feature}<feature-slug>`
-- Fix work: `{branch_prefixes.fix}<description-slug>`
-- Chore work: `{branch_prefixes.chore}<description-slug>`
-- Slugify the feature name (lowercase, hyphens, no special chars).
-- Run: `git checkout -b <branch-name>`
+Delegate to the `/pr-create` skill with the feature name and type.
 
-2. **[If `db_branching` is configured] Create database branch.**
-- Execute the `db_branching.create_command` with `{branch_name}` replaced.
-- If using Neon MCP: call `mcp__Neon__create_branch` with the branch name
-  derived from the git branch.
-- Capture the connection string from the output.
-- Inject it into the environment variable specified by `db_branching.env_var`.
-- **If `db_branching` is NOT configured:** Skip entirely. No mention of
-  database branching.
+The `/pr-create` skill handles:
+1. Creating the git branch
+2. Creating a database branch (if configured)
+3. Pushing and opening a draft PR
+4. Waiting for preview environments (if configured)
 
-3. **Push branch and open draft PR.**
-- `git push -u origin <branch-name>`
-- **If `pr.draft` is true:**
-  ```
-  gh pr create --draft --title "<Feature Name>" --body "WIP: <one-line description>"
-  ```
-- **If `pr.draft` is false:**
-  ```
-  gh pr create --title "<Feature Name>" --body "<one-line description>"
-  ```
-- Apply labels from `pr.labels` if any.
+**After `/pr-create` completes:**
 
-4. **[If `ci.preview_url_command` is configured] Wait for preview environment.**
-- After pushing, wait for the preview environment to be provisioned.
-- Run `ci.preview_url_command` to retrieve preview URLs.
-- Report the URLs to the user.
-- **If `ci.preview_url_command` is NOT configured:** Skip entirely. No
-  mention of preview environments.
+1. **Move PRD from `todo/` to `in-progress/`.**
+   If a PRD exists in `docs/planning/todo/` for this feature:
+   ```
+   git mv docs/planning/todo/<prd-file> docs/planning/in-progress/<prd-file>
+   ```
+   Update the PRD link in the status file's Planning Documents table.
 
-5. **Update status file.**
-- Mark the selected feature as "In Progress" in the status file.
-- Add the branch name and PR number to the tracking table.
+2. **Update status file.**
+   Mark the selected feature as "In Progress" in the status file.
+   Add the branch name and PR number to the tracking table.
+
+3. **Commit:** `docs: move PRD to in-progress, update status`
 
 ### Exit criteria
 Branch exists, PR is open (draft or ready), database branch exists (if configured),
-status file updated.
+PRD moved to `in-progress/`, status file updated.
 
 ---
 
@@ -131,11 +116,11 @@ status file updated.
 
 1. **Determine team composition.**
 - Read the `agents` config to know which roles are available.
-- For a standard feature: spawn all non-reviewer agents (typically backend,
-  frontend, tester).
+- For a standard feature: spawn all non-reviewer, non-performance agents
+  (typically backend, frontend, tester).
 - For frontend-only work: spawn only frontend + tester.
 - For backend-only work: spawn only backend + tester.
-- The reviewer is NEVER part of the build team -- it runs in Phase 4.
+- The reviewer and performance agents run in Phase 4, NOT here.
 
 2. **Generate build plan.**
 - Based on the PRD (or user description), break the work into tasks per agent:
@@ -211,74 +196,48 @@ on the feature branch.
 
 ### Steps
 
-1. **Spawn reviewer agent.**
-- Use the reviewer's `.md` file from `.claude/agents/reviewer.md`.
-- Provide context: "Review all changes on branch {branch} since it diverged
-  from {base_branch}. Check the full diff, not just the latest commit."
-- The reviewer agent has read-only tools (no Write/Edit).
+1. **Spawn reviewer and performance agents in parallel.**
 
-2. **Reviewer executes checklists.**
-The reviewer's agent file contains its checklists (security, architecture,
-quality). It reports findings as:
+   **Reviewer agent:**
+   - Use the reviewer's `.md` file from `.claude/agents/reviewer.md`.
+   - Provide context: "Review all changes on branch {branch} since it diverged
+     from {base_branch}. Check the full diff, not just the latest commit."
+   - The reviewer agent has read-only tools (no Write/Edit).
 
-## Review Findings
+   **Performance agent:**
+   - Use the performance agent's `.md` file from `.claude/agents/performance.md`.
+   - Provide context: "Audit all changes on branch {branch} for performance
+     issues. Check bundle size, re-renders, memory leaks, query patterns,
+     and cache configuration."
+   - The performance agent has read-only tools (no Write/Edit).
 
-### Blockers (must fix before merge)
+   Both agents run simultaneously to minimize review time.
 
-- [SECURITY] {file}:{line} -- {description}
-- [BUG] {file}:{line} -- {description}
+2. **Agents execute checklists.**
+   Each agent reports findings in the standard format:
+   Blockers / Warnings / Notes with `[SECURITY]`, `[BUG]`, `[QUALITY]`,
+   `[PERF]` tags and file:line references.
 
-### Warnings (should fix, not blocking)
+3. **[If `code-simplifier@claude-plugins-official` is installed] Run code simplifier.**
+   After review agents complete, run the code simplifier on changed files
+   to identify unnecessary complexity.
 
-- [QUALITY] {file}:{line} -- {description}
-
-### Notes (informational)
-
-- [STYLE] {description}
-
-3. **Address blockers.**
-- If the reviewer found blockers:
-  - Route each blocker to the appropriate agent (based on file ownership).
+4. **Address blockers.**
+- If either agent found blockers:
+  - Route each blocker to the appropriate build agent (based on file ownership).
   - The agent fixes the issue and commits.
-  - Re-run the reviewer on the fixed files (or the relevant subset).
+  - Re-run the relevant reviewer on the fixed files (or the relevant subset).
 - Repeat until no blockers remain.
 
-4. **Verification gate.**
-Run ALL configured test commands in sequence. Each must pass with evidence.
+5. **Verification gate — delegate to `/verify-local`.**
+   Run the `/verify-local` skill as the mandatory gate. This runs all configured
+   checks (unit, e2e, lint, typecheck) with auto-fix (max 3 attempts per check).
 
-a. **Unit tests:** Run `test_commands.unit` (required).
-   ```
-   $ {test_commands.unit}
-   [show output -- must see pass count and zero failures]
-   ```
-
-b. **[If `test_commands.e2e` is configured] E2E tests:**
-   ```
-   $ {test_commands.e2e}
-   [show output -- must see pass count and zero failures]
-   ```
-   **If NOT configured:** Skip. No mention of e2e tests.
-
-c. **[If `test_commands.lint` is configured] Lint:**
-   ```
-   $ {test_commands.lint}
-   [show output -- must be clean]
-   ```
-   **If NOT configured:** Skip.
-
-d. **[If `test_commands.typecheck` is configured] Type check:**
-   ```
-   $ {test_commands.typecheck}
-   [show output -- must be clean]
-   ```
-   **If NOT configured:** Skip.
-
-5. **If any verification step fails:**
-- Route the failure to the appropriate agent (tester for test failures,
-  the agent that owns the failing file for lint/typecheck).
-- Agent fixes the issue and commits.
-- Re-run the failed verification step.
-- Repeat until all steps pass.
+   `/verify-local` handles:
+   - Running all test commands in sequence
+   - Auto-fixing failures (lint/typecheck auto-fix, test failure diagnosis)
+   - Escalating persistent failures to the user
+   - Updating the status file's "Tested" column
 
 6. **Final confirmation.**
 Report to the user:
@@ -290,11 +249,13 @@ Report to the user:
 - Lint: PASS [if configured]
 - Typecheck: PASS [if configured]
 - Reviewer: No blockers remaining
+- Performance: No blockers remaining
 
 Ready to ship?
 
 ### Exit criteria
-All tests pass, reviewer has no blockers, user confirms ready to ship.
+All tests pass, reviewer and performance agents have no blockers, user confirms
+ready to ship.
 
 ---
 
@@ -314,23 +275,23 @@ gh pr ready
 
 **If `pr.convert_on_ship` is false:** Leave PR in its current state.
 
-3. **[If `ci.watch_command` is configured] Watch CI.**
-- Run the CI watch command:
-  ```
-  $ {ci.watch_command}
-  ```
-- Wait for CI to complete.
-- **If CI passes:** Proceed to reporting.
-- **If CI fails:**
-  - Analyze the failure output.
-  - Route the fix to the appropriate agent.
-  - Agent fixes, commits, pushes.
-  - Re-watch CI.
-  - Repeat until CI passes (max 3 attempts, then escalate to user).
-- **If `ci.watch_command` is NOT configured:** Skip CI watching. Report
-  that the PR is pushed and ready.
+3. **Check CI and preview status — use `/pr-status`.**
+   Run the `/pr-status` skill to get current CI state and preview URLs.
 
-4. **Report to user.**
+4. **Handle CI failures.**
+   If CI is failing, diagnose based on the failure type:
+
+   | Failure Type | Action |
+   |-------------|--------|
+   | Lint / Typecheck | Auto-fix directly, commit, push |
+   | Unit test | Diagnose root cause, fix code (not test), commit, push |
+   | E2E / Build / Logic error | **STOP** — notify user with full failure output |
+
+   For auto-fixable failures: fix, commit, push, re-check (max 3 attempts).
+   For non-auto-fixable failures: stop and present the failure to the user
+   with context about what went wrong and suggested next steps.
+
+5. **Report to user.**
 Always include:
 - **GitHub PR URL:** from `gh pr view --json url -q .url`
 - **[If `ci.preview_url_command` is configured] Preview URLs:**
@@ -355,29 +316,40 @@ configured), URLs reported to user.
 
 ### Steps
 
-1. **Review teammate activity.**
+1. **Move PRD to `complete/`.**
+   ```
+   git mv docs/planning/in-progress/<prd-file> docs/planning/complete/<prd-file>
+   ```
+   Update the PRD link in the status file's Planning Documents table.
+
+2. **Clean up scratch files.**
+   Delete any implementation plan scratch files created during the build
+   that are no longer needed (temporary notes, draft plans, etc.).
+
+3. **Review teammate activity.**
 - Look at what each teammate did: files changed, patterns used, any
   difficulties encountered.
 
-2. **Scan for reusable patterns.**
+4. **Scan for reusable patterns.**
 Look for:
 - New conventions that emerged (naming patterns, file structures).
 - Gotchas discovered (mock shapes, API quirks, test setup requirements).
 - Architecture decisions made during the build.
 - Common mistakes that were caught by the reviewer.
 
-3. **Write to memory.**
+5. **Write to memory.**
 - If the project uses Claude memory (`.claude/` memory files or auto-memory),
   write notable patterns and gotchas.
 - Format as concise, actionable notes that will help future builds.
 
-4. **Update status file.**
+6. **Update status file.**
 - Mark completed columns in the Feature Build Progress table.
 - Update the feature's status to reflect what was shipped.
 - Record the PR number for reference.
+- Commit: `docs: move PRD to complete, update status, memory sweep`
 
 ### Exit criteria
-Status file updated, patterns captured in memory.
+PRD moved to `complete/`, status file updated, patterns captured in memory.
 
 ---
 
@@ -393,12 +365,16 @@ Status file updated, patterns captured in memory.
   merged/closed (via GitHub Actions)."
 - **If `db_branching.cleanup` is `"manual"`:**
   Report: "Remember to delete the database branch `{branch_name}` after
-  the PR is merged."
+  the PR is merged. You can run `/pr-cleanup` to handle this."
 - **If `db_branching.cleanup` is `"none"`:**
   No mention of cleanup.
 - **If `db_branching` is NOT configured:** Skip entirely.
 
-2. **Report final summary.**
+2. **Reference `/pr-cleanup` for manual cleanup.**
+   If the user prefers to clean up now (or later), they can run `/pr-cleanup`
+   to delete the database branch and local git branch after the PR is merged.
+
+3. **Report final summary.**
 
 ## Work Complete
 
@@ -406,6 +382,8 @@ Feature: {feature_name}
 Branch: {branch_name}
 PR: {pr_url}
 Status: Shipped, awaiting merge
+
+Run `/pr-cleanup` after merge to clean up branches.
 
 ### Exit criteria
 User has all the information they need. Pipeline complete.

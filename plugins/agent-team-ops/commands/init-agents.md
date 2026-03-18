@@ -51,6 +51,6 @@ bundled agent templates. This command should be run once during project setup.
 - If the user has custom agent roles not in the templates (e.g., `cli`, `devops`),
   generate a minimal agent file with owned dirs and conventions, using the
   `backend.md` template as a base.
-- The reviewer agent always gets `read_only: true` in its frontmatter and never
-  receives Write/Edit tools.
+- The reviewer and performance agents always get `read_only: true` in their
+  frontmatter and never receive Write/Edit tools.
 - Re-running `/init-agents` after initial setup is safe -- it asks before overwriting.

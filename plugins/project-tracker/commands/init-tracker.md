@@ -62,7 +62,10 @@ Initialize the project tracker for this repository.
    ---
    ```
 
-6. **Create the planning directory** at the configured `planning_dir` path (`mkdir -p`).
+6. **Create the planning directory** with subdirectories at the configured `planning_dir` path:
+   ```
+   mkdir -p <planning_dir>/todo <planning_dir>/in-progress <planning_dir>/complete
+   ```
 
 7. **Commit all created files:**
 

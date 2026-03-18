@@ -68,7 +68,7 @@ Wait for the user's response before doing anything.
 ### Step 3: Handle the response
 
 **If user picks a number (plan):**
--> Go to Step 4: Write the PRD
+-> Go to Step 3.5: Brainstorm + Plan
 
 **If user picks D + number (delete):**
 -> Remove that `##` section from the backlog file (from the `##` heading through the next
@@ -82,20 +82,92 @@ Wait for the user's response before doing anything.
 **If user picks multiple (e.g. "D1, D2, then plan 3"):**
 -> Execute deletions first, then proceed to plan the chosen item.
 
+### Step 3.5a: Brainstorm
+
+Before writing the PRD, brainstorm the feature to flesh out requirements.
+
+**If `superpowers@claude-plugins-official` is installed:**
+- Delegate to `/brainstorming` with the backlog entry as input.
+- Use the brainstorming output as input for the next step.
+
+**If NOT installed (inline brainstorm):**
+- Generate a brainstorm covering:
+  - Core requirements and user stories
+  - Edge cases and error scenarios
+  - Dependencies on existing features or infrastructure
+  - Open questions that need answers before building
+- Present the brainstorm to the user via `AskUserQuestion`:
+  ```
+  ## Brainstorm: <Feature Name>
+
+  ### Requirements
+  - ...
+
+  ### Edge Cases
+  - ...
+
+  ### Dependencies
+  - ...
+
+  ### Open Questions
+  - ...
+
+  Looks good? (yes / edit / skip brainstorming)
+  ```
+- Wait for confirmation. If the user edits, incorporate changes.
+
+### Step 3.5b: Implementation Plan
+
+After brainstorming, create an implementation plan.
+
+**If `superpowers@claude-plugins-official` is installed:**
+- Delegate to `/writing-plans` with the brainstorm output + backlog entry.
+- Use the plan output as input for the PRD.
+
+**If NOT installed (inline plan):**
+- Generate a plan covering:
+  - Ordered implementation steps
+  - Agent assignments (which agent handles which step, if using agent-team-ops)
+  - Risks and mitigations
+  - Estimated scope per step
+- Present the plan to the user via `AskUserQuestion`:
+  ```
+  ## Implementation Plan: <Feature Name>
+
+  ### Steps
+  1. ...
+  2. ...
+
+  ### Agent Assignments
+  - Backend: ...
+  - Frontend: ...
+  - Tester: ...
+
+  ### Risks
+  - ...
+
+  Approve this plan? (yes / edit / skip planning)
+  ```
+- Wait for confirmation.
+
 ### Step 4: Write the PRD
 
 **4a. Read context**
 
-- Scan the planning directory — note the next available PRD number (e.g. if 01-08 exist,
-  next is 09 — but check for gaps first)
+- Scan the planning directory (including `todo/`, `in-progress/`, `complete/` subdirs) —
+  note the next available PRD number across all subdirs (e.g. if 01-08 exist, next is 09 —
+  but check for gaps first)
 - Read the 1-2 most relevant existing PRDs to match format and depth
 - Re-read the full backlog entry for the chosen item
+- Gather the brainstorm output (Step 3.5a) and implementation plan (Step 3.5b) if available
 - If no existing PRDs exist yet, use the template below as-is
 
 **4b. Write the PRD file**
 
-Create `<planning_dir>/<prd_pattern>` where NN is the next number and `<name>` is kebab-cased
-from the feature title.
+Ensure the `todo/` subdirectory exists: `mkdir -p <planning_dir>/todo`
+
+Create `<planning_dir>/todo/<prd_pattern>` where NN is the next number and `<name>` is
+kebab-cased from the feature title.
 
 Use the configured `prd_sections` array to generate the PRD. The file structure:
 
@@ -119,7 +191,12 @@ Use the configured `prd_sections` array to generate the PRD. The file structure:
 
 Render every section from `prd_sections` in order. Each section becomes a `##` heading.
 Use the section's `prompt` as guidance for what to write. Pull concrete details from the
-backlog entry, the project's existing PRDs, and the status file.
+backlog entry, the brainstorm output (Step 3.5a), the implementation plan (Step 3.5b),
+the project's existing PRDs, and the status file.
+
+If brainstorming was done, incorporate the requirements, edge cases, and open questions
+into the relevant PRD sections. If an implementation plan was created, include it as an
+additional "Implementation Plan" section at the end of the PRD.
 
 If there are existing PRDs in the planning directory, match their tone and depth.
 
@@ -137,7 +214,7 @@ from `status_columns` are set to the configured `status_values.not_started`.
 Add a new entry to the Planning Documents table:
 
 ```
-| NN | [PRD: <Feature Name>](<planning_dir>/NN-prd-<feature-name>.md) | **Complete** | <deps> | <one-line summary> |
+| NN | [PRD: <Feature Name>](<planning_dir>/todo/NN-prd-<feature-name>.md) | **Complete** | <deps> | <one-line summary> |
 ```
 
 **4d. Remove the item from the backlog file**
@@ -148,14 +225,14 @@ It now lives in the planning directory.
 **4e. Commit**
 
 ```
-git add <planning_dir>/NN-prd-<feature-name>.md <status_file> <backlog_file>
+git add <planning_dir>/todo/NN-prd-<feature-name>.md <status_file> <backlog_file>
 git commit -m "<commits.prd_created template with <feature> replaced>"
 ```
 
 ### Step 5: Respond
 
 ```
-PRD written: <planning_dir>/NN-prd-<feature-name>.md
+PRD written: <planning_dir>/todo/NN-prd-<feature-name>.md
 Status file updated — <Feature Name> is now in the build queue.
 ```
 
