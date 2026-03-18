@@ -11,7 +11,11 @@ Run the full llms.txt refresh workflow:
    defaults: docs in `docs/llms-txt/`, CLAUDE.md at project root, agents in
    `.claude/agents/`, no extra skip patterns.
 
-2. Scan all dependency manifests in the project. Supported ecosystems detected
+2. If `scripts/download-ai-docs.py` (or configured `script` path) exists, run
+   it with `--json` and use the structured output (script mode). Otherwise,
+   perform discovery inline (standalone mode).
+
+3. Scan all dependency manifests in the project. Supported ecosystems detected
    automatically by manifest presence:
    - **JavaScript/Bun/Node:** `**/package.json` (skip `node_modules/`)
    - **Python:** `requirements.txt`, `pyproject.toml`, `setup.py`, `setup.cfg`

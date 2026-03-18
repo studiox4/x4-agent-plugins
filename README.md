@@ -76,7 +76,8 @@ Scan project dependencies, discover llms.txt documentation endpoints, download a
 **Commands:**
 | Command | Description |
 |---------|-------------|
-| `/llmstxt-update` | Full scan, discover, download, and sync |
+| `/llmstxt-init` | Scaffold download script, known-sources cache, docs directory, config |
+| `/llmstxt-update` | Full scan, discover, download, and sync (uses script if present) |
 | `/llmstxt-status` | Read-only status report of current docs |
 
 ## Configuration

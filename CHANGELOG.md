@@ -38,6 +38,13 @@
 
 ## llmstxt-manager
 
+### 2.0.0 (2026-03-18)
+
+- Add `/llmstxt-init` skill: scaffolds Python download script, known-sources cache, docs directory, config
+- Add `templates/download-ai-docs.py`: pure Python 3 stdlib script for dependency discovery and download
+- `/llmstxt-update`: add script mode (runs `download-ai-docs.py --json` when present) alongside standalone mode
+- Support `extra_packages` and `script` fields in `.llmstxt.json` config
+
 ### 1.0.0 (2026-03-16)
 
 - Initial release: `/llmstxt-update`, `/llmstxt-status`

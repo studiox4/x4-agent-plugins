@@ -27,6 +27,27 @@ If it does not exist, use these defaults:
 
 If `.llmstxt.json` exists, read it and merge with defaults.
 
+## Script Mode vs Standalone Mode
+
+This skill operates in two modes:
+
+**Script mode** (preferred): If the download script exists at the configured
+`script` path (default: `scripts/download-ai-docs.py`), run it with `--json`
+and use the structured output. This is faster and uses the known-sources cache.
+
+**Standalone mode**: If no script exists, perform all discovery inline using
+the steps below. Suggest running `/llmstxt-init` to set up the script for
+faster future runs.
+
+### Script Mode Workflow
+
+1. Run `python3 {script_path} --json`
+2. Parse the JSON output (contains: ecosystems, results with new/updated/unchanged/failed/orphaned)
+3. Delete orphaned files from the docs directory (confirm with user first)
+4. Jump to Step 4 (Update CLAUDE.md) using the script's results
+
+### Standalone Mode Workflow
+
 ## Workflow
 
 ### Step 1 — Scan Dependencies
