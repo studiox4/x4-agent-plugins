@@ -1,6 +1,6 @@
 # Migration Guide: Local Skills to Extracted Plugins
 
-This guide walks through migrating the Daykeep project from its current inline `.claude/` workflow (skills, commands, hooks, agent files) to consuming the three extracted plugins from `corbanbaxter/claude-workflow-plugins`. It also covers how a brand-new project would adopt the plugins from scratch.
+This guide walks through migrating the Daykeep project from its current inline `.claude/` workflow (skills, commands, hooks, agent files) to consuming the three extracted plugins from `studiox4/x4-agent-plugins`. It also covers how a brand-new project would adopt the plugins from scratch.
 
 ---
 
@@ -27,8 +27,8 @@ Before touching anything, verify the current state and document what you have.
 Run each skill and confirm it behaves correctly:
 
 ```bash
-# Verify /btw captures to backlog
-# (invoke in Claude Code): /btw "test idea for migration verification"
+# Verify /idea captures to backlog
+# (invoke in Claude Code): /idea "test idea for migration verification"
 
 # Verify /llmstxt-update runs
 # (invoke in Claude Code): /llmstxt-update
@@ -61,9 +61,9 @@ Current Daykeep local files that will be affected:
 
 | File                                     | Action                                                       | Plugin          |
 | ---------------------------------------- | ------------------------------------------------------------ | --------------- |
-| `.claude/skills/btw/SKILL.md`            | Remove (replaced by plugin)                                  | x4-project-tracker |
+| `.claude/skills/idea/SKILL.md`            | Remove (replaced by plugin)                                  | x4-project-tracker |
 | `.claude/skills/plan-backlog/SKILL.md`   | Remove (replaced by plugin)                                  | x4-project-tracker |
-| `.claude/commands/btw.md`                | Remove (replaced by plugin)                                  | x4-project-tracker |
+| `.claude/commands/idea.md`                | Remove (replaced by plugin)                                  | x4-project-tracker |
 | `.claude/skills/work/SKILL.md`           | Remove (replaced by plugin)                                  | x4-agent-team-ops  |
 | `.claude/skills/run-tests/SKILL.md`      | Remove (replaced by plugin)                                  | x4-agent-team-ops  |
 | `.claude/skills/llmstxt-update/SKILL.md` | Remove (replaced by plugin)                                  | x4-llmstxt-manager |
@@ -107,7 +107,7 @@ In `.claude/settings.json`, add to the `enabledPlugins` section:
 ```json
 {
   "enabledPlugins": {
-    "x4-llmstxt-manager@corbanbaxter/claude-workflow-plugins": true
+    "x4-llmstxt-manager@studiox4/x4-agent-plugins": true
   }
 }
 ```
@@ -115,7 +115,7 @@ In `.claude/settings.json`, add to the `enabledPlugins` section:
 Or install via Claude Code CLI if supported:
 
 ```bash
-claude plugin install corbanbaxter/claude-workflow-plugins/plugins/x4-llmstxt-manager
+claude plugin install studiox4/x4-agent-plugins/plugins/x4-llmstxt-manager
 ```
 
 ### 3b. Verify plugin manifest
@@ -209,7 +209,7 @@ Add to `.claude/settings.json`:
 ```json
 {
   "enabledPlugins": {
-    "x4-project-tracker@corbanbaxter/claude-workflow-plugins": true
+    "x4-project-tracker@studiox4/x4-agent-plugins": true
   }
 }
 ```
@@ -267,7 +267,7 @@ PRDs follow the structure in docs/planning/. Each PRD includes:
 The next PRD number is determined by scanning docs/planning/ for the highest existing
 number and incrementing. Check for gaps first (e.g., if 01-08 exist, next is 09).
 
-## Context Files for /btw
+## Context Files for /idea
 
 When capturing a backlog idea, the skill scans these files for context:
 
@@ -278,10 +278,10 @@ When capturing a backlog idea, the skill scans these files for context:
 
 ### 4c. Test the plugin skills
 
-Test `/btw` first:
+Test `/idea` first:
 
 ```
-/btw "test migration entry — delete after verifying"
+/idea "test migration entry — delete after verifying"
 ```
 
 Verify it:
@@ -307,21 +307,21 @@ After testing, remove the test entry from BACKLOG.md.
 ### 4d. Remove local skill and command files
 
 ```bash
-rm -rf .claude/skills/btw/
+rm -rf .claude/skills/idea/
 rm -rf .claude/skills/plan-backlog/
-rm -f .claude/commands/btw.md
+rm -f .claude/commands/idea.md
 ```
 
 ### 4e. Verify STATUS.md and BACKLOG.md access
 
-Run `/btw "verify plugin reads backlog correctly"` and confirm the entry appears in `docs/BACKLOG.md` with proper formatting. Remove the test entry afterward.
+Run `/idea "verify plugin reads backlog correctly"` and confirm the entry appears in `docs/BACKLOG.md` with proper formatting. Remove the test entry afterward.
 
 ### 4f. Commit
 
 ```bash
 git add .claude/settings.json .claude/project-tracker.config.md
-git rm -r .claude/skills/btw/ .claude/skills/plan-backlog/ .claude/commands/btw.md
-git commit -m "chore: migrate btw and plan-backlog skills to x4-project-tracker plugin"
+git rm -r .claude/skills/idea/ .claude/skills/plan-backlog/ .claude/commands/idea.md
+git commit -m "chore: migrate idea and plan-backlog skills to x4-project-tracker plugin"
 ```
 
 ---
@@ -337,7 +337,7 @@ Add to `.claude/settings.json`:
 ```json
 {
   "enabledPlugins": {
-    "x4-agent-team-ops@corbanbaxter/claude-workflow-plugins": true
+    "x4-agent-team-ops@studiox4/x4-agent-plugins": true
   }
 }
 ```
@@ -621,9 +621,9 @@ The hook scripts (e.g., `hooks/protected-files.sh`, `hooks/auto-format.sh`, `hoo
   },
   "hooks": {},
   "enabledPlugins": {
-    "x4-llmstxt-manager@corbanbaxter/claude-workflow-plugins": true,
-    "x4-project-tracker@corbanbaxter/claude-workflow-plugins": true,
-    "x4-agent-team-ops@corbanbaxter/claude-workflow-plugins": true,
+    "x4-llmstxt-manager@studiox4/x4-agent-plugins": true,
+    "x4-project-tracker@studiox4/x4-agent-plugins": true,
+    "x4-agent-team-ops@studiox4/x4-agent-plugins": true,
     "feature-dev@claude-code-plugins": true,
     "frontend-design@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
@@ -658,7 +658,7 @@ Do NOT delete `.claude/agents/`. Those files are now locally owned by the projec
 
 Run through the complete pipeline:
 
-1. `/btw "integration test idea"` — should work via x4-project-tracker plugin
+1. `/idea "integration test idea"` — should work via x4-project-tracker plugin
 2. `/work` — should show dispatch menu via x4-agent-team-ops plugin
 3. Make a small edit to any `.ts` file — Prettier hook should fire (via plugin)
 4. Try to edit a `.env` file — should be blocked (via plugin)
@@ -668,7 +668,7 @@ Run through the complete pipeline:
 
 Confirm that all three plugins have valid `.claude-plugin/plugin.json` manifests and that Claude Code recognizes them:
 
-1. Run `/help` in Claude Code and verify the plugin-provided skills (`/btw`, `/plan-backlog`, `/work`, `/run-tests`, `/init-agents`, `/llmstxt-update`) appear in the skill listings.
+1. Run `/help` in Claude Code and verify the plugin-provided skills (`/idea`, `/plan-backlog`, `/work`, `/run-tests`, `/init-agents`, `/llmstxt-update`) appear in the skill listings.
 2. Make a small edit to a `.ts` file and confirm the Prettier hook fires (provided by the x4-agent-team-ops plugin's `.claude-plugin/plugin.json`).
 3. Attempt to edit a `.env` file and confirm it is blocked by the PreToolUse hook.
 
@@ -676,7 +676,7 @@ If any plugin does not appear, check that:
 
 - The plugin directory contains a valid `.claude-plugin/plugin.json`
 - The plugin identifier in `enabledPlugins` matches the installed plugin name
-- The plugin was installed from the correct path (`corbanbaxter/claude-workflow-plugins/plugins/<name>`)
+- The plugin was installed from the correct path (`studiox4/x4-agent-plugins/plugins/<name>`)
 
 ### 5j. Commit
 
@@ -754,11 +754,11 @@ bun dev              # Start all workspaces (web:3000, api:3002)
 
 ## Workflow Plugins
 
-Three plugins from `corbanbaxter/claude-workflow-plugins` provide the project workflow:
+Three plugins from `studiox4/x4-agent-plugins` provide the project workflow:
 
 | Plugin          | Skills                                | Config                              |
 | --------------- | ------------------------------------- | ----------------------------------- |
-| x4-project-tracker | `/btw`, `/plan-backlog`               | `.claude/project-tracker.config.md` |
+| x4-project-tracker | `/idea`, `/plan-backlog`               | `.claude/project-tracker.config.md` |
 | x4-agent-team-ops  | `/work`, `/run-tests`, `/init-agents` | `.claude/agent-team-ops.config.md`  |
 | x4-llmstxt-manager | `/llmstxt-update`, `/llmstxt-status`  | `.claude/llmstxt-manager.config.md` |
 
@@ -871,9 +871,9 @@ If `.claude/skills/use-railway` (a symlink) still exists, leave it — that belo
 ls -la .claude/skills/
 ```
 
-### 8b. Remove the old btw command
+### 8b. Remove the old idea command
 
-The `.claude/commands/btw.md` file was already removed in step 4d. Verify:
+The `.claude/commands/idea.md` file was already removed in step 4d. Verify:
 
 ```bash
 ls .claude/commands/
@@ -937,9 +937,9 @@ For a project that wants the full workflow:
 
 ```bash
 # 1. Install all three plugins (note: plugins live under the plugins/ subdirectory)
-claude plugin install corbanbaxter/claude-workflow-plugins/plugins/x4-llmstxt-manager
-claude plugin install corbanbaxter/claude-workflow-plugins/plugins/x4-project-tracker
-claude plugin install corbanbaxter/claude-workflow-plugins/plugins/x4-agent-team-ops
+claude plugin install studiox4/x4-agent-plugins/plugins/x4-llmstxt-manager
+claude plugin install studiox4/x4-agent-plugins/plugins/x4-project-tracker
+claude plugin install studiox4/x4-agent-plugins/plugins/x4-agent-team-ops
 ```
 
 Or add them to `.claude/settings.json` manually:
@@ -947,9 +947,9 @@ Or add them to `.claude/settings.json` manually:
 ```json
 {
   "enabledPlugins": {
-    "x4-llmstxt-manager@corbanbaxter/claude-workflow-plugins": true,
-    "x4-project-tracker@corbanbaxter/claude-workflow-plugins": true,
-    "x4-agent-team-ops@corbanbaxter/claude-workflow-plugins": true
+    "x4-llmstxt-manager@studiox4/x4-agent-plugins": true,
+    "x4-project-tracker@studiox4/x4-agent-plugins": true,
+    "x4-agent-team-ops@studiox4/x4-agent-plugins": true
   }
 }
 ```
@@ -1099,9 +1099,9 @@ Each installed plugin contains a `.claude-plugin/plugin.json` manifest in its ow
 {
   "hooks": {},
   "enabledPlugins": {
-    "x4-llmstxt-manager@corbanbaxter/claude-workflow-plugins": true,
-    "x4-project-tracker@corbanbaxter/claude-workflow-plugins": true,
-    "x4-agent-team-ops@corbanbaxter/claude-workflow-plugins": true
+    "x4-llmstxt-manager@studiox4/x4-agent-plugins": true,
+    "x4-project-tracker@studiox4/x4-agent-plugins": true,
+    "x4-agent-team-ops@studiox4/x4-agent-plugins": true
   }
 }
 ```
@@ -1152,7 +1152,7 @@ Tester must pass all unit tests before going idle.
 #### Workflow after setup
 
 ```
-/btw "add rate limiting to auth endpoints"     # Captures idea to backlog
+/idea "add rate limiting to auth endpoints"     # Captures idea to backlog
 /plan-backlog                                    # Triages backlog, writes PRD
 /work                                            # Dispatches agent team to build
 /llmstxt-update                                  # Refreshes reference docs
@@ -1164,6 +1164,6 @@ The plugins handle all the workflow orchestration. The project only needs to mai
 
 Not every project needs all three plugins. They are independent:
 
-- **Just backlog tracking?** Install only `x4-project-tracker`. Get `/btw` and `/plan-backlog`.
+- **Just backlog tracking?** Install only `x4-project-tracker`. Get `/idea` and `/plan-backlog`.
 - **Just reference docs?** Install only `x4-llmstxt-manager`. Get `/llmstxt-update`.
 - **Full workflow?** Install all three. The `/work` skill in `x4-agent-team-ops` will automatically detect and use the other plugins when they are available.

@@ -14,11 +14,12 @@ Modern libraries increasingly publish machine-readable documentation at `llms.tx
 4. **Sync** — Updates the reference docs table in `CLAUDE.md` and any agent files that reference the docs.
 5. **Report** — Prints a summary of new, updated, unchanged, failed, and removed docs.
 
-Two commands are provided:
+Three commands are provided:
 
 | Command           | Purpose                                                |
 | ----------------- | ------------------------------------------------------ |
-| `/llmstxt-update` | Full scan, discover, download, and sync                |
+| `/llmstxt-init`   | Scaffold Python download script, known-sources cache, docs dir, and config |
+| `/llmstxt-update` | Full scan, discover, download, and sync (script mode or standalone mode) |
 | `/llmstxt-status` | Read-only report of what is current, stale, or missing |
 
 ---
@@ -50,11 +51,14 @@ llmstxt-manager/
 ├── .claude-plugin/
 │   └── plugin.json
 ├── commands/
+│   ├── llmstxt-init.md
 │   ├── llmstxt-update.md
 │   └── llmstxt-status.md
 ├── skills/
 │   └── llmstxt-update/
 │       └── SKILL.md
+├── templates/
+│   └── download-ai-docs.py
 ├── LICENSE
 └── README.md
 ```
@@ -188,6 +192,20 @@ Print a structured summary showing: ecosystems detected, dependency counts, a st
 
 ## 5. Commands
 
+### `/llmstxt-init`
+
+> **File:** `llmstxt-manager/commands/llmstxt-init.md`
+
+One-time scaffolding command that sets up the llms.txt management infrastructure for a project:
+
+1. Creates the docs directory (default: `docs/llms-txt/`)
+2. Creates `.llmstxt.json` config file with project-appropriate defaults
+3. Copies `templates/download-ai-docs.py` to the configured script path (e.g., `scripts/download-ai-docs.py`)
+4. Creates a known-sources cache file (`docs/llms-txt/.known-sources.json`) for tracking discovered URLs
+5. Commits all scaffolded files
+
+After running `/llmstxt-init`, use `/llmstxt-update` to perform the first scan and download.
+
 ### `/llmstxt-update`
 
 > **File:** `llmstxt-manager/commands/llmstxt-update.md`
@@ -210,10 +228,12 @@ This is a custom configuration file, not part of the Claude Code plugin spec. Th
 
 | Field       | Type       | Default             | Description                                                                                       |
 | ----------- | ---------- | ------------------- | ------------------------------------------------------------------------------------------------- |
-| `docs_dir`  | `string`   | `"docs/llms-txt/"`  | Directory to store downloaded docs, relative to project root                                      |
-| `skip`      | `string[]` | `[]`                | Glob patterns or exact package names to skip. `@types/*` and common polyfills are always skipped. |
-| `claude_md` | `string`   | `"CLAUDE.md"`       | Path to CLAUDE.md file, relative to project root                                                  |
-| `agent_dir` | `string`   | `".claude/agents/"` | Directory containing agent `.md` files                                                            |
+| `docs_dir`       | `string`   | `"docs/llms-txt/"`  | Directory to store downloaded docs, relative to project root                                      |
+| `skip`           | `string[]` | `[]`                | Glob patterns or exact package names to skip. `@types/*` and common polyfills are always skipped. |
+| `claude_md`      | `string`   | `"CLAUDE.md"`       | Path to CLAUDE.md file, relative to project root                                                  |
+| `agent_dir`      | `string`   | `".claude/agents/"` | Directory containing agent `.md` files                                                            |
+| `extra_packages` | `string[]` | `[]`                | Additional package names to scan for llms.txt docs, beyond what is found in manifests             |
+| `script`         | `string`   | `""`                | Path to a Python download script (e.g., `scripts/download-ai-docs.py`). When set, `/llmstxt-update` runs in script mode, delegating downloads to this script instead of probing URLs directly. |
 
 ### Auto-skipped Packages
 
@@ -373,6 +393,13 @@ If it does not exist, use these defaults:
 If `.llmstxt.json` exists, read it and merge with defaults.
 
 ## Workflow
+
+### Mode Selection
+
+Before scanning, check if a `script` path is configured in `.llmstxt.json`:
+
+- **Script mode** (when `script` is set): Delegate the download phase to the configured Python script (e.g., `templates/download-ai-docs.py`). The script handles URL probing, downloading, and known-sources caching. The skill still handles Steps 4-6 (CLAUDE.md sync, agent file updates, reporting).
+- **Standalone mode** (when `script` is not set): The skill handles the entire workflow end-to-end, including URL probing and downloading.
 
 ### Step 1 — Scan Dependencies
 

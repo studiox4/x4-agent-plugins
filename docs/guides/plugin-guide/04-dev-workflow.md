@@ -1,13 +1,13 @@
 # 04 -- Dev Workflow
 
-How to set up, develop, test, version, publish, and iterate on the three Claude Code plugins in the `corbanbaxter/claude-workflow-plugins/` monorepo.
+How to set up, develop, test, version, publish, and iterate on the three Claude Code plugins in the `studiox4/x4-agent-plugins/` monorepo.
 
 ---
 
 ## 1. Repository Structure
 
 ```
-claude-workflow-plugins/
+x4-agent-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json          # Central registry of all plugins in this repo
 ├── plugins/
@@ -15,11 +15,11 @@ claude-workflow-plugins/
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json       # Manifest: name, version, skills, commands, hooks
 │   │   ├── commands/
-│   │   │   └── btw.md
+│   │   │   ├── idea.md
+│   │   │   └── init-tracker.md
 │   │   ├── skills/
-│   │   │   ├── btw/SKILL.md
-│   │   │   ├── plan-backlog/SKILL.md
-│   │   │   └── prd-generate/SKILL.md
+│   │   │   ├── idea/SKILL.md
+│   │   │   └── plan-backlog/SKILL.md
 │   │   ├── hooks/
 │   │   │   └── session-start.md
 │   │   ├── LICENSE                # Apache 2.0
@@ -28,7 +28,13 @@ claude-workflow-plugins/
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json
 │   │   ├── commands/
-│   │   │   └── init-agents.md
+│   │   │   ├── work.md
+│   │   │   ├── init-agents.md
+│   │   │   ├── init-setup.md
+│   │   │   ├── verify-local.md
+│   │   │   ├── pr-create.md
+│   │   │   ├── pr-status.md
+│   │   │   └── pr-cleanup.md
 │   │   ├── skills/
 │   │   │   ├── work/SKILL.md
 │   │   │   └── run-tests/SKILL.md
@@ -36,20 +42,34 @@ claude-workflow-plugins/
 │   │   │   ├── backend.md
 │   │   │   ├── frontend.md
 │   │   │   ├── reviewer.md
-│   │   │   └── tester.md
+│   │   │   ├── tester.md
+│   │   │   └── performance.md
 │   │   ├── hooks/
-│   │   │   ├── pre-tool-use.md    # Protected files
-│   │   │   ├── post-tool-use.md   # Auto-format
-│   │   │   └── teammate-idle.md   # Test gate
+│   │   │   ├── protected-files.sh
+│   │   │   ├── auto-format.sh
+│   │   │   └── teammate-idle.sh
 │   │   ├── LICENSE                # Apache 2.0
 │   │   └── README.md
-│   └── llmstxt-manager/
+│   ├── llmstxt-manager/
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json
+│   │   ├── commands/
+│   │   │   ├── llmstxt-init.md
+│   │   │   ├── llmstxt-update.md
+│   │   │   └── llmstxt-status.md
+│   │   ├── skills/
+│   │   │   └── llmstxt-update/SKILL.md
+│   │   ├── templates/
+│   │   │   └── download-ai-docs.py
+│   │   ├── LICENSE                 # Apache 2.0
+│   │   └── README.md
+│   └── x4-scaffold/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── commands/
-│       │   └── llmstxt-status.md
+│       │   └── scaffold.md
 │       ├── skills/
-│       │   └── llmstxt-update/SKILL.md
+│       │   └── scaffold/SKILL.md
 │       ├── LICENSE                 # Apache 2.0
 │       └── README.md
 ├── tests/
@@ -99,8 +119,8 @@ The root `.claude-plugin/marketplace.json` registers all plugins so they can be 
 ```json
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "claude-workflow-plugins",
-  "description": "Reusable workflow plugins for Claude Code: project tracking, agent team ops, and llms.txt management",
+  "name": "x4-agent-plugins",
+  "description": "Reusable workflow plugins for Claude Code: project tracking, agent team ops, llms.txt management, and scaffolding",
   "owner": {
     "name": "Corban Baxter",
     "email": "corban@example.com"
@@ -112,8 +132,8 @@ The root `.claude-plugin/marketplace.json` registers all plugins so they can be 
       "category": "productivity",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
       "source": "plugins/project-tracker",
-      "homepage": "https://github.com/corbanbaxter/claude-workflow-plugins",
-      "version": "1.0.0",
+      "homepage": "https://github.com/studiox4/x4-agent-plugins",
+      "version": "2.0.0",
       "tags": ["backlog", "planning", "prd", "status-tracking"]
     },
     {
@@ -122,8 +142,8 @@ The root `.claude-plugin/marketplace.json` registers all plugins so they can be 
       "category": "development",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
       "source": "plugins/agent-team-ops",
-      "homepage": "https://github.com/corbanbaxter/claude-workflow-plugins",
-      "version": "1.0.0",
+      "homepage": "https://github.com/studiox4/x4-agent-plugins",
+      "version": "2.0.0",
       "tags": ["agents", "teams", "workflow", "ci-cd"]
     },
     {
@@ -132,9 +152,19 @@ The root `.claude-plugin/marketplace.json` registers all plugins so they can be 
       "category": "development",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
       "source": "plugins/llmstxt-manager",
-      "homepage": "https://github.com/corbanbaxter/claude-workflow-plugins",
-      "version": "1.0.0",
+      "homepage": "https://github.com/studiox4/x4-agent-plugins",
+      "version": "2.0.0",
       "tags": ["llms-txt", "documentation", "dependencies"]
+    },
+    {
+      "name": "x4-scaffold",
+      "description": "Project scaffolding and boilerplate generation",
+      "category": "development",
+      "author": { "name": "Corban Baxter", "email": "corban@example.com" },
+      "source": "plugins/x4-scaffold",
+      "homepage": "https://github.com/studiox4/x4-agent-plugins",
+      "version": "2.0.0",
+      "tags": ["scaffold", "boilerplate", "project-setup"]
     }
   ]
 }
@@ -152,9 +182,9 @@ During development, you do not publish to test changes. Instead, link the plugin
 
 ```bash
 # From a consumer project (e.g., Daykeep):
-claude plugin link /path/to/claude-workflow-plugins/plugins/project-tracker
-claude plugin link /path/to/claude-workflow-plugins/plugins/agent-team-ops
-claude plugin link /path/to/claude-workflow-plugins/plugins/llmstxt-manager
+claude plugin link /path/to/x4-agent-plugins/plugins/project-tracker
+claude plugin link /path/to/x4-agent-plugins/plugins/agent-team-ops
+claude plugin link /path/to/x4-agent-plugins/plugins/llmstxt-manager
 ```
 
 Linked plugins override any installed version of the same plugin. To unlink:
@@ -168,7 +198,7 @@ claude plugin unlink x4-project-tracker
 For one-off testing without linking:
 
 ```bash
-claude --plugin-dir /path/to/claude-workflow-plugins/plugins/project-tracker
+claude --plugin-dir /path/to/x4-agent-plugins/plugins/project-tracker
 ```
 
 This loads the plugin for the current session only, without persisting any link.
@@ -179,7 +209,7 @@ The iteration loop looks like this:
 
 ```
 1. Open two terminals:
-   - Terminal A: claude-workflow-plugins/ repo (editing plugin source)
+   - Terminal A: x4-agent-plugins/ repo (editing plugin source)
    - Terminal B: consumer project (e.g., Daykeep)
 
 2. In Terminal B, link the plugin(s) you are working on.
@@ -221,7 +251,7 @@ Every change should be validated against at least two project types before publi
 
 **x4-project-tracker:**
 
-- `/btw` appends items to `docs/BACKLOG.md` with correct formatting
+- `/idea` appends items to `docs/BACKLOG.md` with correct formatting
 - `/plan-backlog` reads BACKLOG.md, presents triage menu, updates STATUS.md
 - `/prd-generate` creates a new file in the planning directory
 - SessionStart hook prints current phase from STATUS.md
@@ -274,7 +304,7 @@ Each plugin is versioned independently via the `version` field in its `.claude-p
 
 | Bump  | When                                                                                      | Example                                            |
 | ----- | ----------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| Patch | Bug fixes, wording changes in skills, no behavior change                                  | Fix typo in `/btw` output format                   |
+| Patch | Bug fixes, wording changes in skills, no behavior change                                  | Fix typo in `/idea` output format                   |
 | Minor | New skill/command added, new config option (backward-compatible), improved behavior       | Add `/prd-generate` skill to x4-project-tracker       |
 | Major | Breaking config changes, renamed skills/commands, removed features, changed hook behavior | Rename `backlog_file` config key to `backlog_path` |
 
@@ -284,7 +314,7 @@ Each plugin is versioned independently via the `version` field in its `.claude-p
 // plugins/project-tracker/.claude-plugin/plugin.json
 {
   "name": "x4-project-tracker",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Backlog capture, triage, PRD generation, status tracking"
 }
 ```
@@ -310,7 +340,7 @@ Maintain a single `CHANGELOG.md` at the repo root, organized by plugin and versi
 
 ### 1.0.0 (2026-03-15)
 
-- Initial release: `/btw`, `/plan-backlog`, SessionStart hook
+- Initial release: `/idea`, `/plan-backlog`, SessionStart hook
 
 ## x4-agent-team-ops
 
@@ -355,14 +385,14 @@ Users install by specifying the repo and plugin path:
 
 ```bash
 # Install individual plugins
-claude plugin install corbanbaxter/claude-workflow-plugins/x4-project-tracker
-claude plugin install corbanbaxter/claude-workflow-plugins/x4-agent-team-ops
-claude plugin install corbanbaxter/claude-workflow-plugins/x4-llmstxt-manager
+claude plugin install studiox4/x4-agent-plugins/x4-project-tracker
+claude plugin install studiox4/x4-agent-plugins/x4-agent-team-ops
+claude plugin install studiox4/x4-agent-plugins/x4-llmstxt-manager
 
 # Or install all three at once if supported
-claude plugin install corbanbaxter/claude-workflow-plugins/x4-project-tracker \
-                      corbanbaxter/claude-workflow-plugins/x4-agent-team-ops \
-                      corbanbaxter/claude-workflow-plugins/x4-llmstxt-manager
+claude plugin install studiox4/x4-agent-plugins/x4-project-tracker \
+                      studiox4/x4-agent-plugins/x4-agent-team-ops \
+                      studiox4/x4-agent-plugins/x4-llmstxt-manager
 ```
 
 After installation, the plugin's skills, commands, and hooks are available in any Claude Code session within the project.
@@ -439,7 +469,7 @@ This is the core feedback loop for improving the plugins over time.
 
 ```
 1. USE the plugin in a consumer project (e.g., Daykeep)
-   - Run /btw, /work, /llmstxt-update in normal development
+   - Run /idea, /work, /llmstxt-update in normal development
 
 2. NOTICE something that could be improved
    - A skill misses an edge case
@@ -452,7 +482,7 @@ This is the core feedback loop for improving the plugins over time.
    - Generic: this applies to any project using the plugin
 
 4. PORT the improvement to the plugin repo
-   - Switch to the claude-workflow-plugins/ repo
+   - Switch to the x4-agent-plugins/ repo
    - Edit the relevant skill/hook/command file
    - Update the config defaults if adding a new option
    - Add a test fixture case if the edge case is tricky
@@ -479,20 +509,20 @@ This is the core feedback loop for improving the plugins over time.
 
 ```
 Problem noticed in Daykeep:
-  /btw adds items to BACKLOG.md but does not deduplicate --
-  the same idea gets captured twice if you run /btw in two sessions.
+  /idea adds items to BACKLOG.md but does not deduplicate --
+  the same idea gets captured twice if you run /idea in two sessions.
 
 Analysis:
   This is generic. Any project would benefit from dedup.
 
 Fix in plugin repo:
-  Edit plugins/project-tracker/skills/btw/SKILL.md
+  Edit plugins/project-tracker/skills/idea/SKILL.md
   Add a step: "Before appending, scan existing BACKLOG.md entries.
   If a substantially similar item exists, ask the user whether to
   merge or add as separate."
 
 Test:
-  Link plugin in Daykeep, run /btw with a duplicate idea, confirm
+  Link plugin in Daykeep, run /idea with a duplicate idea, confirm
   it detects the duplicate and prompts.
 
 Version:
@@ -677,7 +707,7 @@ To test a plugin against the test fixtures without linking into a real project:
 # Start Claude Code in the fixture directory with the plugin loaded
 cd tests/fixtures/daykeep
 claude --plugin-dir ../../../plugins/project-tracker
-# Then invoke /btw, /plan-backlog, etc. and verify output
+# Then invoke /idea, /plan-backlog, etc. and verify output
 ```
 
 This is useful for quick smoke tests. Full validation still requires testing against a real project like Daykeep.
@@ -784,7 +814,7 @@ This scaffolds the directory structure, writes a starter `plugin.json`, and crea
 | Test without linking          | `claude --plugin-dir ./plugins/<name>`                              |
 | List installed/linked plugins | `claude plugin list`                                                |
 | Publish a plugin              | `claude plugin publish ./plugins/<name>`                            |
-| Install from registry         | `claude plugin install corbanbaxter/claude-workflow-plugins/<name>` |
+| Install from registry         | `claude plugin install studiox4/x4-agent-plugins/<name>` |
 | Update a plugin               | `claude plugin update <name>`                                       |
 | Update all plugins            | `claude plugin update`                                              |
 | Validate all plugins locally  | `bash tests/validate.sh`                                            |

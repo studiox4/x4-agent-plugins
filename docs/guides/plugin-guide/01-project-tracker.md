@@ -1,6 +1,6 @@
 # x4-project-tracker Plugin — Full Spec
 
-A Claude Code plugin that provides backlog capture, triage, PRD generation, and status tracking for any software project. Extracted and generified from the Daykeep project's `/btw` and `/plan-backlog` workflows.
+A Claude Code plugin that provides backlog capture, triage, PRD generation, and status tracking for any software project. Extracted and generified from the Daykeep project's `/idea` and `/plan-backlog` workflows.
 
 ---
 
@@ -8,7 +8,7 @@ A Claude Code plugin that provides backlog capture, triage, PRD generation, and 
 
 The x4-project-tracker plugin gives any project three capabilities:
 
-1. **`/btw` (Backlog Capture)** — Quickly capture a feature idea, improvement, or note into a structured backlog file without interrupting active work. The agent reads just enough project context to make the entry useful.
+1. **`/idea` (Backlog Capture)** — Quickly capture a feature idea, improvement, or note into a structured backlog file without interrupting active work. The agent reads just enough project context to make the entry useful.
 
 2. **`/plan-backlog` (Triage + PRD Creation)** — Present unplanned backlog items as a menu. The user picks items to plan (generates a PRD and updates the status file) or delete. Never auto-selects.
 
@@ -46,10 +46,10 @@ project-tracker/
 ├── .claude-plugin/
 │   └── plugin.json
 ├── commands/
-│   ├── btw.md
+│   ├── idea.md
 │   └── init-tracker.md
 ├── skills/
-│   ├── btw/
+│   ├── idea/
 │   │   └── SKILL.md
 │   └── plan-backlog/
 │       └── SKILL.md
@@ -78,7 +78,7 @@ The file uses YAML frontmatter (between `---` delimiters) for all configuration 
 # Paths (relative to repo root)
 status_file: "docs/STATUS.md"
 backlog_file: "docs/BACKLOG.md"
-planning_dir: "docs/planning/"
+planning_dir: "docs/planning/todo/"
 
 # PRD filename pattern — NN is auto-incremented, <name> is kebab-cased
 prd_pattern: "NN-prd-<name>.md"
@@ -122,7 +122,7 @@ prd_sections:
   - heading: "Out of Scope (v1)"
     prompt: "What we are explicitly not building in the first pass"
 
-# Backlog entry template — sections included in each /btw entry
+# Backlog entry template — sections included in each /idea entry
 backlog_sections:
   - heading: "What"
     prompt: "2-4 sentences. What is this feature? What problem does it solve?"
@@ -208,7 +208,10 @@ Initialize the project tracker for this repository.
 
    ---
 
-6. **Create the planning directory** at the configured `planning_dir` path (`mkdir -p`).
+6. **Create the planning directory** at the configured `planning_dir` path with subdirectories (`mkdir -p`):
+   - `<planning_dir>/todo/` — for new/unstarted PRDs
+   - `<planning_dir>/in-progress/` — for PRDs currently being built
+   - `<planning_dir>/complete/` — for shipped PRDs
 
 7. **Commit all created files:**
 
@@ -223,16 +226,16 @@ Initialize the project tracker for this repository.
    &gt; - Planning: `&lt;planning_dir&gt;`
    &gt; - Config: `.claude/project-tracker.config.md`
    &gt;
-   &gt; Customize your config, then use `/btw` to capture ideas and `/plan-backlog` to turn them into PRDs.
+   &gt; Customize your config, then use `/idea` to capture ideas and `/plan-backlog` to turn them into PRDs.
 </code></pre>
 
 ---
 
-## 6. `/btw` Command + Skill
+## 6. `/idea` Command + Skill
 
 ### Command
 
-**File: `project-tracker/commands/btw.md`**
+**File: `project-tracker/commands/idea.md`**
 
 <pre><code>---
 description: Add an idea or feature to the project backlog with project context
@@ -240,23 +243,23 @@ argument-hint: "&lt;your idea or note&gt;"
 allowed-tools: [Read, Write, Edit, Glob, Grep]
 ---
 
-Use the btw skill to add the following to the backlog:
+Use the idea skill to add the following to the backlog:
 
 $ARGUMENTS
 </code></pre>
 
 ### Skill
 
-**File: `project-tracker/skills/btw/SKILL.md`**
+**File: `project-tracker/skills/idea/SKILL.md`**
 
 <pre><code>---
-name: btw
+name: idea
 description: Use when the user wants to capture a feature idea, improvement, or note into the project backlog without interrupting active work
-version: 1.0.0
+version: 2.0.0
 license: MIT
 ---
 
-# /btw — Context-Aware Backlog Capture
+# /idea — Context-Aware Backlog Capture
 
 ## Overview
 
@@ -270,7 +273,7 @@ Read `.claude/project-tracker.config.md` from the repo root. Parse YAML frontmat
 
 - `status_file`: `docs/STATUS.md`
 - `backlog_file`: `docs/BACKLOG.md`
-- `planning_dir`: `docs/planning/`
+- `planning_dir`: `docs/planning/todo/`
 - `scope.small`: Single module or endpoint, no new data models
 - `scope.medium`: New data models, multiple screens or endpoints, possible external integration
 - `scope.large`: New external service, significant schema changes, crosses multiple system boundaries
@@ -344,7 +347,7 @@ Use the scope definitions from the config. If config is missing, use:
 <pre><code>---
 name: plan-backlog
 description: Use when the status file has no ready-to-build features and the backlog has unplanned items — presents a menu to plan or delete backlog items, then writes the PRD and updates the status file
-version: 1.0.0
+version: 2.0.0
 license: MIT
 ---
 
@@ -362,7 +365,7 @@ Read `.claude/project-tracker.config.md` from the repo root. Parse YAML frontmat
 
 - `status_file`: `docs/STATUS.md`
 - `backlog_file`: `docs/BACKLOG.md`
-- `planning_dir`: `docs/planning/`
+- `planning_dir`: `docs/planning/todo/`
 - `prd_pattern`: `NN-prd-&lt;name&gt;.md`
 - `status_columns`: Backend, Frontend, Tested, Deployed
 - `status_values.not_started`: Not Started
@@ -417,6 +420,24 @@ Wait for the user's response before doing anything.
 
 **If user picks multiple (e.g. "D1, D2, then plan 3"):**
 -&gt; Execute deletions first, then proceed to plan the chosen item.
+
+### Step 3.5a: Brainstorming
+
+Before writing the PRD, run a brainstorming session with the user:
+
+- Present 3-5 possible approaches to implementing the feature
+- For each approach, note trade-offs (complexity, scope, dependencies)
+- Ask the user which approach to pursue (or combine ideas)
+- Use the selected approach to inform the PRD content
+
+### Step 3.5b: Implementation Plan
+
+After brainstorming, draft a high-level implementation plan:
+
+- Break the feature into ordered implementation steps
+- Identify which agent roles are involved in each step
+- Note any blockers or prerequisites from the status file
+- Present the plan to the user for approval before writing the PRD
 
 ### Step 4: Write the PRD
 
@@ -487,7 +508,7 @@ Delete the planned item's full section (from `##` heading through the `---` sepa
 - PRDs must match existing format if prior PRDs exist — read at least one before writing
 - Remove the item from the backlog file once it becomes a PRD — no duplicates
 - If the backlog file does not exist, tell the user to run `/init-tracker` first
-- If the backlog file is empty or all items are already tracked in the status file, respond: "Backlog is empty or fully planned. Use `/btw` to capture new ideas."
+- If the backlog file is empty or all items are already tracked in the status file, respond: "Backlog is empty or fully planned. Use `/idea` to capture new ideas."
 </code></pre>
 
 ---
@@ -522,7 +543,7 @@ The hooks schema follows the official Claude Code plugin format. The `${CLAUDE_P
 #!/usr/bin/env bash
 cat <<'HOOK_MSG'
 Project tracker is active. Key commands:
-  /btw <idea>      — capture a feature idea to the backlog
+  /idea <idea>      — capture a feature idea to the backlog
   /plan-backlog    — triage backlog items into PRDs
   /init-tracker    — scaffold tracking files for a new project
 Config: .claude/project-tracker.config.md
@@ -548,7 +569,7 @@ Every file in the plugin is reproduced below in its final, ready-to-copy form. T
 }
 ```
 
-### `project-tracker/commands/btw.md`
+### `project-tracker/commands/idea.md`
 
     ---
     description: Add an idea or feature to the project backlog with project context
@@ -556,7 +577,7 @@ Every file in the plugin is reproduced below in its final, ready-to-copy form. T
     allowed-tools: [Read, Write, Edit, Glob, Grep]
     ---
 
-    Use the btw skill to add the following to the backlog:
+    Use the idea skill to add the following to the backlog:
 
     $ARGUMENTS
 
@@ -626,7 +647,10 @@ Every file in the plugin is reproduced below in its final, ready-to-copy form. T
        ---
        ```
 
-    6. **Create the planning directory** at the configured `planning_dir` path (`mkdir -p`).
+    6. **Create the planning directory** at the configured `planning_dir` path with subdirectories (`mkdir -p`):
+   - `<planning_dir>/todo/` — for new/unstarted PRDs
+   - `<planning_dir>/in-progress/` — for PRDs currently being built
+   - `<planning_dir>/complete/` — for shipped PRDs
 
     7. **Commit all created files:**
 
@@ -643,18 +667,18 @@ Every file in the plugin is reproduced below in its final, ready-to-copy form. T
        > - Planning: `<planning_dir>`
        > - Config: `.claude/project-tracker.config.md`
        >
-       > Customize your config, then use `/btw` to capture ideas and `/plan-backlog` to turn them into PRDs.
+       > Customize your config, then use `/idea` to capture ideas and `/plan-backlog` to turn them into PRDs.
 
-### `project-tracker/skills/btw/SKILL.md`
+### `project-tracker/skills/idea/SKILL.md`
 
     ---
-    name: btw
+    name: idea
     description: Use when the user wants to capture a feature idea, improvement, or note into the project backlog without interrupting active work
-    version: 1.0.0
+    version: 2.0.0
     license: MIT
     ---
 
-    # /btw — Context-Aware Backlog Capture
+    # /idea — Context-Aware Backlog Capture
 
     ## Overview
 
@@ -671,7 +695,7 @@ Every file in the plugin is reproduced below in its final, ready-to-copy form. T
 
     - `status_file`: `docs/STATUS.md`
     - `backlog_file`: `docs/BACKLOG.md`
-    - `planning_dir`: `docs/planning/`
+    - `planning_dir`: `docs/planning/todo/`
     - `scope.small`: Single module or endpoint, no new data models
     - `scope.medium`: New data models, multiple screens or endpoints, possible external integration
     - `scope.large`: New external service, significant schema changes, crosses multiple system boundaries
@@ -746,7 +770,7 @@ Every file in the plugin is reproduced below in its final, ready-to-copy form. T
     ---
     name: plan-backlog
     description: Use when the status file has no ready-to-build features and the backlog has unplanned items — presents a menu to plan or delete backlog items, then writes the PRD and updates the status file
-    version: 1.0.0
+    version: 2.0.0
     license: MIT
     ---
 
@@ -766,7 +790,7 @@ Every file in the plugin is reproduced below in its final, ready-to-copy form. T
 
     - `status_file`: `docs/STATUS.md`
     - `backlog_file`: `docs/BACKLOG.md`
-    - `planning_dir`: `docs/planning/`
+    - `planning_dir`: `docs/planning/todo/`
     - `prd_pattern`: `NN-prd-<name>.md`
     - `status_columns`: Backend, Frontend, Tested, Deployed
     - `status_values.not_started`: Not Started
@@ -826,6 +850,24 @@ Every file in the plugin is reproduced below in its final, ready-to-copy form. T
 
     **If user picks multiple (e.g. "D1, D2, then plan 3"):**
     -> Execute deletions first, then proceed to plan the chosen item.
+
+    ### Step 3.5a: Brainstorming
+
+    Before writing the PRD, run a brainstorming session with the user:
+
+    - Present 3-5 possible approaches to implementing the feature
+    - For each approach, note trade-offs (complexity, scope, dependencies)
+    - Ask the user which approach to pursue (or combine ideas)
+    - Use the selected approach to inform the PRD content
+
+    ### Step 3.5b: Implementation Plan
+
+    After brainstorming, draft a high-level implementation plan:
+
+    - Break the feature into ordered implementation steps
+    - Identify which agent roles are involved in each step
+    - Note any blockers or prerequisites from the status file
+    - Present the plan to the user for approval before writing the PRD
 
     ### Step 4: Write the PRD
 
@@ -913,7 +955,7 @@ Every file in the plugin is reproduced below in its final, ready-to-copy form. T
     - Remove the item from the backlog file once it becomes a PRD — no duplicates
     - If the backlog file does not exist, tell the user to run `/init-tracker` first
     - If the backlog file is empty or all items are already tracked in the status file,
-      respond: "Backlog is empty or fully planned. Use `/btw` to capture new ideas."
+      respond: "Backlog is empty or fully planned. Use `/idea` to capture new ideas."
 
 ### `project-tracker/hooks/hooks.json`
 
@@ -941,7 +983,7 @@ Every file in the plugin is reproduced below in its final, ready-to-copy form. T
 #!/usr/bin/env bash
 cat <<'HOOK_MSG'
 Project tracker is active. Key commands:
-  /btw <idea>      — capture a feature idea to the backlog
+  /idea <idea>      — capture a feature idea to the backlog
   /plan-backlog    — triage backlog items into PRDs
   /init-tracker    — scaffold tracking files for a new project
 Config: .claude/project-tracker.config.md

@@ -11,7 +11,12 @@ The `x4-agent-team-ops` plugin provides:
 - **`/work`** -- A 7-phase feature dispatch pipeline: orient, setup, build (agent team), review, ship, memory sweep, cleanup.
 - **`/run-tests`** -- Runs unit and e2e test commands defined in config.
 - **`/init-agents`** -- Generates project-specific agent `.md` files from bundled templates, using `CLAUDE.md` analysis to fill in project details.
-- **4 agent templates** -- Generic backend, frontend, reviewer, and tester agents that read their domain boundaries from config.
+- **`/init-setup`** -- Interactive wizard for configuring project tooling (test commands, formatters, CI provider, DB branching, etc.).
+- **`/verify-local`** -- Verification gate with auto-fix: runs all configured test commands, lint, and typecheck locally, auto-fixing failures where possible.
+- **`/pr-create`** -- Creates a PR from the current branch with conventional title and body derived from commits and PRD.
+- **`/pr-status`** -- Checks CI status, review state, and merge readiness for the current PR.
+- **`/pr-cleanup`** -- Cleans up after merge: deletes local/remote branch, database branch (if configured), and archives the PRD.
+- **5 agent templates** -- Generic backend, frontend, reviewer, tester, and performance agents that read their domain boundaries from config.
 - **3 hook types** -- PreToolUse (protected files), PostToolUse (auto-format), TeammateIdle (test gate).
 
 Everything is config-driven. No project-specific paths, commands, or service names are hardcoded into the plugin. The plugin reads `.claude/agent-team.config.md` for all project-specific values.
@@ -60,7 +65,8 @@ agent-team-ops/
 │   ├── backend.md               # Template: backend agent
 │   ├── frontend.md              # Template: frontend agent
 │   ├── reviewer.md              # Template: reviewer agent
-│   └── tester.md                # Template: tester agent
+│   ├── tester.md                # Template: tester agent
+│   └── performance.md           # Template: performance agent (read-only)
 ├── hooks/
 │   ├── hooks.json               # PreToolUse, PostToolUse, TeammateIdle
 │   ├── protected-files.sh       # Blocks edits to protected file patterns
@@ -106,6 +112,10 @@ agents:
       - "apps/web"
     model: sonnet
   reviewer:
+    owns: [] # Read-only -- owns nothing
+    model: sonnet
+    read_only: true
+  performance:
     owns: [] # Read-only -- owns nothing
     model: sonnet
     read_only: true
@@ -337,8 +347,8 @@ bundled agent templates. This command should be run once during project setup.
 - If the user has custom agent roles not in the templates (e.g., `cli`, `devops`),
   generate a minimal agent file with owned dirs and conventions, using the
   `backend.md` template as a base.
-- The reviewer agent always gets `read_only: true` in its frontmatter and never
-  receives Write/Edit tools.
+- The reviewer and performance agents always get `read_only: true` in their frontmatter and never
+  receive Write/Edit tools.
 - Re-running `/init-agents` after initial setup is safe -- it asks before overwriting.
 ```
 
@@ -450,15 +460,12 @@ User has confirmed a piece of work to build.
 
 3. **Push branch and open draft PR.**
 - `git push -u origin <branch-name>`
-- **If `pr.draft` is true:**
-  ```
-  gh pr create --draft --title "<Feature Name>" --body "WIP: <one-line description>"
-  ```
-- **If `pr.draft` is false:**
-  ```
-  gh pr create --title "<Feature Name>" --body "<one-line description>"
-  ```
-- Apply labels from `pr.labels` if any.
+- Delegate PR creation to `/pr-create`, which handles draft mode, labels, and body generation.
+
+3a. **Move PRD to in-progress.**
+- If the selected feature has a PRD in `<planning_dir>/todo/`, move it:
+  `git mv <planning_dir>/todo/<prd-file> <planning_dir>/in-progress/<prd-file>`
+- Commit the move.
 
 4. **[If `ci.preview_url_command` is configured] Wait for preview environment.**
 - After pushing, wait for the preview environment to be provisioned.
@@ -565,11 +572,15 @@ on the feature branch.
 
 ### Steps
 
-1. **Spawn reviewer agent.**
+1. **Spawn reviewer and performance agents (in parallel).**
 - Use the reviewer's `.md` file from `.claude/agents/reviewer.md`.
-- Provide context: "Review all changes on branch {branch} since it diverged
-  from {base_branch}. Check the full diff, not just the latest commit."
-- The reviewer agent has read-only tools (no Write/Edit).
+- Use the performance agent's `.md` file from `.claude/agents/performance.md`.
+- Both agents run in parallel. Provide context: "Review all changes on branch
+  {branch} since it diverged from {base_branch}. Check the full diff, not just
+  the latest commit."
+- Both agents have read-only tools (no Write/Edit).
+- The performance agent checks: bundle size impact, unnecessary re-renders,
+  memory leaks, query patterns, caching opportunities.
 
 2. **Reviewer executes checklists.**
 The reviewer's agent file contains its checklists (security, architecture,
@@ -600,8 +611,8 @@ quality). It reports findings as:
   - Re-run the reviewer on the fixed files (or the relevant subset).
 - Repeat until no blockers remain.
 
-4. **Verification gate.**
-Run ALL configured test commands in sequence. Each must pass with evidence.
+4. **Verification gate (mandatory — delegates to `/verify-local`).**
+Run ALL configured test commands in sequence via `/verify-local`. Each must pass with evidence. `/verify-local` will auto-fix lint and typecheck failures where possible.
 
 a. **Unit tests:** Run `test_commands.unit` (required).
    ```
@@ -679,19 +690,20 @@ gh pr ready
 ````
 **If `pr.convert_on_ship` is false:** Leave PR in its current state.
 
-3. **[If `ci.watch_command` is configured] Watch CI.**
-- Run the CI watch command:
-  ```
-  $ {ci.watch_command}
-  ```
+3. **[If `ci.watch_command` is configured] Watch CI via `/pr-status`.**
+- Delegate CI status checking to `/pr-status`.
 - Wait for CI to complete.
 - **If CI passes:** Proceed to reporting.
-- **If CI fails:**
-  - Analyze the failure output.
-  - Route the fix to the appropriate agent.
-  - Agent fixes, commits, pushes.
-  - Re-watch CI.
-  - Repeat until CI passes (max 3 attempts, then escalate to user).
+- **If CI fails:** Handle according to the failure table:
+
+  | Failure type | Action |
+  | --- | --- |
+  | Lint errors | Auto-fix, commit, push, re-watch |
+  | TypeScript type errors | Auto-fix, commit, push, re-watch |
+  | Single failing unit test | Diagnose, fix, commit, push, re-watch |
+  | E2E / build / logic errors | Stop and notify user with error summary |
+
+  - Max 3 retry attempts, then escalate to user.
 - **If `ci.watch_command` is NOT configured:** Skip CI watching. Report
   that the PR is pushed and ready.
 
@@ -745,14 +757,19 @@ Look for:
 - Update the feature's status to reflect what was shipped.
 - Record the PR number for reference.
 
+5. **Move PRD to complete.**
+- If the feature's PRD is in `<planning_dir>/in-progress/`, move it:
+  `git mv <planning_dir>/in-progress/<prd-file> <planning_dir>/complete/<prd-file>`
+- Commit the move.
+
 ### Exit criteria
-Status file updated, patterns captured in memory.
+Status file updated, PRD moved to complete, patterns captured in memory.
 
 ---
 
 ## Phase 7 -- Cleanup
 
-**Goal:** Clean up temporary resources.
+**Goal:** Clean up temporary resources. Delegates to `/pr-cleanup`.
 
 ### Steps
 
@@ -1166,6 +1183,67 @@ Use `{{PACKAGE_MANAGER}}` for all package operations.
    to confirm everything passes, then go idle.
 ```
 
+### 9.5 Performance Agent Template
+
+**File: `agent-team-ops/agents/performance.md`**
+
+```markdown
+---
+name: performance
+description: Read-only performance analysis -- bundle size, re-renders, memory leaks, query patterns, caching
+model: sonnet
+---
+
+# Performance Agent
+
+You are the performance agent. You have READ-ONLY access to the entire codebase.
+You do NOT have Write or Edit tools. Your job is to analyze changes for
+performance implications and report findings.
+
+## Tech Stack
+
+{{TECH_STACK}}
+
+## Conventions
+
+{{CONVENTIONS}}
+
+## Performance Checklist
+
+- [ ] Bundle size impact: new dependencies, large imports, tree-shaking issues
+- [ ] Unnecessary re-renders: missing memoization, unstable references in props
+- [ ] Memory leaks: event listeners not cleaned up, subscriptions not unsubscribed
+- [ ] Query patterns: N+1 queries, missing indexes, unoptimized joins
+- [ ] Caching opportunities: repeated expensive computations, cacheable API responses
+- [ ] Lazy loading: large components or routes that should be code-split
+
+## Output Format
+
+Report findings with severity and location:
+
+## Performance Findings
+
+### Blockers (must fix before merge)
+
+- [PERF] path/to/file.ts:42 -- Description of the issue
+
+### Warnings (should fix, not blocking)
+
+- [PERF] path/to/file.ts:15 -- Description of the issue
+
+### Opportunities (nice to have)
+
+- [PERF] General optimization suggestion
+
+## Rules
+
+1. You are read-only. Do not attempt to fix issues -- report them.
+2. Review ALL changes on the branch, not just the latest commit.
+3. Use `git diff <base>...HEAD` to see the full diff.
+4. Be specific: include file paths and line numbers.
+5. Focus on measurable performance impacts, not style preferences.
+```
+
 ---
 
 ## 10. Hooks
@@ -1337,6 +1415,7 @@ Every file in the plugin and its purpose:
 | `agents/frontend.md`         | Section 9.2   | Template: frontend agent with placeholders             |
 | `agents/reviewer.md`         | Section 9.3   | Template: reviewer agent (read-only) with placeholders |
 | `agents/tester.md`           | Section 9.4   | Template: tester agent with placeholders               |
+| `agents/performance.md`     | Section 9.5   | Template: performance agent (read-only) with placeholders |
 | `hooks/hooks.json`           | Section 10    | Hook definitions using `${CLAUDE_PLUGIN_ROOT}` paths   |
 | `hooks/protected-files.sh`   | Section 10    | PreToolUse: blocks edits to protected file patterns    |
 | `hooks/auto-format.sh`       | Section 10    | PostToolUse: runs configured formatter after edits     |
@@ -1366,6 +1445,7 @@ The config file is created by `/init-agents` on first run or manually by the use
    - `.claude/agents/frontend.md` (from template)
    - `.claude/agents/reviewer.md` (from template)
    - `.claude/agents/tester.md` (from template)
+   - `.claude/agents/performance.md` (from template)
 4. User reviews and customizes the generated files.
 5. Hooks are active immediately (they read from config).
 
