@@ -1,59 +1,113 @@
 # x4-agent-plugins
 
-A Claude Code plugin marketplace for structured development workflows: project scaffolding, tracking, agent team ops, and llms.txt management.
+A Claude Code plugin marketplace for the complete AI-powered development workflow: project scaffolding, backlog management, agent team coordination, and reference documentation.
 
-## Pipeline Overview
+![x4 Workflow Diagram](public/images/x4-workflow-diagram.png)
 
-The plugins work together as a full development pipeline:
+## How It Works
 
-```
-/x4-create → /init-tracker → /idea → /plan-backlog → /work → shipped PR
-```
+The plugins form a complete pipeline from idea to shipped PR:
 
-1. **`/x4-create`** — Scaffold a new x4-mono full-stack TypeScript monorepo
-2. **`/idea`** — Capture feature ideas to a structured backlog
-3. **`/plan-backlog`** — Triage backlog items, brainstorm, create implementation plans, write PRDs (→ `docs/planning/todo/`)
-4. **`/work`** — Pick a feature, dispatch an agent team, build, review, verify, ship (PRD moves: `todo/` → `in-progress/` → `complete/`)
+| Stage | Command | What happens |
+|-------|---------|--------------|
+| **Onboard** | `/x4-onboard` | Check tools, accounts, CLI access — get your machine ready |
+| **Scaffold** | `/x4-create my-app` | Create a full-stack TypeScript monorepo (Next.js, Hono, Expo, etc.) |
+| **Capture** | `/idea <idea>` | Drop a feature idea into a structured backlog |
+| **Plan** | `/plan-backlog` | Brainstorm, create implementation plan, write PRD |
+| **Build** | `/work` | Dispatch an agent team, build, review, verify, ship |
 
-## Quick Start
+## Getting Started
+
+### 1. Install Claude Code
+
+If you don't have Claude Code yet, install it from [claude.ai/download](https://claude.ai/download) or via:
 
 ```bash
-# 1. Add the marketplace
+npm install -g @anthropic-ai/claude-code
+```
+
+### 2. Add the marketplace and install plugins
+
+```bash
+# Add the x4 plugin marketplace
 /plugin marketplace add studiox4/x4-agent-plugins
 
-# 2. Install plugins
+# Install all plugins
 /plugin install x4-scaffold@x4-agent-plugins
 /plugin install x4-project-tracker@x4-agent-plugins
 /plugin install x4-agent-team-ops@x4-agent-plugins
 /plugin install x4-llmstxt-manager@x4-agent-plugins
-
-# 3. Scaffold a new project
-/x4-create my-app   # Interactive wizard: preset, platforms, env setup
-
-# 4. Set up workflow tools (inside the new project)
-/init-tracker    # Create STATUS.md, BACKLOG.md, planning directories
-/init-setup      # Configure database, hosting, CI, package manager, tests
-/init-agents     # Generate project-specific agent files from templates
 ```
+
+### 3. Run the onboarding wizard
+
+```bash
+/x4-onboard
+```
+
+This checks your machine for everything you need and walks you through setup:
+
+| Requirement | Why | Free tier? |
+|-------------|-----|------------|
+| **Bun** >= 1.1 | Package manager + runtime | Open source |
+| **Node.js** >= 18 | Required by some tooling | Open source |
+| **Git** | Version control | Open source |
+| **GitHub CLI** (`gh`) | PR management, CI watching | Free |
+| **Neon** account | Serverless PostgreSQL with branch-per-PR | Yes (0.5 GB, 190 compute hrs/mo) |
+| **Railway** account | Hosting + preview environments | Yes ($5/mo credit) |
+| **Vercel** account | Next.js frontend deploys | Yes (personal projects) |
+| **Anthropic API key** | AI features in your app | Pay-as-you-go |
+
+The onboarding wizard detects what's already installed and only walks through what's missing.
+
+### 4. Create your first project
+
+```bash
+/x4-create my-app
+```
+
+Choose a preset:
+- **saas** — Web + API + AI (most common)
+- **full-stack** — Everything: web, API, mobile, desktop, AI, marketing, docs
+- **landing** — Web + API + marketing site
+- **api-only** — Hono + tRPC backend microservice
+
+The wizard handles environment setup (database, auth secrets, AI keys), then you're ready:
+
+```bash
+cd my-app
+bun dev        # Web on :3000, API on :3002, Marketing on :3001
+```
+
+### 5. Start building features
+
+```bash
+/idea "Add user dashboard with analytics"     # Capture the idea
+/plan-backlog                                   # Brainstorm → plan → write PRD
+/work                                           # Agent team builds, reviews, ships
+```
+
+---
 
 ## Plugins
 
 ### x4-scaffold
 
-Scaffold and manage x4-mono full-stack TypeScript monorepo projects.
+Scaffold and manage [x4-mono](https://github.com/corbanb/x4-mono) full-stack TypeScript monorepo projects.
 
-**Commands:**
 | Command | Description |
 |---------|-------------|
+| `/x4-onboard` | Check tools, accounts, CLIs — set up your dev environment |
 | `/x4-create [name]` | Scaffold a new project (presets: full-stack, saas, landing, api-only) |
 | `/x4-add` | Add a mobile or web app to an existing project |
 | `/x4-env` | Set up environment variables (database, auth, AI keys) |
+
+**Tech stack created:** Next.js 15 + React 19 + Tailwind 4 / Hono + tRPC 11 + Drizzle ORM / Neon PostgreSQL / Better Auth / Vercel AI SDK + Claude / Expo 52 / Electron 33 / Turborepo + Bun
 
 ### x4-project-tracker
 
 Backlog capture, triage, PRD generation, and project status tracking.
 
-**Commands:**
 | Command | Description |
 |---------|-------------|
 | `/idea <idea>` | Capture a feature idea to the backlog |
@@ -64,7 +118,6 @@ Backlog capture, triage, PRD generation, and project status tracking.
 
 Agent team coordination, feature dispatching, review cycles, and hook-based guardrails.
 
-**Commands:**
 | Command | Description |
 |---------|-------------|
 | `/work` | 7-phase pipeline: Orient → Setup → Build → Review+Verify → Ship → Memory Sweep → Cleanup |
@@ -77,6 +130,7 @@ Agent team coordination, feature dispatching, review cycles, and hook-based guar
 | `/pr-cleanup` | Post-merge cleanup: delete DB branch + local branch |
 
 **Agent Templates:**
+
 | Agent | Role |
 |-------|------|
 | backend | Server-side code, database schema, API routes |
@@ -89,12 +143,13 @@ Agent team coordination, feature dispatching, review cycles, and hook-based guar
 
 Scan project dependencies, discover llms.txt documentation endpoints, download and manage AI-readable reference docs.
 
-**Commands:**
 | Command | Description |
 |---------|-------------|
 | `/llmstxt-init` | Scaffold download script, known-sources cache, docs directory, config |
 | `/llmstxt-update` | Full scan, discover, download, and sync (uses script if present) |
 | `/llmstxt-status` | Read-only status report of current docs |
+
+---
 
 ## Configuration
 
@@ -104,6 +159,7 @@ Each plugin uses a config file in `.claude/`:
 |--------|-------------|--------------|
 | project-tracker | `.claude/project-tracker.config.md` | `/init-tracker` |
 | agent-team-ops | `.claude/agent-team.config.md` | `/init-setup` |
+| llmstxt-manager | `.llmstxt.json` | `/llmstxt-init` |
 
 All settings have sensible defaults. Configuration is optional to get started.
 
@@ -119,26 +175,9 @@ Some features integrate with official Claude plugins when installed:
 
 These are optional — features degrade gracefully with inline alternatives when plugins aren't installed.
 
-## Installation
+## Auto-suggest plugins for your team
 
-### Add the marketplace
-
-```
-/plugin marketplace add studiox4/x4-agent-plugins
-```
-
-### Install plugins
-
-```
-/plugin install x4-scaffold@x4-agent-plugins
-/plugin install x4-project-tracker@x4-agent-plugins
-/plugin install x4-agent-team-ops@x4-agent-plugins
-/plugin install x4-llmstxt-manager@x4-agent-plugins
-```
-
-### Auto-suggest plugins for your team
-
-Add this to your project's `.claude/settings.json` so team members are prompted to install the marketplace and plugins when they trust the project:
+Add this to your project's `.claude/settings.json` so team members are prompted to install:
 
 ```json
 {
@@ -154,20 +193,7 @@ Add this to your project's `.claude/settings.json` so team members are prompted 
     "x4-scaffold@x4-agent-plugins": true,
     "x4-project-tracker@x4-agent-plugins": true,
     "x4-agent-team-ops@x4-agent-plugins": true,
-    "x4-llmstxt-manager@x4-agent-plugins": true,
-    "feature-dev@claude-code-plugins": true,
-    "frontend-design@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true,
-    "code-review@claude-plugins-official": true,
-    "github@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
-    "ralph-loop@claude-plugins-official": true,
-    "playwright@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true,
-    "claude-code-setup@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true,
-    "railway@railway-skills": true
+    "x4-llmstxt-manager@x4-agent-plugins": true
   }
 }
 ```
@@ -177,7 +203,6 @@ Add this to your project's `.claude/settings.json` so team members are prompted 
 ```bash
 # Test the marketplace locally
 /plugin marketplace add ./path/to/x4-agent-plugins
-/plugin install x4-project-tracker@x4-agent-plugins
 
 # Validate marketplace structure
 claude plugin validate .
@@ -186,10 +211,10 @@ claude plugin validate .
 bash tests/validate.sh
 
 # Link individual plugins for iterative development
+claude plugin link ./plugins/x4-scaffold
 claude plugin link ./plugins/project-tracker
 claude plugin link ./plugins/agent-team-ops
 claude plugin link ./plugins/llmstxt-manager
-claude plugin link ./plugins/x4-scaffold
 ```
 
 ## License

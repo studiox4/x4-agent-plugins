@@ -4,6 +4,18 @@ A Claude Code plugin to scaffold and manage [x4-mono](https://github.com/corbanb
 
 ## Commands
 
+### `/x4-onboard`
+
+First-time setup wizard for new developers. Checks your local environment and walks through everything you need:
+
+- **Required tools:** Bun, Node.js, Git, GitHub CLI
+- **Accounts:** Neon (database), Railway (hosting), Vercel (deploys), Anthropic (AI)
+- **CLI authentication:** gh, neonctl, railway, vercel
+- **Claude Code plugins:** installs any missing x4 plugins
+- **Optional tools:** Python 3, Expo CLI, Playwright
+
+Safe to re-run anytime to check your environment status.
+
 ### `/x4-create [project-name]`
 
 Interactive wizard to scaffold a new x4-mono project. Guides you through:
@@ -52,9 +64,13 @@ Set up or update `.env.local` for an x4-mono project:
 
 ## Prerequisites
 
+Run `/x4-onboard` to check and install everything automatically, or set up manually:
+
 - **Bun** >= 1.1 (`curl -fsSL https://bun.sh/install | bash`)
+- **Node.js** >= 18 (via [nvm](https://github.com/nvm-sh/nvm) or [nodejs.org](https://nodejs.org))
 - **Git** installed
-- **GitHub access** (template downloads from GitHub)
+- **GitHub CLI** (`brew install gh`, then `gh auth login`)
+- **Neon account** (free tier at [console.neon.tech](https://console.neon.tech/signup))
 
 ## Installation
 
