@@ -17,8 +17,11 @@ Combines project scaffolding, backlog management, agent team coordination, llms.
 |---------|-------------|
 | `/x4:onboard` | Check tools, accounts, CLIs — set up your dev environment |
 | `/x4:create [name]` | Scaffold a new x4-mono project |
+| `/x4:tour` | Guided walkthrough — explore apps, test login, try AI chat |
+| `/x4:kickstart` | Brainstorm features, design UI, prioritize, batch-generate PRDs |
 | `/x4:add` | Add a mobile or web app to an existing project |
 | `/x4:env` | Set up environment variables |
+| `/x4:status` | Quick project health dashboard |
 | `/x4:idea <idea>` | Capture a feature idea to the backlog |
 | `/x4:plan-backlog` | Triage backlog, brainstorm, plan, write PRD |
 | `/x4:init-tracker` | Scaffold STATUS.md, BACKLOG.md, planning folders |

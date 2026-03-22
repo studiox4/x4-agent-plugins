@@ -12,8 +12,8 @@ The `x4` plugin provides a complete pipeline from idea to shipped PR:
 |-------|---------|--------------|
 | **Onboard** | `/x4:onboard` | Check tools, accounts, CLI access — get your machine ready |
 | **Scaffold** | `/x4:create my-app` | Create a full-stack TypeScript monorepo (Next.js, Hono, Expo, etc.) |
-| **Capture** | `/x4:idea <idea>` | Drop a feature idea into a structured backlog |
-| **Plan** | `/x4:plan-backlog` | Brainstorm, create implementation plan, write PRD |
+| **Tour** | `/x4:tour` | Guided walkthrough — test login, try AI chat, explore your app |
+| **Kickstart** | `/x4:kickstart` | Brainstorm features, design UI, prioritize, batch-generate PRDs |
 | **Build** | `/x4:work` | Dispatch an agent team, build, review, verify, ship |
 
 ## Getting Started
@@ -76,7 +76,14 @@ cd my-app
 bun dev        # Web on :3000, API on :3002, Marketing on :3001
 ```
 
-### 5. Start building features
+### 5. Kickstart your project
+
+```bash
+/x4:kickstart                                      # Brainstorm features, design UI, generate PRDs
+/x4:work                                           # Agent team builds, reviews, ships
+```
+
+Or add features incrementally:
 
 ```bash
 /x4:idea "Add user dashboard with analytics"     # Capture the idea
@@ -98,8 +105,10 @@ Scaffold and manage [x4-mono](https://github.com/corbanb/x4-mono) full-stack Typ
 |---------|-------------|
 | `/x4:onboard` | Check tools, accounts, CLIs — set up your dev environment |
 | `/x4:create [name]` | Scaffold a new project (presets: full-stack, saas, landing, api-only) |
+| `/x4:tour` | Guided walkthrough — explore apps, test login, try AI chat, set up git |
 | `/x4:add` | Add a mobile or web app to an existing project |
 | `/x4:env` | Set up environment variables (database, auth, AI keys) |
+| `/x4:status` | Quick project health dashboard — apps, ports, database, git, plugins |
 
 **Tech stack created:** Next.js 15 + React 19 + Tailwind 4 / Hono + tRPC 11 + Drizzle ORM / Neon PostgreSQL / Better Auth / Vercel AI SDK + Claude / Expo 52 / Electron 33 / Turborepo + Bun
 
@@ -109,6 +118,7 @@ Backlog capture, triage, PRD generation, and project status tracking.
 
 | Command | Description |
 |---------|-------------|
+| `/x4:kickstart` | Brainstorm features, design UI, prioritize, and batch-generate PRDs |
 | `/x4:idea <idea>` | Capture a feature idea to the backlog |
 | `/x4:plan-backlog` | Triage backlog → brainstorm → plan → write PRD |
 | `/x4:init-tracker` | Scaffold STATUS.md, BACKLOG.md, `planning/{todo,in-progress,complete}/` |
