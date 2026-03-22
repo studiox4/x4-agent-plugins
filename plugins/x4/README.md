@@ -47,6 +47,10 @@ Combines project scaffolding, feature planning, UI design, backlog management, a
 | tester | Unit tests and e2e tests |
 | performance | Read-only performance audit |
 
+## Companion Plugins
+
+Install via `/x4:onboard` for the best experience. See the root README for the full list.
+
 ## License
 
 Apache 2.0
