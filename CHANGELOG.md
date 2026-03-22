@@ -1,5 +1,17 @@
 # Changelog
 
+## x4
+
+### 3.0.0 (2026-03-19)
+
+- **BREAKING:** Consolidate 4 plugins (`x4-scaffold`, `x4-project-tracker`, `x4-agent-team-ops`, `x4-llmstxt-manager`) into a single `x4` plugin
+- All commands now live under the `/x4:` namespace (e.g., `/x4:work`, `/x4:idea`, `/x4:create`)
+- Scaffold commands renamed: `/x4-create` → `/x4:create`, `/x4-add` → `/x4:add`, `/x4-env` → `/x4:env`, `/x4-onboard` → `/x4:onboard`
+- Merged hooks from agent-team-ops and project-tracker into single `hooks.json`
+- Single install: `/plugin install x4@x4-agent-plugins`
+
+---
+
 ## x4-scaffold
 
 ### 1.0.0 (2026-03-18)
