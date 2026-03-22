@@ -2,7 +2,7 @@
 
 Complete AI-powered development workflow plugin for Claude Code.
 
-Combines project scaffolding, backlog management, agent team coordination, llms.txt reference docs, and hook-based guardrails into a single plugin.
+Combines project scaffolding, feature planning, UI design, backlog management, agent team coordination, llms.txt reference docs, and hook-based guardrails into a single plugin.
 
 ## Install
 
