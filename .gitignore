@@ -1,2 +1,5 @@
 # Generated briefs — regenerate anytime with Claude
 .briefs/
+
+# Local Claude Code settings
+.claude/settings.local.json
