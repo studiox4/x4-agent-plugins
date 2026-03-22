@@ -227,7 +227,15 @@ Set up project tracking and agent team ops for this project?
 ### Next Steps:
 - cd <project-name>
 - bun dev (start all servers)
+- Run /tour for a guided walkthrough of your project
+- Run /status to check project health at any time
 - Run /add to add more apps later
+
+### Companion Plugins (recommended):
+Install these for the best x4 experience:
+- superpowers      -- brainstorming + writing plans (/plan-backlog)
+- code-simplifier  -- code quality checks (/work review phase)
+Run /onboard to install all companion plugins.
 ```
 
 ## Rules
