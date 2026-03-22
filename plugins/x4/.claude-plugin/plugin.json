@@ -6,5 +6,16 @@
     "name": "Corban Baxter",
     "email": "corban@example.com"
   },
-  "recommendations": []
+  "recommendations": [
+    {
+      "name": "superpowers",
+      "marketplace": "claude-plugins-official",
+      "reason": "Enables /brainstorming and /writing-plans in the /plan-backlog workflow"
+    },
+    {
+      "name": "code-simplifier",
+      "marketplace": "claude-plugins-official",
+      "reason": "Runs code quality simplification during /work Phase 4 review"
+    }
+  ]
 }

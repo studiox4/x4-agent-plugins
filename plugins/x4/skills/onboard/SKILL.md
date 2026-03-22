@@ -286,30 +286,77 @@ Paste your key when ready (or type "skip"):
 If they provide a key, validate it starts with `sk-ant-` and store it
 for use in `/env` later.
 
-### Step 4: Claude Code Plugins
+### Step 4: Claude Code Plugins & Companions
 
-Check which x4 plugins are installed:
+Check which plugins are installed. The x4 plugin works best with companion
+plugins from the official Claude marketplace.
+
+**Required by x4 workflows** (referenced directly in `/plan-backlog` and `/work`):
+- `superpowers@claude-plugins-official` — brainstorming + writing plans
+- `code-simplifier@claude-plugins-official` — code quality in review phase
+
+**Recommended** (enhance specific agents and workflows):
+- `frontend-design@claude-plugins-official` — UI design patterns (frontend agent)
+- `code-review@claude-plugins-official` — structured reviews (reviewer agent)
+- `playwright@claude-plugins-official` — e2e test authoring (tester agent)
+- `typescript-lsp@claude-plugins-official` — TypeScript diagnostics (all agents)
+- `commit-commands@claude-plugins-official` — git workflow helpers
+- `github@claude-plugins-official` — PR and issue management
+- `railway@railway-skills` — Railway deployment management
+
+Present the dashboard:
 
 ```
 ## Claude Code Plugins
 
 Checking installed plugins...
 
-| Plugin              | Status    |
-|---------------------|-----------|
-| x4                  | Installed |
+### x4 Plugin
+| Plugin | Status    |
+|--------|-----------|
+| x4     | Installed |
 
-Install missing plugins?
+### Companion Plugins — Required by x4
+These plugins are used directly by x4 skills. Without them, x4 falls back
+to built-in alternatives, but the experience is better with them installed.
 
-1. Yes — install all missing plugins
-2. Pick which ones to install
-3. Skip
+| Plugin           | Status  | Used by                |
+|------------------|---------|------------------------|
+| superpowers      | ???     | /plan-backlog          |
+| code-simplifier  | ???     | /work Phase 4          |
+
+### Companion Plugins — Recommended
+These plugins enhance specific agents and workflows.
+
+| Plugin           | Status  | Enhances               |
+|------------------|---------|------------------------|
+| frontend-design  | ???     | Frontend agent         |
+| code-review      | ???     | Reviewer agent         |
+| playwright       | ???     | Tester agent, /verify  |
+| typescript-lsp   | ???     | All TypeScript work    |
+| commit-commands  | ???     | Git workflow           |
+| github           | ???     | PR management          |
+| railway          | ???     | Railway deploys        |
+
+What would you like to install?
+
+1. Install all missing (required + recommended)
+2. Install required only (superpowers + code-simplifier)
+3. Pick which ones to install
+4. Skip
 ```
 
-If yes, run for each missing plugin:
+For option 1 or 2, install each missing plugin:
 ```
-/plugin install <plugin-name>@x4-agent-plugins
+/plugin install superpowers@claude-plugins-official
+/plugin install code-simplifier@claude-plugins-official
 ```
+(and recommended plugins if option 1)
+
+For option 3, present a numbered list of missing plugins and ask for
+comma-separated selections.
+
+After installation, confirm what was installed with a summary table.
 
 ### Step 5: Optional Tools
 
@@ -350,6 +397,9 @@ For each selected:
 
 ### Plugins
 - x4: installed
+- superpowers: installed / missing
+- code-simplifier: installed / missing
+- (list any other companion plugins that were installed)
 
 ### Ready to Go!
 
