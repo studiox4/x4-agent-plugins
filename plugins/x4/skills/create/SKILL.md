@@ -228,6 +228,7 @@ Set up project tracking and agent team ops for this project?
 - cd <project-name>
 - bun dev (start all servers)
 - Run /tour for a guided walkthrough of your project
+- Run /kickstart to brainstorm features, design the UI, and generate PRDs
 - Run /status to check project health at any time
 - Run /add to add more apps later
 
