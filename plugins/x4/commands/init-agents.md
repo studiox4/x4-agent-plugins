@@ -1,6 +1,6 @@
 ---
 description: Generate project-specific agent files from templates. Reads CLAUDE.md to fill in project details.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # /init-agents

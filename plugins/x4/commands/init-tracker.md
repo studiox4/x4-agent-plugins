@@ -1,6 +1,6 @@
 ---
 description: Scaffold project tracking files (STATUS.md, BACKLOG.md, planning directory)
-allowed-tools: [Read, Write, Edit, Glob, Grep, Bash]
+allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 ---
 
 Initialize the project tracker for this repository.
