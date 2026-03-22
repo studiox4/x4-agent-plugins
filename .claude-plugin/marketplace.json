@@ -5,49 +5,19 @@
     "email": "corban@example.com"
   },
   "metadata": {
-    "description": "Reusable workflow plugins for Claude Code: project tracking, agent team ops, and llms.txt management",
-    "version": "2.0.0"
+    "description": "Complete AI-powered development workflow: project scaffolding, backlog management, agent team coordination, llms.txt reference docs, and hook-based guardrails",
+    "version": "3.0.0"
   },
   "plugins": [
     {
-      "name": "x4-project-tracker",
-      "description": "Backlog capture, triage, PRD generation, and status tracking",
-      "category": "productivity",
-      "author": { "name": "Corban Baxter", "email": "corban@example.com" },
-      "source": "./plugins/project-tracker",
-      "homepage": "https://github.com/studiox4/x4-agent-plugins",
-      "version": "2.0.0",
-      "keywords": ["backlog", "planning", "prd", "status-tracking"]
-    },
-    {
-      "name": "x4-agent-team-ops",
-      "description": "Agent team coordination, feature dispatching, and review cycles",
+      "name": "x4",
+      "description": "Complete AI-powered development workflow: project scaffolding, backlog management, agent team coordination, llms.txt reference docs, and hook-based guardrails",
       "category": "development",
       "author": { "name": "Corban Baxter", "email": "corban@example.com" },
-      "source": "./plugins/agent-team-ops",
+      "source": "./plugins/x4",
       "homepage": "https://github.com/studiox4/x4-agent-plugins",
-      "version": "2.0.0",
-      "keywords": ["agents", "teams", "workflow", "ci-cd"]
-    },
-    {
-      "name": "x4-llmstxt-manager",
-      "description": "Scan dependencies and manage llms.txt reference documentation",
-      "category": "development",
-      "author": { "name": "Corban Baxter", "email": "corban@example.com" },
-      "source": "./plugins/llmstxt-manager",
-      "homepage": "https://github.com/studiox4/x4-agent-plugins",
-      "version": "2.0.0",
-      "keywords": ["llms-txt", "documentation", "dependencies"]
-    },
-    {
-      "name": "x4-scaffold",
-      "description": "Scaffold and manage x4-mono full-stack TypeScript monorepo projects",
-      "category": "development",
-      "author": { "name": "Corban Baxter", "email": "corban@example.com" },
-      "source": "./plugins/x4-scaffold",
-      "homepage": "https://github.com/studiox4/x4-agent-plugins",
-      "version": "1.0.0",
-      "keywords": ["scaffold", "monorepo", "expo", "nextjs", "hono", "create-x4"]
+      "version": "3.0.0",
+      "keywords": ["scaffold", "monorepo", "backlog", "planning", "agents", "teams", "workflow", "llms-txt", "documentation"]
     }
   ]
 }
