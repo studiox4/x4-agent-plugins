@@ -45,6 +45,13 @@ Use `{{PACKAGE_MANAGER}}` for all package operations.
 
 {{REFERENCE_DOCS}}
 
+## Companion Plugins
+
+If installed, leverage these plugins for better results:
+- `frontend-design@claude-plugins-official` — Use for component design patterns,
+  accessibility guidelines, and responsive layout decisions.
+- `typescript-lsp@claude-plugins-official` — Use for type checking and diagnostics.
+
 ## Rules
 
 1. Stay within your owned directories. Never touch API or database code.

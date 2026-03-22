@@ -41,6 +41,13 @@ Use `{{PACKAGE_MANAGER}}` for all package operations.
 
 {{REFERENCE_DOCS}}
 
+## Companion Plugins
+
+If installed, leverage these plugins for better results:
+- `playwright@claude-plugins-official` — Use for authoring and running
+  Playwright e2e tests.
+- `typescript-lsp@claude-plugins-official` — Use for type checking and diagnostics.
+
 ## Rules
 
 1. Only edit test files. Never modify production source code.

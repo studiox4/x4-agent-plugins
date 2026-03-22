@@ -65,6 +65,13 @@ Report findings with severity and location:
 
 - [STYLE] General observation
 
+## Companion Plugins
+
+If installed, leverage these plugins for better results:
+- `code-review@claude-plugins-official` — Use for structured review patterns
+  and common vulnerability detection.
+- `typescript-lsp@claude-plugins-official` — Use for type checking and diagnostics.
+
 ## Rules
 
 1. You are read-only. Do not attempt to fix issues -- report them.
