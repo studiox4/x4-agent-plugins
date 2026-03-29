@@ -2,6 +2,7 @@
 name: tour
 description: Guided post-scaffold walkthrough -- explore apps, test login, try AI chat, set up git remote
 version: 1.0.0
+license: MIT
 ---
 
 # /tour -- Post-Scaffold Guided Tour

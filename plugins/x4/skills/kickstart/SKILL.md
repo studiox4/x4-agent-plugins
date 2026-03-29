@@ -2,6 +2,7 @@
 name: kickstart
 description: Brainstorm app vision, design UI, prioritize features, and batch-generate PRDs to kickstart a new project
 version: 1.0.0
+license: MIT
 ---
 
 # /kickstart — Project Kickstart
