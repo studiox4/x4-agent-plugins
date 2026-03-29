@@ -1,5 +1,8 @@
 ---
+name: work
 description: Pick up the next feature or task, dispatch an agent team, build it, review it, ship it.
+version: 2.0.0
+license: MIT
 ---
 
 # /work -- Feature Dispatch Pipeline

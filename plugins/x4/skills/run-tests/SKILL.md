@@ -1,6 +1,9 @@
 ---
+name: run-tests
 description: Run project tests using commands from agent-team config. Supports unit, e2e, lint, and typecheck.
 argument-hint: "[unit|e2e|lint|typecheck]"
+version: 2.0.0
+license: MIT
 ---
 
 # /run-tests
