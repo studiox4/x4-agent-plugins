@@ -1,5 +1,5 @@
 ---
-name: x4-create
+name: create
 description: >
   Scaffold a new x4-mono full-stack TypeScript monorepo using the create-x4 CLI.
   Interactive wizard for project name, preset, platforms, scope, and environment setup.

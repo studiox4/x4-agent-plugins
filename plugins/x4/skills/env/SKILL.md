@@ -1,5 +1,5 @@
 ---
-name: x4-env
+name: env
 description: Set up or update environment variables for an x4-mono project — database, auth secrets, AI keys
 version: 1.0.0
 license: MIT

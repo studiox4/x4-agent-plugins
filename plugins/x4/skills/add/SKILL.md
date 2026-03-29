@@ -1,5 +1,5 @@
 ---
-name: x4-add
+name: add
 description: Add a new mobile app or web app to an existing x4-mono project
 version: 1.0.0
 license: MIT

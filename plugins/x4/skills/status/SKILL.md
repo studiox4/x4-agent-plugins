@@ -1,5 +1,5 @@
 ---
-name: x4-status
+name: status
 description: Quick diagnostic dashboard showing app status, ports, database, git state, and companion plugins
 version: 1.0.0
 ---

@@ -1,5 +1,5 @@
 ---
-name: x4-onboard
+name: onboard
 description: >
   Guide a new user through setting up their local development environment —
   checks for required tools, accounts, and CLI access, then walks through
