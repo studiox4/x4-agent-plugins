@@ -5,7 +5,8 @@ description: >
   documentation endpoints, download to a local directory, and update CLAUDE.md
   and agent file references. Use when dependencies change, new libraries are
   added, or reference docs need refreshing.
-disable-model-invocation: true
+version: 2.0.0
+license: MIT
 ---
 
 # /llmstxt-update — Refresh LLMs.txt Reference Docs

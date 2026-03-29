@@ -1,7 +1,8 @@
 ---
 name: init-tracker
 description: Scaffold project tracking files — STATUS.md, BACKLOG.md, planning directory with todo/in-progress/complete subdirectories, and config
-disable-model-invocation: true
+version: 2.0.0
+license: MIT
 ---
 
 # /init-tracker — Initialize Project Tracker

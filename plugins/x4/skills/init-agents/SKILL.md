@@ -1,7 +1,8 @@
 ---
 name: init-agents
 description: Generate project-specific agent files from templates — reads CLAUDE.md to fill in project details like tech stack, conventions, and owned directories
-disable-model-invocation: true
+version: 2.0.0
+license: MIT
 ---
 
 # /init-agents — Generate Agent Files

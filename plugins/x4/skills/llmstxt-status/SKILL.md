@@ -3,7 +3,8 @@ name: llmstxt-status
 description: >
   Read-only status report of llms.txt reference docs — shows what is current,
   stale, missing, or orphaned. Use for health checks after dependency changes.
-disable-model-invocation: true
+version: 2.0.0
+license: MIT
 ---
 
 # /llmstxt-status — LLMs.txt Documentation Status
