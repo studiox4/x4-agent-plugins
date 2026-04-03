@@ -2,6 +2,16 @@
 
 ## x4
 
+### 3.9.0 (2026-04-03)
+
+- `brand/BRAND.md` — new human-editable brand guide scaffolded at project root by `/init-setup`; all marketing skills read from it (voice, tone, colors, logos, social handles, email config); assets go in `brand/assets/`
+- All marketing skills (`market-update`, `market-email`, `market-linkedin`, `market-tweet`, `market-subscribe`) updated to read `brand/BRAND.md` first, fall back to legacy `brand:` YAML config
+- `/init-setup` Step 6c rewired — now creates `brand/BRAND.md` from a rich template instead of writing a `brand:` YAML block to `agent-team.config.md`
+- Template stored in `plugins/x4/skills/init-setup/references/brand-template.md` with `{{PLACEHOLDER}}` tokens for pre-filling
+- `brand/assets/` README generated with asset size/format guidance
+- README updated with brand guide section and day-in-the-life brand update workflow
+- `/help` updated to surface `brand/BRAND.md` and `brand/assets/` as directly editable resources
+
 ### 3.8.1 (2026-04-03)
 
 - `/market-subscribe`: new skill — scaffolds email capture into the marketing site; generates `SubscribeForm` React component and `/api/subscribe` Next.js route handler wired to Resend or Loops; inserts form into configured page using section markers; adds env var placeholders to `.env.local`

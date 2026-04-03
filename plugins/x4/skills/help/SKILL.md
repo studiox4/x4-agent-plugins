@@ -61,6 +61,9 @@ A typical developer goes through x4 like this:
          /x4:llmstxt-update  → refresh docs after adding libraries
          /x4:market-update   → sync marketing site after shipping a batch
 
+  Brand  Edit brand/BRAND.md → update voice, logos, colors, social handles
+         brand/assets/       → drop in logo.svg, og-image.png, banner.png
+
 ### The Pipeline
 
   Onboard → Create → Deploy Setup → Tour → Kickstart → Work → Ship

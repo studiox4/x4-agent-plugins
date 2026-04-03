@@ -19,23 +19,24 @@ You decide when to send — the skill never sends automatically.
 
 ### Step 0: Load brand config
 
-Read `.claude/agent-team.config.md`. Extract the `brand` section:
+Check for `brand/BRAND.md` in the project root. This is the primary source.
+If absent, fall back to the `brand:` section in `.claude/agent-team.config.md` (legacy).
 
-```yaml
-brand:
-  name: "Your Product"
-  tagline: "Your tagline."
-  voice: "developer-first, direct, show-don't-tell"
-  audience: "developers building X with Y"
-  email:
-    provider: resend          # or loops
-    api_key_env: RESEND_API_KEY
-    from: "updates@yourdomain.com"
-    audience_id: "..."        # Resend audience ID or Loops list ID
-```
+If neither exists: "Brand not configured — run `/init-setup` to create `brand/BRAND.md`,
+or create it manually from the template at
+`plugins/x4/skills/init-setup/references/brand-template.md`." Stop.
 
-If the `brand` section is absent: "Brand not configured — run `/init-setup` to add brand and email settings." Stop.
-If `brand.email` is absent: proceed but note that sending will be manual (no API config).
+From `brand/BRAND.md`, extract:
+- **Name** — from `## Identity` → `**Name:**`
+- **Voice** — from `## Voice & Tone` → `**Voice:**`
+- **Audience** — from `## Voice & Tone` → `**Audience:**`
+- **Email provider** — from `## Email List` → `**Provider:**`
+- **API key env var** — from `## Email List` → `**API key env var:**`
+- **Audience ID** — from `## Email List` → `**Audience ID:**`
+- **From address** — from `## Social & Contact` → `**Email from:**`
+- **Logo path** — from `## Logo & Visual Assets` table, "Logo (light bg)" row
+
+If email fields are absent from `brand/BRAND.md`: proceed but note sending will be manual.
 
 ### Step 1: Read what's new
 

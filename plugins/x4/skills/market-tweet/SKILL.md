@@ -20,20 +20,18 @@ Pass `--post` to trigger posting via the X API if `X_API_KEY` is configured.
 
 ### Step 0: Load brand config
 
-Read `.claude/agent-team.config.md`. Extract the `brand` section:
+Check for `brand/BRAND.md` in the project root. This is the primary source.
+If absent, fall back to the `brand:` section in `.claude/agent-team.config.md` (legacy).
 
-```yaml
-brand:
-  name: "Your Product"
-  voice: "developer-first, direct, show-don't-tell"
-  audience: "developers building X with Y"
-  social:
-    twitter_handle: "@yourbrand"
-    hashtags: ["#relevant", "#hashtags"]
-    x_api_key_env: X_API_KEY   # optional — enables --post
-```
+If neither exists: "Brand not configured — run `/init-setup` to create `brand/BRAND.md`." Stop.
 
-If `brand` is absent: "Brand not configured — run `/init-setup` to add brand settings." Stop.
+From `brand/BRAND.md`, extract:
+- **Name** — from `## Identity` → `**Name:**`
+- **Voice** — from `## Voice & Tone` → `**Voice:**`
+- **Audience** — from `## Voice & Tone` → `**Audience:**`
+- **Twitter handle** — from `## Social & Contact` → `**Twitter/X:**`
+- **Hashtags** — from `## Social & Contact` → `**Hashtags:**`
+- **X API key env var** — from `## X / Twitter API` → `**API key env var:**`
 
 ### Step 1: Read what's new
 

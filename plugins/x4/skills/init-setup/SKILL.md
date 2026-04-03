@@ -200,22 +200,6 @@ marketing:
     changelog: app/changelog/page.tsx   # [only if selected]
     landing: app/page.tsx               # [only if selected]
 
-# [Only include if user configured brand in Step 6c]
-brand:
-  name: "Your Product"
-  tagline: "Your tagline."
-  voice: "developer-first, direct, show-don't-tell"
-  audience: "developers building X with Y"
-  email:
-    provider: resend                    # or loops
-    api_key_env: RESEND_API_KEY
-    from: "updates@yourdomain.com"
-    audience_id: ""                     # Resend audience ID or Loops list ID
-  social:
-    twitter_handle: "@yourbrand"
-    x_api_key_env: X_API_KEY           # optional — enables --post in /market-tweet
-    linkedin_url: "https://linkedin.com/company/yourbrand"
-    hashtags: []
 ---
 
 # Agent Team Configuration
@@ -279,54 +263,86 @@ If yes, set a flag to delegate to `/market-subscribe` at the end of Step 7.
 
 ### Step 6c: Brand & marketing channels
 
-Auto-detect: check if `docs/CHANGELOG.md` exists (brand is more useful if changelog is present).
+Brand config lives in `brand/BRAND.md` — a human-editable markdown file at the
+project root. All marketing skills (`/market-update`, `/market-email`,
+`/market-linkedin`, `/market-tweet`, `/market-subscribe`) read from it.
+Logo and image assets go in `brand/assets/`.
 
 Use `AskUserQuestion`:
 
 ```
 ## Brand & Marketing Channels
 
-Configure your brand voice and marketing channels for /market-email,
-/market-linkedin, and /market-tweet.
+x4's marketing skills use a brand guide at brand/BRAND.md — a plain markdown
+file you can edit anytime to update your voice, logos, colors, and social handles.
 
-1. Yes — configure brand settings now
-2. Skip — I'll set this up later
+Set up brand/BRAND.md now?
+
+1. Yes — collect brand details and generate the file
+2. Skip — I'll create it later (or copy from references/brand-template.md)
 ```
 
-If yes, collect the following (all optional, but the more filled in the better):
+If yes, collect (all optional — defaults shown):
 
 ```
 Brand name: {project name from package.json as default}
-Tagline: (one-liner — e.g. "Idea to shipped PR — with agent teams.")
+Tagline: (one-liner, e.g. "Idea to shipped PR — with agent teams.")
+One-liner description: (for someone who's never heard of you)
 Voice/tone: (e.g. "developer-first, direct, show-don't-tell")
 Target audience: (e.g. "developers building full-stack apps with Claude Code")
+Website URL: (e.g. https://yourdomain.com)
 ```
 
-Email provider:
+Email:
 ```
 Email provider:
-1. Resend (recommended for developer projects — resend.com)
-2. Loops (SaaS-focused email — loops.so)
-3. None / manual
-```
+1. Resend (recommended — resend.com, great for developer audiences)
+2. Loops (SaaS-focused — loops.so)
+3. None / I'll add this later
 
-If Resend or Loops:
-```
 From address: (e.g. updates@yourdomain.com)
-API key env var name: (default: RESEND_API_KEY or LOOPS_API_KEY)
-Audience ID: (optional — your Resend audience or Loops list ID)
+API key env var: (default: RESEND_API_KEY or LOOPS_API_KEY)
+Audience ID: (optional — find in your Resend or Loops dashboard)
 ```
 
-Social channels:
+Social:
 ```
 Twitter/X handle: (e.g. @yourbrand)
-X API key env var: (optional — enables --post flag in /market-tweet)
+X API key env var name: (optional — enables --post in /market-tweet)
 LinkedIn company URL: (e.g. https://linkedin.com/company/yourbrand)
 Hashtags: (comma-separated, e.g. #ClaudeCode,#AIdev,#devtools)
 ```
 
-Include the `brand` block in the Step 7 config output (see config template).
-If the user skips, omit the `brand` block entirely.
+**Generate brand/BRAND.md:**
+
+Read the template from `references/brand-template.md` (in this skill's directory).
+Replace all `{{PLACEHOLDER}}` tokens with the user's answers. Write to `brand/BRAND.md`.
+Also create `brand/assets/` directory with a `README.md`:
+
+```markdown
+# Brand Assets
+
+Add your logo and image files here. Update the paths in `../BRAND.md`.
+
+| File | Size | Format | Purpose |
+|------|------|--------|---------|
+| logo.svg | any | SVG | Primary logo — light backgrounds |
+| logo-dark.svg | any | SVG | Dark backgrounds |
+| logo-icon.svg | any | SVG | Favicon, avatar |
+| og-image.png | 1200×630 | PNG | Open Graph — link previews |
+| banner.png | 1500×500 | PNG | Twitter/LinkedIn header |
+```
+
+Tell the user:
+```
+✓ brand/BRAND.md created — edit it anytime to update your brand across all marketing skills
+✓ brand/assets/ created — add your logo.svg, og-image.png, and other assets here
+
+Your brand guide lives at: brand/BRAND.md
+```
+
+If user skips: note in summary "Brand guide not configured. Create `brand/BRAND.md` anytime,
+or run `/init-setup` again. Template is at `plugins/x4/skills/init-setup/references/brand-template.md`."
 
 ### Step 7b: Project Tracker
 

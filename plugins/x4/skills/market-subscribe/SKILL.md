@@ -20,16 +20,19 @@ so `/market-email` has an audience to send to.
 
 ### Step 0: Load config
 
-Read `.claude/agent-team.config.md`.
+Check for `brand/BRAND.md` in the project root. This is the primary source.
+If absent, fall back to the `brand:` section in `.claude/agent-team.config.md` (legacy).
 
-Extract:
-- `brand.email.provider` — `resend` or `loops`
-- `brand.email.api_key_env` — e.g. `RESEND_API_KEY`
-- `brand.email.audience_id` — Resend audience ID or Loops list ID
-- `marketing.site_dir` — defaults to `apps/marketing`
+From `brand/BRAND.md`, extract:
+- **Email provider** — from `## Email List` → `**Provider:**`
+- **API key env var** — from `## Email List` → `**API key env var:**`
+- **Audience ID** — from `## Email List` → `**Audience ID:**`
 
-If `brand.email` is absent:
-"Email provider not configured — run `/init-setup` to add `brand.email` settings first, or pass `--provider resend` to proceed with defaults."
+Also read `marketing.site_dir` from `.claude/agent-team.config.md` — defaults to `apps/marketing`.
+
+If neither brand source exists and `--provider` was not passed:
+"Brand not configured — run `/init-setup` to create `brand/BRAND.md`,
+or pass `--provider resend` to proceed with defaults."
 
 If `--provider` was passed, use it regardless of config.
 

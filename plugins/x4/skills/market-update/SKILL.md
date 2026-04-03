@@ -41,6 +41,12 @@ Defaults when keys are absent:
 **If the `marketing` section is absent or `enabled: false`:**
 Respond: "Marketing site not configured. Add a `marketing` section to `.claude/agent-team.config.md` or run `/init-setup` to configure it." Stop.
 
+Also check for `brand/BRAND.md`. If present, read it and extract:
+- **Voice** — from `## Voice & Tone` → `**Voice:**` (used to calibrate generated copy tone)
+- **Logo path** — from `## Logo & Visual Assets` (for any image references in generated content)
+
+Brand info is optional for market-update — the skill works without it but produces better-calibrated copy when the brand guide is present.
+
 ### Step 1: Read what's new
 
 1. Check if `docs/CHANGELOG.md` exists. If not:

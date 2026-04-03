@@ -20,20 +20,21 @@ handles the creative work and you paste it in.
 
 ### Step 0: Load brand config
 
-Read `.claude/agent-team.config.md`. Extract the `brand` section:
+Check for `brand/BRAND.md` in the project root. This is the primary source.
+If absent, fall back to the `brand:` section in `.claude/agent-team.config.md` (legacy).
 
-```yaml
-brand:
-  name: "Your Product"
-  voice: "developer-first, direct, show-don't-tell"
-  audience: "developers building X with Y"
-  social:
-    linkedin_url: "https://linkedin.com/company/yourbrand"
-    hashtags: ["#relevant", "#hashtags"]
-```
+If neither exists: "Brand not configured — run `/init-setup` to create `brand/BRAND.md`." Stop.
 
-If `brand` is absent: "Brand not configured — run `/init-setup` to add brand settings." Stop.
-If `brand.social` is absent, proceed with defaults (no hashtags, no LinkedIn URL).
+From `brand/BRAND.md`, extract:
+- **Name** — from `## Identity` → `**Name:**`
+- **Voice** — from `## Voice & Tone` → `**Voice:**`
+- **Audience** — from `## Voice & Tone` → `**Audience:**`
+- **LinkedIn URL** — from `## Social & Contact` → `**LinkedIn:**`
+- **Hashtags** — from `## Social & Contact` → `**Hashtags:**`
+- **Logo path** — from `## Logo & Visual Assets` table, "Logo (light bg)" row
+- **Banner path** — from `## Logo & Visual Assets` table, "Social Banner" row
+
+If social fields are absent, proceed with no hashtags and no LinkedIn URL.
 
 ### Step 1: Read what's new
 

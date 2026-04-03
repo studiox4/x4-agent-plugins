@@ -102,6 +102,16 @@ Select the ideas you like → they go straight to the backlog.
 ```
 Triage the backlog, pick an item, brainstorm it, write a PRD. Then `/work` again.
 
+### Ongoing — Brand updates
+
+Your brand evolves. Open `brand/BRAND.md` in any editor and change what you need:
+- Update the voice description as your tone matures
+- Swap logo paths when you rebrand
+- Add your Twitter handle or LinkedIn URL when ready
+- Set your Resend audience ID after you create one
+
+All marketing skills pick up the changes automatically next time they run.
+
 ### Ongoing — Keeping everything healthy
 
 ```
@@ -110,6 +120,25 @@ Triage the backlog, pick an item, brainstorm it, write a PRD. Then `/work` again
 /x4:market-update   → sync the marketing site with shipped features (generates copy, optionally screenshots)
 /x4:status          → running apps, ports, git state at a glance
 ```
+
+---
+
+## Brand Guide
+
+Your project's brand identity lives in `brand/BRAND.md` — a plain markdown file at the project root that you can open and edit anytime. All marketing commands read from it automatically.
+
+```
+brand/
+  BRAND.md          ← voice, tone, colors, tagline, social handles, email config
+  assets/
+    logo.svg        ← primary logo (light backgrounds)
+    logo-dark.svg   ← dark backgrounds
+    logo-icon.svg   ← favicon, avatar, app icon
+    og-image.png    ← Open Graph image (1200×630)
+    banner.png      ← Twitter/LinkedIn header
+```
+
+`/init-setup` creates `brand/BRAND.md` and walks you through the initial setup. After that, just edit the file directly — no commands needed to update your brand voice, swap a logo, or change your social handles.
 
 ---
 
