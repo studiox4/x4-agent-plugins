@@ -2,6 +2,11 @@
 
 ## x4
 
+### 3.5.0 (2026-04-02)
+
+- `/help`: contextual plugin guide — detects project state, shows all commands, suggests next step
+- `/doctor`: project health diagnostic — checks prerequisites, config, agents, env vars, database, plugins, llms.txt docs
+
 ### 3.4.0 (2026-04-02)
 
 - `/gaps`: product gap finder — scans features for dead ends, missing connections, incomplete flows, stale backlog items
