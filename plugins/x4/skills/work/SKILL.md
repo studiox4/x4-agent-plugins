@@ -464,6 +464,103 @@ User has all the information they need. Pipeline complete.
 
 ---
 
+## Auto-Loop Wrapper
+
+**Applies when:** The user selected "Build all ready PRDs" or "Build in
+parallel" in Phase 1, and there are more PRDs remaining in the execution plan.
+
+**Does NOT apply when:** The user picked a single PRD (existing behavior --
+pipeline ends after Phase 7 as before).
+
+### Sequential Auto-Loop
+
+After Phase 7 completes for the current PRD:
+
+1. Print a checkpoint summary using `AskUserQuestion`:
+
+   ## Completed: {feature_name} ({N}/{total})
+
+   PR: {pr_url} -- merged
+   Next up: {next_feature_name}
+   Remaining: {remaining_count} ({blocked_count} blocked)
+
+   Continue to next PRD? (yes / stop)
+
+2. If the user replies "stop" or "no," end the loop normally.
+3. If the user confirms (or replies empty/yes), set the next PRD as the
+   work target and run Phases 2-7 again (skip Phase 1's selection menu).
+4. Skip any PRDs that are still blocked by unshipped dependencies.
+5. After the last PRD completes (or all remaining are blocked), print
+   a final summary:
+
+   ## Work Complete
+
+   | PRD | Status | PR |
+   |-----|--------|----|
+   | {name} | Shipped | #{number} |
+   | {name} | Blocked ({reason}) | -- |
+
+   {shipped_count} shipped, {blocked_count} blocked.
+   Run /x4:work again after blocked dependencies merge.
+
+### Parallel Execution
+
+Requires agent teams (`team_mode: "auto"` or `"teams"` with
+`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` set). If not available, this
+mode does not appear in the Phase 1 menu.
+
+**Wave execution:**
+
+1. For each PRD in the current wave, create a separate agent team:
+   - Team name: `x4-{feature-name-kebab}-{prd-number}`
+   - Each team runs on its own feature branch
+   - Each team has its own build agents (backend, frontend, tester)
+   - Each team runs the full Phase 2-7 cycle independently
+2. The lead (main `/work` session) monitors all teams simultaneously
+   via shared task lists and automatic teammate messages.
+3. When all teams in a wave complete, print a wave checkpoint:
+
+   ## Wave {N} Complete ({shipped}/{total} shipped)
+
+   | PRD | Status | PR |
+   |-----|--------|----|
+   | {name} | Shipped | #{number} |
+   | {name} | Failed ({reason}) | #{number} |
+
+   Wave {N+1}: {next_features} -- checking if dependencies are met...
+
+4. Re-evaluate blocked PRDs: if their dependencies shipped in this wave,
+   unblock them and proceed to the next wave.
+5. Same final summary as sequential mode after the last wave.
+
+**Merge strategy:**
+- Parallel PRDs ship their PRs sequentially, not simultaneously.
+- The lead coordinates merge order.
+- After the first PR in a wave merges, subsequent PRs rebase onto the
+  updated main branch before merging.
+- If a rebase produces conflicts, pause that PR and report to the user
+  at the wave checkpoint.
+
+**Guardrails:**
+- Maximum concurrent teams: 3 (to manage token costs).
+- If a wave has more than 3 parallel-safe PRDs, split into sub-waves of 3.
+- If any PRD's build fails or needs user input, pause that PRD and
+  continue with others. Report at the wave checkpoint.
+- If a PRD's CI fails after 3 auto-fix attempts, mark as failed and
+  continue. Do not block the entire wave.
+- Each team runs its own review cycle (Phase 4) independently.
+
+### Edge Cases
+
+- If the execution plan becomes empty (all PRDs moved/deleted between
+  confirmation and execution), report "No PRDs remaining" and end normally.
+- If the plan shrinks to 1 PRD, run it as a single-PRD build (no loop).
+- If the user stops the loop mid-way, no state is persisted. Re-running
+  `/work` presents a fresh Phase 1 menu -- shipped PRDs will have moved
+  out of `todo/` so the menu naturally reflects remaining work.
+
+---
+
 ## Error Handling (All Phases)
 
 - **Git conflicts:** If a push fails due to conflicts, pull and rebase. If
