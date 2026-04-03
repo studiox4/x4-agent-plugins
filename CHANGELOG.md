@@ -2,6 +2,12 @@
 
 ## x4
 
+### 3.5.1 (2026-04-03)
+
+- Improve all 28 skill descriptions for better triggering — each now includes "Use when..." context and concrete example phrases so Claude invokes the right skill from natural language
+- Update workflow diagram image
+- Fix `/update-briefs` to be user-invocable as a slash command
+
 ### 3.5.0 (2026-04-02)
 
 - `/help`: contextual plugin guide — detects project state, shows all commands, suggests next step
