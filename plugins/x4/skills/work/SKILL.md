@@ -33,6 +33,38 @@ user and offer to run `/init-setup` first.
    - **STANDALONE TASKS** -- Items that don't follow the full feature pipeline
      (e.g., "add tests for X", "refactor Y"). These may be listed in a
      separate section or tagged differently.
+   - **BLOCKED** -- Has a PRD in `docs/planning/todo/` but has unmet
+     dependencies on other PRDs or in-progress features.
+
+2.5. **[If 2+ PRDs are READY TO BUILD] Dependency analysis.**
+   Analyze the ready PRDs for dependencies and parallelism:
+
+   a. **Extract metadata from each PRD.** Read each PRD file in `docs/planning/todo/`
+      and look for:
+      - Feature name (from title or filename)
+      - Explicit dependencies: sections titled "Dependencies", "Requires",
+        "Blocked by", or inline references to other PRD names/numbers
+      - Affected domains: scan for keywords and file paths indicating backend,
+        frontend, shared packages, database schema changes
+
+   b. **Build a dependency graph.**
+      - PRDs that explicitly reference each other → sequential (dependency first)
+      - PRDs that both modify shared packages (same path in `shared_packages`
+        config) → sequential (avoid merge conflicts)
+      - PRDs that touch completely different domains with no shared state →
+        parallel-safe
+      - PRDs with no detected dependencies → parallel-safe
+
+   c. **Group into execution waves.**
+      - Wave 1: all PRDs with no unmet dependencies
+      - Wave 2: PRDs whose dependencies are all in Wave 1
+      - Wave N: PRDs whose dependencies are all in waves 1 through N-1
+      - PRDs blocked by in-progress work (not in `todo/`) are flagged as
+        blocked with the reason
+
+   d. **Categorize READY TO BUILD PRDs further:**
+      - Move any PRD with unmet dependencies to the **BLOCKED** category
+      - Only truly unblocked PRDs remain in READY TO BUILD
 
 3. Present a numbered menu to the user using `AskUserQuestion`:
 
