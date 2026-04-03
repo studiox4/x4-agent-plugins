@@ -1,6 +1,6 @@
 ---
 name: release
-description: Bump plugin version (patch/minor/major), update CHANGELOG.md, and commit — runs validation first
+description: Bump plugin version (patch/minor/major), update CHANGELOG.md, commit, push, and create a GitHub release tag
 disable-model-invocation: true
 ---
 
@@ -36,9 +36,10 @@ Apply the bump:
 - `minor`: `3.1.1` → `3.2.0`
 - `major`: `3.1.1` → `4.0.0`
 
-### 5. Update plugin.json
+### 5. Update plugin.json and marketplace.json
 
 Edit `plugins/x4/.claude-plugin/plugin.json` to set the new version.
+Edit `.claude-plugin/marketplace.json` to set the new version in both `metadata.version` and `plugins[].version`.
 
 ### 6. Update CHANGELOG.md
 
@@ -54,10 +55,35 @@ To determine the summary, check `git log` since the last version tag or changelo
 
 ### 7. Commit
 
-Stage both files and commit:
+Stage all changed files (`plugin.json`, `marketplace.json`, `CHANGELOG.md`) and commit:
 
 ```
 release: x4 v<new-version>
 ```
 
-Report the new version to the user.
+### 8. Push
+
+Push to origin:
+
+```bash
+git push
+```
+
+### 9. Create GitHub release tag
+
+Create a tagged release on GitHub using `gh`:
+
+```bash
+gh release create v<new-version> --title "x4 v<new-version>" --notes "<changelog entry for this version>"
+```
+
+The `--notes` content should be the changelog bullet points from step 6.
+
+### 10. Report
+
+Report the new version to the user:
+
+> Released x4 v<new-version>
+> - Commit: pushed to origin
+> - Tag: v<new-version>
+> - GitHub release: <release-url>
