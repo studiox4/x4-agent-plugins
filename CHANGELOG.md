@@ -2,6 +2,14 @@
 
 ## x4
 
+### 3.2.0 (2026-04-02)
+
+- Add missing skills for 3 orphan commands: `llmstxt-status`, `init-tracker`, `init-agents`
+- Make all 4 thick commands thin wrappers (including pre-existing `llmstxt-update`)
+- Normalize all 21 skill names to bare format (remove `x4-` prefix)
+- Add missing `name`, `version`, and `license` fields across all skills
+- Remove pre-commit auto-bump hook — version management now via `/release` skill
+
 ### 3.0.0 (2026-03-19)
 
 - **BREAKING:** Consolidate 4 plugins (`x4-scaffold`, `x4-project-tracker`, `x4-agent-team-ops`, `x4-llmstxt-manager`) into a single `x4` plugin
