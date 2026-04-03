@@ -104,10 +104,15 @@ A typical developer goes through x4 like this:
   /x4:llmstxt-update Refresh reference docs
   /x4:llmstxt-status Check docs health
 
+**Marketing & Announcements**
+  /x4:market-update   Sync marketing site with recently shipped features
+  /x4:market-email    Write and send a release email to your list
+  /x4:market-linkedin Generate a LinkedIn post
+  /x4:market-tweet    Generate an X/Twitter thread
+
 **Other**
   /x4:help           This guide
   /x4:doctor         Diagnose project setup issues
-  /x4:market-update  Sync marketing site with recently shipped features
   /x4:deploy-setup   Configure Railway services and PR preview deployments
 ```
 

@@ -501,7 +501,17 @@ PR: {pr_url}
 Status: Shipped, awaiting merge
 
 Run `/pr-cleanup` after merge to clean up branches.
-[If `marketing.enabled: true` in config] Run `/x4:market-update` when ready to sync the marketing site with new features.
+
+[If `marketing.enabled: true` OR `brand` section exists in config, show this block:]
+
+## Announce What Shipped
+
+  /x4:market-update    → update the marketing site with new features
+  /x4:market-email     → write a release email for your list
+  /x4:market-linkedin  → generate a LinkedIn post
+  /x4:market-tweet     → generate an X/Twitter thread
+
+Run them together after shipping a batch, or one at a time as needed.
 
 ### Exit criteria
 User has all the information they need. Pipeline complete.

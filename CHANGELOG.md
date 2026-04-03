@@ -2,6 +2,15 @@
 
 ## x4
 
+### 3.8.0 (2026-04-03)
+
+- `/market-email`: new skill — generates release email campaigns from CHANGELOG.md entries; produces subject line options, preview text, and full email body in brand voice; outputs Resend-ready send snippet; never auto-sends — always review first
+- `/market-linkedin`: new skill — generates LinkedIn-optimized posts from CHANGELOG.md; hook → body → CTA → hashtags format; puts external links in first comment (not post body, per LinkedIn algorithm); copies to clipboard and opens compose
+- `/market-tweet`: new skill — generates numbered X/Twitter threads from CHANGELOG.md; 280-char enforcement per tweet; optional `--post` flag for X API posting if `X_API_KEY` configured
+- `/init-setup`: new Step 6c — brand & marketing channels configuration; collects brand voice, audience, email provider (Resend/Loops), social handles, hashtags, optional X API key env var; writes `brand` block to config
+- `/work` Phase 7: expanded marketing reminder block — shows all four marketing commands (`market-update`, `market-email`, `market-linkedin`, `market-tweet`) when marketing or brand is configured
+- `/help`: new "Marketing & Announcements" section in command list
+
 ### 3.7.0 (2026-04-02)
 
 - `/deploy-setup`: new skill — one-time Railway deployment wizard; detects monorepo services, generates `railway.toml` with per-service config, syncs env vars from `.env.local`, walks through GitHub connection and PR preview setup in the Railway dashboard

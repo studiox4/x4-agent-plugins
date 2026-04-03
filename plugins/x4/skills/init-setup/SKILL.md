@@ -199,6 +199,23 @@ marketing:
     features: app/features/page.tsx     # [only if selected]
     changelog: app/changelog/page.tsx   # [only if selected]
     landing: app/page.tsx               # [only if selected]
+
+# [Only include if user configured brand in Step 6c]
+brand:
+  name: "Your Product"
+  tagline: "Your tagline."
+  voice: "developer-first, direct, show-don't-tell"
+  audience: "developers building X with Y"
+  email:
+    provider: resend                    # or loops
+    api_key_env: RESEND_API_KEY
+    from: "updates@yourdomain.com"
+    audience_id: ""                     # Resend audience ID or Loops list ID
+  social:
+    twitter_handle: "@yourbrand"
+    x_api_key_env: X_API_KEY           # optional — enables --post in /market-tweet
+    linkedin_url: "https://linkedin.com/company/yourbrand"
+    hashtags: []
 ---
 
 # Agent Team Configuration
@@ -244,6 +261,57 @@ If user selects pages, include the `marketing` block in the Step 7 config output
 
 If user picks No or skip: omit the `marketing` block entirely. Its absence is
 treated as disabled — no `enabled: false` needed.
+
+### Step 6c: Brand & marketing channels
+
+Auto-detect: check if `docs/CHANGELOG.md` exists (brand is more useful if changelog is present).
+
+Use `AskUserQuestion`:
+
+```
+## Brand & Marketing Channels
+
+Configure your brand voice and marketing channels for /market-email,
+/market-linkedin, and /market-tweet.
+
+1. Yes — configure brand settings now
+2. Skip — I'll set this up later
+```
+
+If yes, collect the following (all optional, but the more filled in the better):
+
+```
+Brand name: {project name from package.json as default}
+Tagline: (one-liner — e.g. "Idea to shipped PR — with agent teams.")
+Voice/tone: (e.g. "developer-first, direct, show-don't-tell")
+Target audience: (e.g. "developers building full-stack apps with Claude Code")
+```
+
+Email provider:
+```
+Email provider:
+1. Resend (recommended for developer projects — resend.com)
+2. Loops (SaaS-focused email — loops.so)
+3. None / manual
+```
+
+If Resend or Loops:
+```
+From address: (e.g. updates@yourdomain.com)
+API key env var name: (default: RESEND_API_KEY or LOOPS_API_KEY)
+Audience ID: (optional — your Resend audience or Loops list ID)
+```
+
+Social channels:
+```
+Twitter/X handle: (e.g. @yourbrand)
+X API key env var: (optional — enables --post flag in /market-tweet)
+LinkedIn company URL: (e.g. https://linkedin.com/company/yourbrand)
+Hashtags: (comma-separated, e.g. #ClaudeCode,#AIdev,#devtools)
+```
+
+Include the `brand` block in the Step 7 config output (see config template).
+If the user skips, omit the `brand` block entirely.
 
 ### Step 7b: Project Tracker
 
