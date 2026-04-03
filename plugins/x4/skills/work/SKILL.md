@@ -420,10 +420,53 @@ Look for:
 - Mark completed columns in the Feature Build Progress table.
 - Update the feature's status to reflect what was shipped.
 - Record the PR number for reference.
-- Commit: `docs: move PRD to complete, update status, memory sweep`
+
+7. **Write changelog entry.**
+- Read the PRD from `docs/planning/complete/<prd-file>`.
+- Extract the feature title and user stories section. Convert each user story
+  to a user-facing bullet — lead with the value proposition, not the technical
+  mechanism. ("Users can now export reports as CSV" not "Added CSV export endpoint".)
+- Get PR number and URL: `gh pr view --json number,url`
+- Get today's date: `date +%Y-%m-%d`
+- Check if `docs/CHANGELOG.md` exists. If not, create it:
+  ```markdown
+  # Changelog
+
+  <!-- marketing-last-synced: never -->
+
+  All notable changes to this project are documented here.
+  Each entry is generated automatically during the post-ship memory sweep.
+
+  ---
+  ```
+- Prepend the new entry after the header block (before the first `## ` heading,
+  or at end of file if no prior entries exist):
+  ```markdown
+  ## [Feature Name] — YYYY-MM-DD
+
+  <!-- changelog-entry
+  feature: Feature Name
+  date: YYYY-MM-DD
+  pr: <number>
+  pr_url: <url>
+  status: shipped
+  -->
+
+  ### What's New
+
+  - <user-facing bullet from PRD user story>
+  - <user-facing bullet from PRD user story>
+
+  ---
+  ```
+- Stage `docs/CHANGELOG.md`.
+
+8. **Commit all docs together.**
+Stage all modified docs files (PRD location, status file, CHANGELOG.md) and commit:
+`docs: move PRD to complete, update status and changelog`
 
 ### Exit criteria
-PRD moved to `complete/`, status file updated, patterns captured in memory.
+PRD moved to `complete/`, status file updated, changelog entry written, patterns captured in memory.
 
 ---
 
@@ -458,6 +501,7 @@ PR: {pr_url}
 Status: Shipped, awaiting merge
 
 Run `/pr-cleanup` after merge to clean up branches.
+[If `marketing.enabled: true` in config] Run `/x4:market-update` when ready to sync the marketing site with new features.
 
 ### Exit criteria
 User has all the information they need. Pipeline complete.

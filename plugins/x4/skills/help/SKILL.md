@@ -81,8 +81,9 @@ Docs: https://px4.dev
   /x4:llmstxt-status Check docs health
 
 **Other**
-  /x4:help        This guide
-  /x4:doctor      Diagnose project setup issues
+  /x4:help           This guide
+  /x4:doctor         Diagnose project setup issues
+  /x4:market-update  Sync marketing site with recently shipped features
 ```
 
 ### 3. Offer next step
