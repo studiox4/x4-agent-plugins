@@ -2,6 +2,11 @@
 
 ## x4
 
+### 3.4.0 (2026-04-02)
+
+- `/gaps`: product gap finder — scans features for dead ends, missing connections, incomplete flows, stale backlog items
+- `/dream`: visionary ideas generator — interactive exploration of big ideas informed by tech stack and ecosystem
+
 ### 3.3.0 (2026-04-02)
 
 - `/work` auto-loop: build all ready PRDs sequentially with checkpoint prompts between each
