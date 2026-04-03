@@ -1,7 +1,7 @@
 ---
 name: work
-description: Pick up the next feature or task, dispatch an agent team, build it, review it, ship it.
-version: 2.0.0
+description: Pick up the next feature or task, dispatch an agent team, build it, review it, ship it. Supports auto-loop through multiple PRDs and parallel execution with agent teams.
+version: 3.0.0
 license: MIT
 ---
 
