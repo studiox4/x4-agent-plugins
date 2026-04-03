@@ -112,14 +112,34 @@ Your brand evolves. Open `brand/BRAND.md` in any editor and change what you need
 
 All marketing skills pick up the changes automatically next time they run.
 
+### Ongoing — Announcing what shipped
+
+After each batch of merged features, run the announce workflow:
+
+```
+/x4:market-update   → update the marketing site with new features (generates copy, optional screenshots)
+/x4:market-email    → write a release email → review it → send to your list via Resend
+/x4:market-linkedin → generate a LinkedIn post → copy → paste into LinkedIn
+/x4:market-tweet    → generate an X/Twitter thread → copy → paste (or --post)
+```
+
+All four read from `docs/CHANGELOG.md` — the same file that `/work` writes to automatically after every feature ships. Each tracks its own sync date so you can run them independently.
+
 ### Ongoing — Keeping everything healthy
 
 ```
-/x4:doctor          → quick health check: tools, config, agents, env, database, docs
+/x4:doctor          → health check: tools, config, agents, env, database, version, docs
+/x4:upgrade         → apply migrations after updating the plugin (prompted by session-start)
 /x4:llmstxt-update  → refresh AI reference docs after adding a new library
-/x4:market-update   → sync the marketing site with shipped features (generates copy, optionally screenshots)
+/x4:market-update   → sync the marketing site with shipped features
 /x4:status          → running apps, ports, git state at a glance
 ```
+
+When you update the x4 plugin, the next session-start will show:
+```
+→ x4 updated to v3.10.0 (project on v3.9.0) — run /x4:upgrade
+```
+Run `/x4:upgrade` and it applies only what's missing — idempotent, safe to re-run.
 
 ---
 
@@ -210,13 +230,24 @@ Every stage feeds the next. Enter anywhere — scaffolding is optional if you al
 | `/x4:llmstxt-update` | Scan dependencies, discover, download llms.txt docs |
 | `/x4:llmstxt-status` | Read-only status of current docs |
 
+### Marketing & Announcements
+
+| Command | What it does |
+|---------|-------------|
+| `/x4:market-update` | Sync marketing site with shipped features — generates copy, optional screenshots, TSX updates |
+| `/x4:market-email` | Generate release email from changelog — subject, preview text, full body, Resend snippet |
+| `/x4:market-linkedin` | Generate LinkedIn post — hook/body/CTA/hashtags, link in first comment, copies to clipboard |
+| `/x4:market-tweet` | Generate X/Twitter thread — 280-char enforced, clipboard default, `--post` for X API |
+| `/x4:market-subscribe` | Scaffold email capture form + `/api/subscribe` route into the marketing site |
+
 ### Utility
 
 | Command | What it does |
 |---------|-------------|
 | `/x4:help` | Contextual guide — detects project state, suggests next step |
-| `/x4:doctor` | Health diagnostic — tools, config, agents, env, database, docs |
-| `/x4:market-update` | Sync marketing site with shipped features |
+| `/x4:doctor` | Health diagnostic — tools, config, agents, env, database, version, docs |
+| `/x4:upgrade` | Apply migrations after updating the plugin — versioned registry, safe to re-run |
+| `/x4:deploy-setup` | One-time Railway wizard — generate railway.toml, sync env vars, configure PR previews |
 
 ---
 
@@ -260,7 +291,7 @@ Four hooks fire automatically during Claude Code sessions:
 | **protected-files** | Before Edit/Write | Blocks edits to lock files and configs |
 | **auto-format** | After Edit/Write | Runs the project formatter on changed files |
 | **teammate-idle** | Tester goes idle | Runs the test gate |
-| **session-start** | New session | Shows key commands, warns if llms.txt docs are stale |
+| **session-start** | New session | Shows key commands, warns if llms.txt docs are stale, prompts to upgrade when plugin version is newer than project version |
 
 ---
 
