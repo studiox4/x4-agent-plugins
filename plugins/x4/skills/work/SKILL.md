@@ -75,20 +75,59 @@ user and offer to run `/init-setup` first.
 1.  [Feature Name] -- [one-line description from PRD]
 2.  [Feature Name] -- [one-line description from PRD]
 
+### Blocked
+
+3.  [Feature Name] -- depends on [dependency] ([status])
+
 ### In Progress
 
-3.  [Feature Name] -- [current state: Backend done, Frontend in progress]
+4.  [Feature Name] -- [current state: Backend done, Frontend in progress]
     PR: <url> | Preview: <url> [if available]
 
 ### Standalone Tasks
 
-4.  [Task description]
+5.  [Task description]
 
-### Other
+### Dependency Analysis
 
-5.  Describe something else to work on
+[Only shown when 2+ PRDs are ready]
+
+PRDs 1 and 2 are independent -- can be built in parallel.
+PRD 3 (Feature) is blocked until [dependency] ships.
+
+### Build Options
+
+6.  Pick one to build (enter a number above)
+7.  Describe something else to work on
+8.  Build all ready PRDs (auto-loop, pausing between each)
+9.  Build independent PRDs in parallel (Wave 1 simultaneously)
+
+Menu items are dynamically numbered based on the items above. The
+"Blocked" section appears only when PRDs have unmet dependencies.
+"Dependency Analysis" appears when 2+ PRDs are ready. Option 8
+appears when 2+ unblocked PRDs exist. Option 9 appears only when
+agent teams are enabled (config `team_mode` is `"auto"` or `"teams"`
+with `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` set) AND 2+ parallel-safe
+PRDs exist in the same wave.
 
 4. Wait for the user to pick a number or describe custom work.
+
+   - **If user picks a single PRD or standalone task:** existing behavior.
+   - **If user picks "Describe something else":** existing behavior.
+   - **If user picks "Build all ready PRDs" or "Build in parallel":**
+     Show the execution plan for confirmation:
+
+     ## Execution Plan
+
+     Wave 1 (parallel): [Feature A] + [Feature B]
+     Wave 2 (after [dependency] ships): [Feature C]
+
+     Start building? (yes / adjust)
+
+     If the user says "adjust," let them reorder, remove PRDs, or
+     change parallel to sequential. Once confirmed, set the execution
+     mode (`sequential` or `parallel`) and the ordered PRD list, then
+     proceed to Phase 2 with the first PRD.
 
 5. **If nothing is ready to build:**
 - **If `x4` plugin is installed:** Suggest running `/plan-backlog`
