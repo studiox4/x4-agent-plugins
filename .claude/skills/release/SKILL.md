@@ -41,6 +41,38 @@ Apply the bump:
 Edit `plugins/x4/.claude-plugin/plugin.json` to set the new version.
 Edit `.claude-plugin/marketplace.json` to set the new version in both `metadata.version` and `plugins[].version`.
 
+### 5.5. Update version constants
+
+Two files contain hardcoded version constants that must stay in sync with the plugin version. Update both:
+
+**`plugins/x4/hooks/session-start.sh`** — find the line:
+```
+X4_VERSION="<old-version>"
+```
+Replace with:
+```
+X4_VERSION="<new-version>"
+```
+
+**`plugins/x4/skills/upgrade/SKILL.md`** — find the HTML comment:
+```
+<!-- CURRENT_VERSION: <old-version> -->
+```
+Replace with:
+```
+<!-- CURRENT_VERSION: <new-version> -->
+```
+Also update the literal version string in Step 5 of the upgrade skill:
+```
+echo "<old-version>" > .claude/x4-version
+```
+→
+```
+echo "<new-version>" > .claude/x4-version
+```
+
+These constants power the session-start version check and the upgrade migration runner respectively. If they fall out of sync, users will see stale upgrade prompts.
+
 ### 6. Update CHANGELOG.md
 
 Add a new entry at the top of the `## x4` section in `CHANGELOG.md`:

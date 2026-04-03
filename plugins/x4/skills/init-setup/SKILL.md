@@ -396,12 +396,21 @@ the summary step.
 
 ### Step 8: Confirm
 
+Write the current x4 plugin version to `.claude/x4-version`. Read the version
+from `plugins/x4/.claude-plugin/plugin.json` (when in the x4-agent-plugins repo)
+or from the `CURRENT_VERSION` comment in `skills/upgrade/SKILL.md`. This file
+is used by the session-start hook and `/x4:upgrade` to track what's been applied.
+
 Show the user a summary of what was configured and tell them:
+- Their brand guide lives at `brand/BRAND.md` — edit it anytime to update
+  voice, logos, colors, and social handles across all marketing skills
+- Add logo files to `brand/assets/` and update the paths in `brand/BRAND.md`
 - They can re-run `/init-setup` anytime to reconfigure
 - They can edit `.claude/agent-team.config.md` directly
 - Run `/init-agents` next to generate agent files
 - Use `/idea` to capture features and `/plan-backlog` to write PRDs
 - Run `/llmstxt-update` anytime to refresh reference docs
+- Run `/x4:upgrade` after future plugin updates to apply migrations
 
 ## Rules
 

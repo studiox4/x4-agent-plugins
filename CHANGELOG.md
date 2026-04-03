@@ -2,6 +2,15 @@
 
 ## x4
 
+### 3.10.0 (2026-04-03)
+
+- `/upgrade`: new skill — applies x4 project migrations after a plugin update; reads `.claude/x4-version` to detect what's been applied, runs versioned migration registry, presents findings before touching anything, updates version file on completion
+- `session-start.sh`: version check — compares `X4_VERSION` constant against `.claude/x4-version`; shows one-line upgrade prompt when they differ; fires for projects set up before version tracking was introduced
+- `.claude/x4-version`: new project file — one-line version tracker written by `/init-setup` and updated by `/upgrade`; used by session-start hook to detect when migrations are available
+- `/init-setup` Step 8: now writes `.claude/x4-version` at the end of setup
+- `/doctor` Step 8: new version and migration gap checks — flags outdated version file, missing `brand/BRAND.md`, missing `brand/assets/`, missing `railway.toml` when Railway is configured
+- `/release`: new Step 5.5 — updates `X4_VERSION` in `session-start.sh` and `CURRENT_VERSION` in `upgrade/SKILL.md` as part of every release
+
 ### 3.9.0 (2026-04-03)
 
 - `brand/BRAND.md` — new human-editable brand guide scaffolded at project root by `/init-setup`; all marketing skills read from it (voice, tone, colors, logos, social handles, email config); assets go in `brand/assets/`

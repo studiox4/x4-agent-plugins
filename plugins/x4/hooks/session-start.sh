@@ -23,6 +23,22 @@ elif [ -f "$LLMSTXT_CONFIG" ] && [ ! -d "$LLMSTXT_DIR" ]; then
   STALE_MSG="  ⚠ llms.txt configured but no docs downloaded — run /x4:llmstxt-update"
 fi
 
+# --- x4 version check ---
+# X4_VERSION is updated automatically by /release — do not edit manually
+X4_VERSION="3.10.0"
+UPGRADE_MSG=""
+
+PROJECT_VERSION_FILE=".claude/x4-version"
+if [ -f "$PROJECT_VERSION_FILE" ]; then
+  PROJECT_VERSION=$(cat "$PROJECT_VERSION_FILE" | tr -d '[:space:]')
+  if [ "$PROJECT_VERSION" != "$X4_VERSION" ]; then
+    UPGRADE_MSG="  → x4 updated to v${X4_VERSION} (project on v${PROJECT_VERSION}) — run /x4:upgrade"
+  fi
+elif [ -f ".claude/agent-team.config.md" ]; then
+  # Project configured with x4 before version tracking was introduced
+  UPGRADE_MSG="  → x4 v${X4_VERSION} has new features for this project — run /x4:upgrade"
+fi
+
 # --- Session start message ---
 cat <<HOOK_MSG
 x4 plugin is active. Key commands:
@@ -38,4 +54,8 @@ HOOK_MSG
 
 if [ -n "$STALE_MSG" ]; then
   echo "$STALE_MSG"
+fi
+
+if [ -n "$UPGRADE_MSG" ]; then
+  echo "$UPGRADE_MSG"
 fi

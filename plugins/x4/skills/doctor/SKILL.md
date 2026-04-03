@@ -92,7 +92,30 @@ Only if `db_branching` is configured in agent-team config:
 
 For missing: report as OPTIONAL with what it enables.
 
-### 8. Check llms.txt docs
+### 8. Check x4 project version
+
+| Check | How | Pass |
+|-------|-----|------|
+| `.claude/x4-version` exists | Read file | Exists (set by `/init-setup` or `/upgrade`) |
+| Version is current | Compare with `CURRENT_VERSION` in `upgrade/SKILL.md` | Matches |
+
+If `.claude/x4-version` is missing but `.claude/agent-team.config.md` exists:
+  WARN: "Project was configured before version tracking — run `/x4:upgrade` to apply any missed migrations."
+
+If version is present but outdated:
+  WARN: "Project is on v{project_version}, plugin is v{current_version} — run `/x4:upgrade`."
+
+If version matches: PASS.
+
+**Also scan for common migration gaps directly** (catches issues even if version file is current):
+
+| Gap | Check | Fix |
+|-----|-------|-----|
+| `brand/BRAND.md` | File exists when brand config is present | `/x4:upgrade` |
+| `brand/assets/` | Directory exists | `/x4:upgrade` |
+| `railway.toml` | Exists when Railway is configured in CI | `/x4:deploy-setup` |
+
+### 9. Check llms.txt docs
 
 | Check | How | Pass |
 |-------|-----|------|
@@ -103,7 +126,7 @@ For missing: report as OPTIONAL with what it enables.
 For stale docs: suggest `/x4:llmstxt-update`.
 For no docs: suggest `/x4:llmstxt-init`.
 
-### 9. Report
+### 10. Report
 
 Present as a structured diagnostic:
 

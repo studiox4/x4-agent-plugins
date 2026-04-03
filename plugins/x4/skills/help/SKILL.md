@@ -58,6 +58,7 @@ A typical developer goes through x4 like this:
          /x4:work            → build it
 
   Always /x4:doctor          → health check: tools, config, env, agents
+         /x4:upgrade         → apply migrations after plugin updates
          /x4:llmstxt-update  → refresh docs after adding libraries
          /x4:market-update   → sync marketing site after shipping a batch
 
@@ -117,6 +118,7 @@ A typical developer goes through x4 like this:
 **Other**
   /x4:help           This guide
   /x4:doctor         Diagnose project setup issues
+  /x4:upgrade        Apply migrations after updating the plugin
   /x4:deploy-setup   Configure Railway services and PR preview deployments
 ```
 
