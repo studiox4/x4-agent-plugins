@@ -37,11 +37,35 @@ Docs: https://px4.dev
 
 {Contextual suggestion based on detected state — 1-2 sentences}
 
+### The Journey
+
+A typical developer goes through x4 like this:
+
+  Day 1  /x4:onboard         → dev environment ready, companions installed
+         /x4:create my-app   → full-stack monorepo scaffolded
+         /x4:deploy-setup    → Railway services, env vars, PR previews configured
+         /x4:tour            → explore the app, test login, try AI chat
+
+  Day 1  /x4:kickstart       → "I'm building a fitness tracker with AI coaching"
+                                Brainstorm → UI design → prioritize → 8 PRDs ready
+
+  Day 2  /x4:work            → auto-loop: agent teams build all 8 features
+                                Each: backend + frontend + tester → reviewer → ship
+
+  Week 2 /x4:gaps            → "You have logging but no progress charts"
+         /x4:dream           → "What if users could share workout plans?"
+         /x4:plan-backlog    → write a PRD for the new idea
+         /x4:work            → build it
+
+  Always /x4:doctor          → health check: tools, config, env, agents
+         /x4:llmstxt-update  → refresh docs after adding libraries
+         /x4:market-update   → sync marketing site after shipping a batch
+
 ### The Pipeline
 
-  Onboard → Scaffold → Tour → Kickstart → Build → Ship
-                                ↑                   ↓
-                           /gaps + /dream → backlog → plan
+  Onboard → Create → Deploy Setup → Tour → Kickstart → Work → Ship
+                                              ↑                   ↓
+                                        /gaps + /dream → backlog → plan
 
 ### Commands by Stage
 
