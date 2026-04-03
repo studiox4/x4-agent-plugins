@@ -67,7 +67,20 @@ Where does this project deploy? (used for preview URL checks):
 4. None — no preview environments
 ```
 
-If user picks 1-3, set `ci.preview_url_command` to the appropriate CLI command.
+If user picks 1 (Railway), set `ci.preview_url_command` to:
+`railway status --json | jq -r '.services[]? | "\(.name): \(.url // \"pending\")"'`
+
+Then offer to run deploy-setup now:
+```
+Railway selected. Run /x4:deploy-setup to configure Railway services,
+sync env vars, and enable PR previews?
+
+1. Yes — run /deploy-setup now (recommended for first-time setup)
+2. Skip — I'll run it later
+```
+If yes, delegate to `/deploy-setup`. After it completes, return to Step 4.
+
+If user picks 2-3, set `ci.preview_url_command` to the appropriate CLI command.
 If user picks 4, omit preview config.
 
 ### Step 4: CI Provider
@@ -170,7 +183,7 @@ db_branching:
 ci:
   provider: github-actions
   watch_command: gh run watch
-  preview_url_command: "railway status --json | jq -r '.deployments[0].url'"
+  preview_url_command: "railway status --json | jq -r '.services[]? | \"\(.name): \(.url // \"pending\")\"'"
 
 pr:
   draft: true

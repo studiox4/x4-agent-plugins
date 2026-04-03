@@ -2,6 +2,13 @@
 
 ## x4
 
+### 3.7.0 (2026-04-02)
+
+- `/deploy-setup`: new skill — one-time Railway deployment wizard; detects monorepo services, generates `railway.toml` with per-service config, syncs env vars from `.env.local`, walks through GitHub connection and PR preview setup in the Railway dashboard
+- `/init-setup` Step 3: when Railway is selected, offers to run `/deploy-setup` immediately for first-time configuration
+- `/init-setup`: fix incorrect `preview_url_command` default — was `.deployments[0].url` (invalid path), now `.services[]?` which correctly lists all service URLs for multi-service monorepos
+- `/help`: updated command list to include `/x4:deploy-setup`
+
 ### 3.6.0 (2026-04-03)
 
 - `/market-update`: new skill — syncs the marketing site with recently shipped features; reads `docs/CHANGELOG.md` entries since last sync, generates marketing copy per page, optionally captures screenshots via Playwright, presents draft for user review, then applies updates with TSX section marker support

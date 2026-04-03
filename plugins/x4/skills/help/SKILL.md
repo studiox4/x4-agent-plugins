@@ -84,6 +84,7 @@ Docs: https://px4.dev
   /x4:help           This guide
   /x4:doctor         Diagnose project setup issues
   /x4:market-update  Sync marketing site with recently shipped features
+  /x4:deploy-setup   Configure Railway services and PR preview deployments
 ```
 
 ### 3. Offer next step
