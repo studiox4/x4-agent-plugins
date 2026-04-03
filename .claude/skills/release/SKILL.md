@@ -79,7 +79,11 @@ gh release create v<new-version> --title "x4 v<new-version>" --notes "<changelog
 
 The `--notes` content should be the changelog bullet points from step 6.
 
-### 10. Report
+### 10. Update briefs
+
+Run the `/update-briefs` skill to regenerate all brief documents in `.briefs/` with the new version and current plugin state. Briefs are gitignored so this does not require a commit.
+
+### 11. Report
 
 Report the new version to the user:
 
@@ -87,3 +91,4 @@ Report the new version to the user:
 > - Commit: pushed to origin
 > - Tag: v<new-version>
 > - GitHub release: <release-url>
+> - Briefs: updated
