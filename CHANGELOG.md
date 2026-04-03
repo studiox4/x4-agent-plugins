@@ -2,6 +2,12 @@
 
 ## x4
 
+### 3.8.1 (2026-04-03)
+
+- `/market-subscribe`: new skill — scaffolds email capture into the marketing site; generates `SubscribeForm` React component and `/api/subscribe` Next.js route handler wired to Resend or Loops; inserts form into configured page using section markers; adds env var placeholders to `.env.local`
+- `/init-setup` Step 6b: offer to run `/market-subscribe` after brand+email config is written
+- `/init-setup` Step 7d: new conditional step — delegates to `/market-subscribe` if opted in
+
 ### 3.8.0 (2026-04-03)
 
 - `/market-email`: new skill — generates release email campaigns from CHANGELOG.md entries; produces subject line options, preview text, and full email body in brand voice; outputs Resend-ready send snippet; never auto-sends — always review first

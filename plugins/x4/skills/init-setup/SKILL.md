@@ -262,6 +262,21 @@ If user selects pages, include the `marketing` block in the Step 7 config output
 If user picks No or skip: omit the `marketing` block entirely. Its absence is
 treated as disabled — no `enabled: false` needed.
 
+After page selection (if marketing site exists), ask:
+
+```
+## Email Capture
+
+Add an email sign-up form to capture visitor emails?
+This scaffolds a SubscribeForm component and /api/subscribe route.
+(Requires brand.email to be configured in the next step)
+
+1. Yes — scaffold email capture after config is written
+2. Skip — I'll add it later with /x4:market-subscribe
+```
+
+If yes, set a flag to delegate to `/market-subscribe` at the end of Step 7.
+
 ### Step 6c: Brand & marketing channels
 
 Auto-detect: check if `docs/CHANGELOG.md` exists (brand is more useful if changelog is present).
@@ -356,6 +371,12 @@ to the summary step.
 
 If `.llmstxt.json` already exists, skip this step and note it in the summary
 as "already configured."
+
+### Step 7d: Email capture (conditional)
+
+If the user opted into email capture in Step 6b AND `brand.email` was configured
+in Step 6c, delegate to `/market-subscribe` now. After it completes, return to
+the summary step.
 
 ### Step 8: Confirm
 
