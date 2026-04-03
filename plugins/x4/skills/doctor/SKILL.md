@@ -1,6 +1,6 @@
 ---
 name: doctor
-description: Diagnose project setup issues — checks prerequisites, config files, database, agents, hooks, and environment variables. Reports what's healthy and what needs fixing.
+description: Use when something isn't working, when the user wants to verify their x4 project setup, or before starting a build session. Checks prerequisites, config files, agents, environment variables, database, companion plugins, and llms.txt docs. Trigger for "is my setup correct?", "why isn't X working?", "check my project health", or any setup/configuration question.
 version: 1.0.0
 license: MIT
 ---

@@ -1,6 +1,6 @@
 ---
 name: status
-description: Quick diagnostic dashboard showing app status, ports, database, git state, and companion plugins
+description: Use when the user wants a quick snapshot of their x4 project — what's running, what's configured, what's missing. Shows app ports, database state, git status, and companion plugin coverage. Trigger for "what's running?", "show me project status", "is my database connected?", or any question about current project state.
 version: 1.0.0
 license: MIT
 ---

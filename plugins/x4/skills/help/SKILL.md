@@ -1,6 +1,6 @@
 ---
 name: help
-description: Show an overview of the x4 plugin — what it does, how to get started, and all available commands organized by workflow stage
+description: Use when the user asks what x4 can do, how to get started, what commands are available, or seems lost in the workflow. Shows a contextual guide — detects project state and suggests the right next step. Trigger for "what commands do I have?", "how does this work?", "what should I do next?", or any confusion about x4.
 version: 1.0.0
 license: MIT
 ---

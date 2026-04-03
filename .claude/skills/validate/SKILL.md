@@ -1,6 +1,6 @@
 ---
 name: validate
-description: Run comprehensive validation of the plugin marketplace structure — checks JSON, manifests, command/skill pairing, hook scripts, and cross-references
+description: Use when verifying the x4-agent-plugins marketplace structure — checks JSON manifests, command/skill pairing, hook scripts, and cross-references. Trigger for "validate the plugin", "check the marketplace", "is the structure correct?", before any release, or after adding new commands or skills.
 disable-model-invocation: true
 ---
 

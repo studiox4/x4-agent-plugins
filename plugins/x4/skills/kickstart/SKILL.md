@@ -1,6 +1,6 @@
 ---
 name: kickstart
-description: Brainstorm app vision, design UI, prioritize features, and batch-generate PRDs to kickstart a new project
+description: Use when starting a new project or when the user has a project but no PRDs yet — runs an interactive planning session from vision to full PRD backlog. Trigger for "let's plan the app", "I want to brainstorm features", "kickstart my project", "help me figure out what to build", or any request to go from idea to a structured build plan.
 version: 1.0.0
 license: MIT
 ---

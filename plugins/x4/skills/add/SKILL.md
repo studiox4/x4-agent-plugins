@@ -1,6 +1,6 @@
 ---
 name: add
-description: Add a new mobile app or web app to an existing x4-mono project
+description: Use when the user wants to add a mobile app or web app to an existing x4-mono project. Trigger for "add mobile", "add Expo app", "add another web app", "I want a React Native app", or any request to expand an existing x4 project with new apps.
 version: 1.0.0
 license: MIT
 ---

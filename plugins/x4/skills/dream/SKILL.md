@@ -1,6 +1,6 @@
 ---
 name: dream
-description: Explore visionary ideas for the project — bold features, natural evolutions, and untapped capabilities from the tech stack. Interactive discussion that captures selected ideas to the backlog.
+description: Use when the user wants to think big about their product — bold new directions, natural next steps, or untapped capabilities in their tech stack. Trigger for "what could this become?", "give me big ideas", "what's possible with my stack?", "dream with me", or any request for visionary ideation beyond the current plan.
 version: 1.0.0
 license: MIT
 ---

@@ -1,8 +1,11 @@
 ---
 name: create
 description: >
-  Scaffold a new x4-mono full-stack TypeScript monorepo using the create-x4 CLI.
-  Interactive wizard for project name, preset, platforms, scope, and environment setup.
+  Use when the user wants to create a new full-stack TypeScript project. Scaffolds
+  an x4-mono monorepo via the create-x4 CLI with an interactive wizard covering
+  project name, preset (saas/full-stack/landing/api-only), platforms, and env setup.
+  Trigger for "create a new project", "scaffold an app", "start a new x4 project",
+  "I want to build a SaaS app", or any request to start a new project from scratch.
 version: 1.0.0
 license: MIT
 ---

@@ -1,6 +1,6 @@
 ---
 name: run-tests
-description: Run project tests using commands from agent-team config. Supports unit, e2e, lint, and typecheck.
+description: Use when the user wants to run tests — reads test commands from agent-team config and runs unit, e2e, lint, and/or typecheck. Trigger for "run tests", "run unit tests", "check lint", "run e2e", or any request to execute the project's test suite. Pass a specific type (unit/e2e/lint/typecheck) or run all.
 argument-hint: "[unit|e2e|lint|typecheck]"
 version: 2.0.0
 license: MIT

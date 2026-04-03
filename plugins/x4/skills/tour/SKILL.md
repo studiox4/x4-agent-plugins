@@ -1,6 +1,6 @@
 ---
 name: tour
-description: Guided post-scaffold walkthrough -- explore apps, test login, try AI chat, set up git remote
+description: Use after scaffolding a new x4-mono project to walk the user through what was created — explore apps, test login, try AI chat, set up git remote. Trigger after /create completes, when the user asks "what do I do now?", "show me around the project", or "how do I start the app".
 version: 1.0.0
 license: MIT
 ---

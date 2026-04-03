@@ -1,6 +1,6 @@
 ---
 name: env
-description: Set up or update environment variables for an x4-mono project — database, auth secrets, AI keys
+description: Use when the user needs to configure environment variables for an x4-mono project — database connection, auth secrets, AI API keys. Trigger for "set up my database", "configure env", "add my API key", "set DATABASE_URL", "I need to configure .env.local", or any mention of environment setup or missing credentials.
 version: 1.0.0
 license: MIT
 ---

@@ -1,6 +1,6 @@
 ---
 name: work
-description: Pick up the next feature or task, dispatch an agent team, build it, review it, ship it. Supports auto-loop through multiple PRDs and parallel execution with agent teams.
+description: Use when the user is ready to build — picks up the next PRD from the planning queue, dispatches an agent team (backend, frontend, tester), reviews, verifies, and ships. Trigger for "let's build", "start working", "build the next feature", "dispatch the team", or any request to begin development work. Supports auto-loop through all ready PRDs and parallel execution.
 version: 3.0.0
 license: MIT
 ---

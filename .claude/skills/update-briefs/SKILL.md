@@ -1,6 +1,6 @@
 ---
 name: update-briefs
-description: Regenerate all brief documents in .briefs/ to reflect the current state of the plugin — run this as part of every release
+description: Use to regenerate .briefs/ documents after a release or when skills/commands have changed. Trigger for "update the briefs", "refresh the marketing brief", "sync docs to current version", or automatically as part of /release. Reads current plugin state and updates both the architecture brief and marketing site brief.
 disable-model-invocation: true
 ---
 

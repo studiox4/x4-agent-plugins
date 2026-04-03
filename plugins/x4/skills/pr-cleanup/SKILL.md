@@ -1,6 +1,6 @@
 ---
 name: pr-cleanup
-description: Post-merge cleanup — delete DB branch (if configured) and clean up local git branch
+description: Use after a PR is merged to clean up the database branch and local git branch. Trigger for "clean up the branch", "PR is merged, clean up", "delete the DB branch", or after /work Phase 7 when the user wants to finalize. Safe to run manually at any time post-merge.
 version: 2.0.0
 license: MIT
 ---

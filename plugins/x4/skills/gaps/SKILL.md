@@ -1,6 +1,6 @@
 ---
 name: gaps
-description: Scan completed and in-progress features to find product gaps — dead ends, missing connections, incomplete flows, and stale backlog items. Adds selected gaps to the backlog.
+description: Use when the user wants to find what's missing in their product — dead ends, missing connections between features, incomplete user flows, or stale backlog items that are now relevant. Trigger for "what am I missing?", "find product gaps", "what should I build next?", "check my feature coverage", or after shipping a few features to see what needs follow-through.
 version: 1.0.0
 license: MIT
 ---

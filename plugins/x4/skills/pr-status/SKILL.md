@@ -1,6 +1,6 @@
 ---
 name: pr-status
-description: Check PR status — CI checks, preview URLs, review state — using gh CLI and configured commands
+description: Use when the user wants to check the status of their current PR — CI checks, preview URLs, review decisions. Trigger for "check CI", "what's the PR status?", "is CI passing?", "check my preview URL", or any question about a PR in flight. Also called by /work during Phase 5.
 version: 2.0.0
 license: MIT
 ---

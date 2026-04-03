@@ -1,6 +1,6 @@
 ---
 name: llmstxt-init
-description: Scaffold the llms.txt download script, known-sources cache, and docs directory into a project
+description: Use when setting up llms.txt reference docs for the first time — scaffolds the download script, known-sources cache, and docs directory. Trigger for "set up llms.txt", "I want AI-readable docs for my dependencies", "initialize reference docs", or when /llmstxt-update reports no script found. Run once per project before /llmstxt-update.
 version: 2.0.0
 license: MIT
 ---

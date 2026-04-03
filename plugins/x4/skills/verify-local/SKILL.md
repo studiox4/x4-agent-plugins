@@ -1,6 +1,6 @@
 ---
 name: verify-local
-description: Run all configured checks (unit, e2e, lint, typecheck), auto-fix failures up to 3 attempts, update status
+description: Use as the quality gate before shipping — runs all configured checks (unit, e2e, lint, typecheck), auto-fixes failures up to 3 attempts per check, and updates the status file. Trigger for "verify everything passes", "run all checks", "gate before ship", or when /work Phase 4 needs a full verification pass. More thorough than /run-tests — includes auto-fix.
 version: 2.0.0
 license: MIT
 ---

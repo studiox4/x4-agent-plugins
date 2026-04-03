@@ -1,9 +1,11 @@
 ---
 name: onboard
 description: >
-  Guide a new user through setting up their local development environment —
-  checks for required tools, accounts, and CLI access, then walks through
-  setup for anything missing.
+  Use when a developer is setting up for the first time, onboarding to a new
+  machine, or joining a team using x4. Checks for required tools (Bun, Node,
+  Git, gh), accounts (Neon, Railway, Vercel), and companion plugins, then walks
+  through setup for anything missing. Trigger for "get started", "set up my
+  machine", "onboard me", or "what do I need to install?".
 version: 1.0.0
 license: MIT
 ---

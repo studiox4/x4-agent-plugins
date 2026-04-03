@@ -1,6 +1,6 @@
 ---
 name: init-agents
-description: Generate project-specific agent files from templates — reads CLAUDE.md to fill in project details like tech stack, conventions, and owned directories
+description: Use when setting up agent files for a project or when .claude/agents/ is empty or has unresolved template placeholders. Reads CLAUDE.md to fill in tech stack, conventions, and directory ownership. Trigger for "set up agents", "generate agent files", "my agents have {{placeholders}}", or when /work can't find agent files. Run once after /init-setup.
 version: 2.0.0
 license: MIT
 ---

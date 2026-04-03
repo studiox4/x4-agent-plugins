@@ -1,6 +1,6 @@
 ---
 name: plan-backlog
-description: Use when the status file has no ready-to-build features and the backlog has unplanned items — presents a menu to plan or delete backlog items, then writes the PRD and updates the status file
+description: Use when the backlog has ideas that need to be turned into PRDs, or when /work says there's nothing ready to build. Presents a triage menu to plan or delete backlog items, runs brainstorming and planning, then writes a full PRD. Trigger for "plan a feature", "write a PRD", "triage the backlog", "plan something from my backlog", or any request to turn an idea into a buildable spec.
 version: 1.0.0
 license: MIT
 ---

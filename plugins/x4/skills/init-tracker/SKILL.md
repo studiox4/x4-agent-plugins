@@ -1,6 +1,6 @@
 ---
 name: init-tracker
-description: Scaffold project tracking files — STATUS.md, BACKLOG.md, planning directory with todo/in-progress/complete subdirectories, and config
+description: Use when setting up a project for the first time or when STATUS.md, BACKLOG.md, or planning directories are missing. Trigger for "set up project tracking", "initialize tracker", "I don't have a STATUS.md", or when /idea or /plan-backlog reports the tracker isn't set up. Run once per project before using /idea, /plan-backlog, or /work.
 version: 2.0.0
 license: MIT
 ---

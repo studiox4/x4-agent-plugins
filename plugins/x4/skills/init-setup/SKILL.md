@@ -1,6 +1,6 @@
 ---
 name: init-setup
-description: Interactive wizard to configure tooling — database, hosting, CI, package manager, and test framework
+description: Use when setting up a project for x4 workflows or when the agent-team config is missing. Configures database branching, hosting, CI, package manager, and test framework into .claude/agent-team.config.md. Trigger for "set up my project", "configure x4", "I need to set up my database branching", or when /work reports missing configuration. Run once per project.
 version: 2.0.0
 license: MIT
 ---

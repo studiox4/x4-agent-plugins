@@ -1,6 +1,6 @@
 ---
 name: pr-create
-description: Create git branch, DB branch (if configured), push, open draft PR, wait for preview, report URLs
+description: Use when starting work on a new feature — creates the git branch, database branch (if configured), pushes, opens a draft PR, and reports preview URLs. Trigger for "create a PR", "start a branch", "set up a feature branch", or at the beginning of a build cycle. Also called internally by /work Phase 2.
 version: 2.0.0
 license: MIT
 ---
