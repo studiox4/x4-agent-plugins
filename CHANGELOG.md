@@ -2,6 +2,14 @@
 
 ## x4
 
+### 3.3.0 (2026-04-02)
+
+- `/work` auto-loop: build all ready PRDs sequentially with checkpoint prompts between each
+- `/work` parallel execution: build independent PRDs simultaneously using agent teams (experimental)
+- PRD dependency analysis in Phase 1: detects inter-PRD dependencies, groups into execution waves
+- Enhanced Phase 1 menu with Blocked section, Dependency Analysis, and Build Options
+- Work skill bumped to v3.0.0
+
 ### 3.2.0 (2026-04-02)
 
 - Add missing skills for 3 orphan commands: `llmstxt-status`, `init-tracker`, `init-agents`
