@@ -81,7 +81,13 @@ The `--notes` content should be the changelog bullet points from step 6.
 
 ### 10. Update briefs
 
-Run the `/update-briefs` skill to regenerate all brief documents in `.briefs/` with the new version and current plugin state. Briefs are gitignored so this does not require a commit.
+Regenerate all brief documents in `.briefs/` to reflect the new version and current plugin state:
+
+1. Read the current plugin state: `plugins/x4/.claude-plugin/plugin.json` (version), all skills, commands, agents, hooks, `CHANGELOG.md`
+2. Update `.briefs/x4-architecture-and-user-flow.md` — version, skill/command counts, command reference table, pipeline description, any new features
+3. Update `.briefs/marketing-site-brief.md` — version, command counts, command reference, changelog highlights, key stats
+
+Briefs are gitignored so this does not require a commit.
 
 ### 11. Report
 
