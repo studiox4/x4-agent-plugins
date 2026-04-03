@@ -2,6 +2,14 @@
 
 ## x4
 
+### 3.6.0 (2026-04-03)
+
+- `/market-update`: new skill — syncs the marketing site with recently shipped features; reads `docs/CHANGELOG.md` entries since last sync, generates marketing copy per page, optionally captures screenshots via Playwright, presents draft for user review, then applies updates with TSX section marker support
+- `/work` Phase 6: now writes a structured `docs/CHANGELOG.md` entry after every shipped feature — feature title, user-facing bullets from PRD user stories, PR number/URL, date
+- `/work` Phase 7: adds `/market-update` reminder to the Work Complete report when marketing is configured
+- `/init-setup`: new Step 6b — detects and configures marketing site pages for `/market-update`
+- `/help`: updated command list to include `/x4:market-update`
+
 ### 3.5.1 (2026-04-03)
 
 - Improve all 28 skill descriptions for better triggering — each now includes "Use when..." context and concrete example phrases so Claude invokes the right skill from natural language
