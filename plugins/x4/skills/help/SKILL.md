@@ -57,6 +57,8 @@ A typical developer goes through x4 like this:
          /x4:plan-backlog    → write a PRD for the new idea
          /x4:work            → build it
 
+  Anytime [plan mode] → /x4:plan-bridge → PRD written, status updated, ready to build
+
   Always /x4:doctor          → health check: tools, config, env, agents
          /x4:upgrade         → apply migrations after plugin updates
          /x4:opensrc-update  → refresh source after adding libraries
@@ -82,9 +84,10 @@ A typical developer goes through x4 like this:
   /x4:status      Project health dashboard
 
 **Planning**
-  /x4:kickstart   Brainstorm features, design UI, generate PRDs
-  /x4:idea        Capture an idea to the backlog
+  /x4:kickstart    Brainstorm features, design UI, generate PRDs
+  /x4:idea         Capture an idea to the backlog
   /x4:plan-backlog Triage backlog into PRDs
+  /x4:plan-bridge  Convert any planning session (plan mode, /brainstorming) into a PRD
 
 **Discovery**
   /x4:gaps        Find product gaps in shipped features

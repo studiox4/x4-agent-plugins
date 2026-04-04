@@ -2,6 +2,14 @@
 
 ## x4
 
+### 3.13.0 (2026-04-04)
+
+- `/plan-bridge`: new skill — converts any planning session into a PRD; detects context from plan mode output (`.claude/plans/`), superpowers `/brainstorming` or `/writing-plans` conversation output, or a manual description; confirms feature summary before writing; writes PRD to `docs/planning/todo/`, updates `STATUS.md`, removes item from `BACKLOG.md` if it originated there
+- `hooks/plan-bridge-nudge.sh`: new PostToolUse hook on `ExitPlanMode` — fires after plan mode exits and nudges the user to run `/x4:plan-bridge` when `docs/planning/` or `docs/STATUS.md` is present
+- `hooks/hooks.json`: added `ExitPlanMode` PostToolUse hook entry
+- `/help`: added `/x4:plan-bridge` to Planning commands and "Anytime" journey entry
+- `/upgrade` migration v3.13.0: informational — notes that plan bridge hook is now active
+
 ### 3.12.0 (2026-04-04)
 
 - `/e2e-setup`: new skill — one-time Playwright scaffold wizard; detects `apps/web`, `apps/marketing`, `apps/desktop`; creates `packages/playwright-{type}` with tailored configs, starter tests, and Turborepo integration; each app type gets purpose-built setup (storageState auth for web, software-renderer canvas for marketing, `electron-playwright-helpers` for desktop)

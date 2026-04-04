@@ -23,6 +23,16 @@
             "statusMessage": "Auto-formatting"
           }
         ]
+      },
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/plan-bridge-nudge.sh",
+            "statusMessage": "Checking x4 tracker"
+          }
+        ]
       }
     ],
     "TeammateIdle": [

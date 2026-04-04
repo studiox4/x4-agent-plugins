@@ -10,14 +10,14 @@ license: MIT
 Detects gaps between the current plugin version and what's been applied to
 this project. Applies only what's missing — idempotent, always safe to re-run.
 
-<!-- CURRENT_VERSION: 3.12.0 -->
+<!-- CURRENT_VERSION: 3.13.0 -->
 <!-- Updated automatically by /release — do not edit this line manually -->
 
 ## Process
 
 ### Step 1: Detect project state
 
-1. Read the current plugin version from the `CURRENT_VERSION` comment above: `3.12.0`
+1. Read the current plugin version from the `CURRENT_VERSION` comment above: `3.13.0`
 
 2. Read the project's last-applied version from `.claude/x4-version`:
    - If the file exists, read its contents (trim whitespace)
@@ -82,7 +82,7 @@ Apply each confirmed migration. Report each as it completes:
 Write the current plugin version to `.claude/x4-version`:
 
 ```bash
-echo "3.12.0" > .claude/x4-version
+echo "3.13.0" > .claude/x4-version
 ```
 
 Create `.claude/` if it doesn't exist.
@@ -205,6 +205,22 @@ Run now? (yes / later)
 
 If "yes": delegate to `/e2e-setup`.
 If "later": note it in the report.
+
+---
+
+### v3.13.0 — Plan Mode bridge hook (`plan-bridge-nudge.sh`)
+
+**Check:** `plugins/x4/hooks/plan-bridge-nudge.sh` does NOT exist in the plugin directory
+(for plugin maintainers) — or for project users, this migration is informational only
+since the hook ships with the plugin update.
+
+**Action (Skip — informational):** This version adds an `ExitPlanMode` PostToolUse hook
+that nudges users to run `/x4:plan-bridge` after finishing a plan mode session. The hook
+and skill are delivered automatically when the plugin is updated. No project-level files
+need to be created.
+
+Report: "Plan bridge hook active — Claude will now prompt you to run /x4:plan-bridge
+after each plan mode session."
 
 ---
 
