@@ -92,8 +92,9 @@ A typical developer goes through x4 like this:
 
 **Building**
   /x4:work        Build pipeline — auto-loops through all ready PRDs
-  /x4:run-tests   Run test commands
+  /x4:run-tests   Run tests — app-type-aware e2e routing (web/marketing/desktop)
   /x4:verify-local Full check suite with auto-fix
+  /x4:e2e-setup   Scaffold Playwright suites for each app type (run once)
   /x4:pr-create   Create branch + PR
   /x4:pr-status   Check CI and preview
   /x4:pr-cleanup  Post-merge cleanup

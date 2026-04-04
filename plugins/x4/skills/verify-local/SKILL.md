@@ -25,7 +25,7 @@ Run each configured check in order. All must pass.
 | Check | Command | Required |
 |-------|---------|----------|
 | Unit tests | `test_commands.unit` | Yes |
-| E2E tests | `test_commands.e2e` | If configured |
+| E2E tests | app-type-aware routing (web/marketing/desktop) | If any e2e configured |
 | Lint | `test_commands.lint` | If configured |
 | Typecheck | `test_commands.typecheck` | If configured |
 
@@ -46,8 +46,16 @@ When a check fails:
      exact files and lines).
    - **Unit test failures:** Read the failing test and the code under test.
      Fix the code (not the test) unless the test itself is wrong.
-   - **E2E test failures:** Read the test, check selectors and expected values.
-     Fix if the issue is clear; otherwise escalate.
+   - **E2E test failures:** First, identify which suite failed (web/marketing/desktop)
+     from the output prefix. Load the corresponding reference file from
+     `skills/run-tests/references/e2e-{type}.md` and check the failure triage table.
+     If the triage table gives a specific fix (e.g., re-seed storageState), attempt it.
+     If the triage table says escalate, or the error is not in the table, read the
+     failing test and fix the selector or assertion.
+     **Special rule — marketing visual regression:** If the failure is a snapshot
+     mismatch in `packages/playwright-marketing/`, STOP immediately. Never attempt
+     to auto-fix. Report: "Visual regression failure — review playwright-report/ diff
+     and run --update-snapshots manually if the change is intentional."
 3. Apply the fix and commit: `fix: resolve <check> failure — <brief description>`
 4. Re-run the same check.
 5. If still failing, increment attempt counter and retry.

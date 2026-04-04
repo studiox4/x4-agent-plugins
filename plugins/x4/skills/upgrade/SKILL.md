@@ -10,14 +10,14 @@ license: MIT
 Detects gaps between the current plugin version and what's been applied to
 this project. Applies only what's missing — idempotent, always safe to re-run.
 
-<!-- CURRENT_VERSION: 3.11.0 -->
+<!-- CURRENT_VERSION: 3.12.0 -->
 <!-- Updated automatically by /release — do not edit this line manually -->
 
 ## Process
 
 ### Step 1: Detect project state
 
-1. Read the current plugin version from the `CURRENT_VERSION` comment above: `3.11.0`
+1. Read the current plugin version from the `CURRENT_VERSION` comment above: `3.12.0`
 
 2. Read the project's last-applied version from `.claude/x4-version`:
    - If the file exists, read its contents (trim whitespace)
@@ -82,7 +82,7 @@ Apply each confirmed migration. Report each as it completes:
 Write the current plugin version to `.claude/x4-version`:
 
 ```bash
-echo "3.11.0" > .claude/x4-version
+echo "3.12.0" > .claude/x4-version
 ```
 
 Create `.claude/` if it doesn't exist.
@@ -185,6 +185,26 @@ If "later": note it in the report.
   | og-image.png | 1200×630 | PNG | Open Graph — link previews everywhere |
   | banner.png | 1500×500 | PNG | Twitter/LinkedIn profile header |
   ```
+
+---
+
+### v3.12.0 — E2E test suites (`packages/playwright-*`)
+
+**Check:** `apps/web/`, `apps/marketing/`, or `apps/desktop/` exists, AND
+the corresponding `packages/playwright-{type}/` directory does NOT exist.
+
+**Action (Offer):** E2e suites are not required, but significantly improve
+code quality in the `/work` pipeline.
+
+```
+Your project has apps but no Playwright e2e suites configured.
+Run /x4:e2e-setup to scaffold per-app Playwright packages (web/marketing/desktop).
+
+Run now? (yes / later)
+```
+
+If "yes": delegate to `/e2e-setup`.
+If "later": note it in the report.
 
 ---
 

@@ -395,6 +395,28 @@ If the user opted into email capture in Step 6b AND `brand.email` was configured
 in Step 6c, delegate to `/market-subscribe` now. After it completes, return to
 the summary step.
 
+### Step 7e: E2E test suites (conditional)
+
+Only run this step if `apps/` directory exists with at least one app subdirectory.
+
+Use `AskUserQuestion`:
+
+```
+## E2E Testing
+
+Detected apps: {list of apps/web, apps/marketing, apps/desktop that exist}
+
+Set up Playwright e2e test suites now?
+
+1. Yes — run /e2e-setup to scaffold packages/playwright-{type} for each app
+2. Skip — I'll configure e2e later with /e2e-setup
+```
+
+If yes, delegate to `/e2e-setup all`. After it completes, return to the summary step.
+
+If `packages/playwright-web/` (or other playwright package) already exists,
+skip this step and note it in the summary as "already configured."
+
 ### Step 8: Confirm
 
 Write the current x4 plugin version to `.claude/x4-version`. Read the version
@@ -409,6 +431,7 @@ Show the user a summary of what was configured and tell them:
 - They can re-run `/init-setup` anytime to reconfigure
 - They can edit `.claude/agent-team.config.md` directly
 - Run `/init-agents` next to generate agent files
+- Run `/e2e-setup` to scaffold Playwright suites for each app (if skipped during setup)
 - Use `/idea` to capture features and `/plan-backlog` to write PRDs
 - Run `/opensrc-update` anytime to refresh source code references
 - Run `/x4:upgrade` after future plugin updates to apply migrations

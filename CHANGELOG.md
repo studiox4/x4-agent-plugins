@@ -2,6 +2,16 @@
 
 ## x4
 
+### 3.12.0 (2026-04-04)
+
+- `/e2e-setup`: new skill — one-time Playwright scaffold wizard; detects `apps/web`, `apps/marketing`, `apps/desktop`; creates `packages/playwright-{type}` with tailored configs, starter tests, and Turborepo integration; each app type gets purpose-built setup (storageState auth for web, software-renderer canvas for marketing, `electron-playwright-helpers` for desktop)
+- `/run-tests`: rewritten — now app-type-aware for e2e; loads `references/e2e-detection.md` to route each app to its correct strategy; loads per-type runtime reference (`e2e-web.md`, `e2e-marketing.md`, `e2e-desktop.md`) for prerequisite checks and failure triage; visual regression failures in marketing never auto-fix; backward compatible with legacy `test_commands.e2e`
+- `skills/run-tests/references/`: five new reference files — `e2e-detection.md`, `e2e-web.md`, `e2e-marketing.md`, `e2e-desktop.md`, `e2e-turbo.md`; cover storageState auth, Three.js canvas baseline testing, Electron IPC/dialog testing, and Turborepo task structure
+- `skills/e2e-setup/references/`: four scaffold templates — `scaffold-web.md`, `scaffold-marketing.md`, `scaffold-desktop.md`, `scaffold-shared-config.md`; complete with typed config files and starter test suites
+- `/verify-local`: updated e2e failure handling — identifies suite type from output, loads reference file's failure triage table, never auto-fixes marketing snapshot mismatches
+- `/init-setup` Step 7e: new conditional — offers `/e2e-setup` during project init when `apps/` directory is detected
+- `/upgrade` migration v3.12.0: detects projects with `apps/` but no playwright packages, offers `/e2e-setup`
+
 ### 3.11.0 (2026-04-04)
 
 - **Breaking:** Replace llms.txt system with [opensrc](https://github.com/vercel-labs/opensrc) — fetches actual npm package source code instead of docs; gives agents implementation-level context, not just API references
