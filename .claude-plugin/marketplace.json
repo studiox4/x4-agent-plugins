@@ -5,13 +5,13 @@
     "email": "corban@example.com"
   },
   "metadata": {
-    "description": "Complete AI-powered development workflow: project scaffolding, backlog management, agent team coordination, llms.txt reference docs, and hook-based guardrails",
-    "version": "3.10.0"
+    "description": "Complete AI-powered development workflow: project scaffolding, backlog management, agent team coordination, opensrc source code context, and hook-based guardrails",
+    "version": "3.11.0"
   },
   "plugins": [
     {
       "name": "x4",
-      "description": "Complete AI-powered development workflow: project scaffolding, backlog management, agent team coordination, llms.txt reference docs, and hook-based guardrails",
+      "description": "Complete AI-powered development workflow: project scaffolding, backlog management, agent team coordination, opensrc source code context, and hook-based guardrails",
       "category": "development",
       "author": {
         "name": "Corban Baxter",
@@ -19,7 +19,7 @@
       },
       "source": "./plugins/x4",
       "homepage": "https://github.com/studiox4/x4-agent-plugins",
-      "version": "3.10.0",
+      "version": "3.11.0",
       "keywords": [
         "scaffold",
         "monorepo",
@@ -28,7 +28,7 @@
         "agents",
         "teams",
         "workflow",
-        "llms-txt",
+        "opensrc",
         "documentation"
       ]
     }

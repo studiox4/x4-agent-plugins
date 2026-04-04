@@ -371,22 +371,23 @@ this step and note it in the summary as "already configured."
 Use `AskUserQuestion`:
 
 ```
-## LLMs.txt Reference Docs
+## Source Code References (opensrc)
 
-llms.txt files give Claude context about your dependencies — frameworks,
-libraries, and tools. This helps agents write better code with fewer mistakes.
+opensrc fetches actual source code for your npm dependencies so agents can
+read implementations — not just docs. This gives agents deeper context for
+writing library-specific code correctly.
 
-Set up llms.txt for this project?
+Set up opensrc for this project?
 
-1. Yes — run /llmstxt-init to scaffold config and download docs
+1. Yes — run /opensrc-init to detect key dependencies and fetch their source
 2. Skip — I'll set this up later
 ```
 
-If yes, delegate to the `/llmstxt-init` skill. After it completes, return
+If yes, delegate to the `/opensrc-init` skill. After it completes, return
 to the summary step.
 
-If `.llmstxt.json` already exists, skip this step and note it in the summary
-as "already configured."
+If `opensrc/sources.json` already exists, skip this step and note it in the
+summary as "already configured."
 
 ### Step 7d: Email capture (conditional)
 
@@ -409,7 +410,7 @@ Show the user a summary of what was configured and tell them:
 - They can edit `.claude/agent-team.config.md` directly
 - Run `/init-agents` next to generate agent files
 - Use `/idea` to capture features and `/plan-backlog` to write PRDs
-- Run `/llmstxt-update` anytime to refresh reference docs
+- Run `/opensrc-update` anytime to refresh source code references
 - Run `/x4:upgrade` after future plugin updates to apply migrations
 
 ## Rules

@@ -59,7 +59,7 @@ A typical developer goes through x4 like this:
 
   Always /x4:doctor          → health check: tools, config, env, agents
          /x4:upgrade         → apply migrations after plugin updates
-         /x4:llmstxt-update  → refresh docs after adding libraries
+         /x4:opensrc-update  → refresh source after adding libraries
          /x4:market-update   → sync marketing site after shipping a batch
 
   Brand  Edit brand/BRAND.md → update voice, logos, colors, social handles
@@ -103,10 +103,10 @@ A typical developer goes through x4 like this:
   /x4:init-tracker Scaffold STATUS.md, BACKLOG.md, planning dirs
   /x4:init-agents Generate project-specific agent files
 
-**Reference Docs**
-  /x4:llmstxt-init   Scaffold llms.txt system
-  /x4:llmstxt-update Refresh reference docs
-  /x4:llmstxt-status Check docs health
+**Source Code References**
+  /x4:opensrc-init   Fetch source code for key dependencies (one-time)
+  /x4:opensrc-update Refresh source after adding new libraries
+  /x4:opensrc-status Check source coverage and freshness
 
 **Marketing & Announcements**
   /x4:market-update     Sync marketing site with recently shipped features

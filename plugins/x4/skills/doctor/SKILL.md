@@ -115,16 +115,16 @@ If version matches: PASS.
 | `brand/assets/` | Directory exists | `/x4:upgrade` |
 | `railway.toml` | Exists when Railway is configured in CI | `/x4:deploy-setup` |
 
-### 9. Check llms.txt docs
+### 9. Check opensrc sources
 
 | Check | How | Pass |
 |-------|-----|------|
-| .llmstxt.json exists | Read file | Exists (optional) |
-| Docs directory exists | Check configured docs dir | Has files |
-| Docs are fresh | Check file modification dates | None older than 30 days |
+| `opensrc/sources.json` exists | Read file | Exists (optional) |
+| Sources fetched | Check `packages` array in sources.json | Has entries |
+| Sources fresh | Check `fetchedAt` timestamps | None older than 30 days |
 
-For stale docs: suggest `/x4:llmstxt-update`.
-For no docs: suggest `/x4:llmstxt-init`.
+For stale sources: suggest `/x4:opensrc-update`.
+For no sources: suggest `/x4:opensrc-init` (optional — gives agents implementation-level context).
 
 ### 10. Report
 
@@ -170,9 +170,9 @@ Present as a structured diagnostic:
   ✓ code-simplifier
   ○ frontend-design (optional — enhances /kickstart UI design)
 
-### Reference Docs
-  ✓ 8 docs in docs/llms-txt/
-  ⚠ 2 docs older than 30 days — run /x4:llmstxt-update
+### Source Code (opensrc)
+  ✓ 11 packages fetched in opensrc/
+  ⚠ 2 sources older than 30 days — run /x4:opensrc-update
 
 ### Summary
   18 passed, 1 failed, 1 warning

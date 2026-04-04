@@ -34,7 +34,7 @@ Read all planning artifacts (same as `/gaps`):
 - CLAUDE.md
 
 **Additionally**, read ecosystem context:
-- llms.txt reference docs in `docs/llms-txt/` (if the directory exists)
+- opensrc source code in `opensrc/` (if initialized — reveals untapped library capabilities)
 - Use general knowledge of the tech stack's ecosystem and modern patterns
 
 If no PRDs exist and the backlog is empty, still proceed — dream can

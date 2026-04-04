@@ -56,7 +56,7 @@ Items to set up: 4
 | Neon CLI | `neonctl --version` | Installed (optional) |
 | Railway CLI | `railway --version` | Installed (optional) |
 | Vercel CLI | `vercel --version` | Installed (optional) |
-| Python 3 | `python3 --version` | >= 3.8 (for llmstxt script) |
+| Node.js | `node --version` | >= 18 (required by opensrc) |
 
 ### Step 2: Required Tools
 
@@ -369,7 +369,7 @@ These aren't required but enhance the development experience:
 
 | Tool | Purpose | Install? |
 |------|---------|----------|
-| Python 3.8+ | llms.txt download script | Already installed / Install |
+| opensrc | Source-level AI context (`npx opensrc`) | npx (no install needed) |
 | Expo CLI | Mobile development | eas-cli for builds |
 | Playwright | E2E testing | bunx playwright install |
 

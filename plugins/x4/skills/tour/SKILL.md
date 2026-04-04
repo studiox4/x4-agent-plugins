@@ -255,7 +255,7 @@ Here's what you can do next:
 - /status                        -- Quick project health dashboard
 - /add                           -- Add mobile, desktop, or marketing apps
 - /env                           -- Reconfigure environment variables
-- /llmstxt-update                -- Download AI-readable reference docs
+- /opensrc-update                -- Refresh source code references for AI agents
 
 ### Companion Plugins
 For the best experience, install companion plugins:

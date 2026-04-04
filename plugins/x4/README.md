@@ -130,7 +130,7 @@ All four read from `docs/CHANGELOG.md` — the same file that `/work` writes to 
 ```
 /x4:doctor          → health check: tools, config, agents, env, database, version, docs
 /x4:upgrade         → apply migrations after updating the plugin (prompted by session-start)
-/x4:llmstxt-update  → refresh AI reference docs after adding a new library
+/x4:opensrc-update  → refresh source code references after adding new libraries
 /x4:market-update   → sync the marketing site with shipped features
 /x4:status          → running apps, ports, git state at a glance
 ```
@@ -222,13 +222,13 @@ Every stage feeds the next. Enter anywhere — scaffolding is optional if you al
 | `/x4:init-setup` | Configure database, hosting, CI, tests, marketing |
 | `/x4:init-agents` | Generate project-specific agent files from templates |
 
-### Reference Docs
+### Source Code References (opensrc)
 
 | Command | What it does |
 |---------|-------------|
-| `/x4:llmstxt-init` | Scaffold llms.txt download script and config |
-| `/x4:llmstxt-update` | Scan dependencies, discover, download llms.txt docs |
-| `/x4:llmstxt-status` | Read-only status of current docs |
+| `/x4:opensrc-init` | Fetch source code for key dependencies (run once per machine) |
+| `/x4:opensrc-update` | Refresh after adding new libraries or when source is stale |
+| `/x4:opensrc-status` | Read-only status — coverage, freshness, missing packages |
 
 ### Marketing & Announcements
 

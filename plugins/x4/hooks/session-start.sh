@@ -1,31 +1,27 @@
 #!/usr/bin/env bash
 
-# --- llms.txt staleness check ---
-LLMSTXT_DIR="docs/llms-txt"
-LLMSTXT_CONFIG=".llmstxt.json"
+# --- opensrc staleness check ---
+OPENSRC_CONFIG="opensrc/sources.json"
 STALE_DAYS=30
 STALE_MSG=""
 
-if [ -d "$LLMSTXT_DIR" ] && [ -f "$LLMSTXT_CONFIG" ]; then
-  # Find the most recently modified doc
-  NEWEST=$(find "$LLMSTXT_DIR" -name '*.txt' -type f -print0 2>/dev/null \
-    | xargs -0 stat -f '%m %N' 2>/dev/null \
-    | sort -rn | head -1 | awk '{print $1}')
-
-  if [ -n "$NEWEST" ]; then
-    NOW=$(date +%s)
-    AGE_DAYS=$(( (NOW - NEWEST) / 86400 ))
+if [ -f "$OPENSRC_CONFIG" ]; then
+  # Check age of sources.json (proxy for when source was last refreshed)
+  NOW=$(date +%s)
+  LAST_MOD=$(stat -f '%m' "$OPENSRC_CONFIG" 2>/dev/null)
+  if [ -n "$LAST_MOD" ]; then
+    AGE_DAYS=$(( (NOW - LAST_MOD) / 86400 ))
     if [ "$AGE_DAYS" -ge "$STALE_DAYS" ]; then
-      STALE_MSG="  ⚠ llms.txt docs are ${AGE_DAYS}d old — run /x4:llmstxt-update to refresh"
+      STALE_MSG="  ⚠ opensrc sources are ${AGE_DAYS}d old — run /x4:opensrc-update to refresh"
     fi
   fi
-elif [ -f "$LLMSTXT_CONFIG" ] && [ ! -d "$LLMSTXT_DIR" ]; then
-  STALE_MSG="  ⚠ llms.txt configured but no docs downloaded — run /x4:llmstxt-update"
+elif [ -f "package.json" ]; then
+  STALE_MSG="  ⚠ opensrc not set up — run /x4:opensrc-init for source-level AI context"
 fi
 
 # --- x4 version check ---
 # X4_VERSION is updated automatically by /release — do not edit manually
-X4_VERSION="3.10.0"
+X4_VERSION="3.11.0"
 UPGRADE_MSG=""
 
 PROJECT_VERSION_FILE=".claude/x4-version"

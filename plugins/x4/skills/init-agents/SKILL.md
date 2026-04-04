@@ -40,8 +40,8 @@ bundled agent templates. This command should be run once during project setup.
    - `{{SHARED_PACKAGE}}` -- from config `shared_packages[0].path` (if set)
    - `{{SHARED_OWNER}}` -- from config `shared_packages[0].owner` (if set)
    - `{{OFF_LIMITS_DIRS}}` -- directories owned by OTHER agents (agent must not touch these)
-   - `{{REFERENCE_DOCS}}` -- if x4 is installed and `docs/llms-txt/` exists,
-     generate a table mapping relevant docs to this agent's domain. Otherwise omit.
+   - `{{REFERENCE_DOCS}}` -- if `opensrc/sources.json` exists, generate a table
+     mapping relevant source paths in `opensrc/` to this agent's domain. Otherwise omit.
      c. Write the generated file to `.claude/agents/<role>.md`.
 
 5. **Summary.** Print which agent files were created and remind the user they

@@ -2,6 +2,16 @@
 
 ## x4
 
+### 3.11.0 (2026-04-04)
+
+- **Breaking:** Replace llms.txt system with [opensrc](https://github.com/vercel-labs/opensrc) — fetches actual npm package source code instead of docs; gives agents implementation-level context, not just API references
+- `/opensrc-init`: new skill — detects key runtime dependencies, runs `npx opensrc` to clone their source at the installed version, updates CLAUDE.md with a Source Code References table; replaces `/llmstxt-init`
+- `/opensrc-update`: new skill — diffs `package.json` against `opensrc/sources.json`, fetches new/outdated packages, removes orphaned source; replaces `/llmstxt-update`
+- `/opensrc-status`: new skill — read-only report of fetched packages, version freshness vs lockfile, and missing coverage; replaces `/llmstxt-status`
+- `session-start.sh`: replaced llms.txt staleness check with opensrc check — warns when `opensrc/sources.json` is 30+ days old, suggests init when package.json exists but opensrc is not set up
+- All skills updated: `/doctor`, `/init-setup`, `/help`, `/dream`, `/init-agents`, `/onboard`, `/tour` now reference opensrc paths
+- Removed `templates/download-ai-docs.py` — no longer needed
+
 ### 3.10.0 (2026-04-03)
 
 - `/upgrade`: new skill — applies x4 project migrations after a plugin update; reads `.claude/x4-version` to detect what's been applied, runs versioned migration registry, presents findings before touching anything, updates version file on completion
