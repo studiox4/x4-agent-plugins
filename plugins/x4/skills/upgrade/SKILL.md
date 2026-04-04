@@ -10,7 +10,7 @@ license: MIT
 Detects gaps between the current plugin version and what's been applied to
 this project. Applies only what's missing — idempotent, always safe to re-run.
 
-<!-- CURRENT_VERSION: 3.13.0 -->
+<!-- CURRENT_VERSION: 3.13.1 -->
 <!-- Updated automatically by /release — do not edit this line manually -->
 
 ## Process
@@ -82,7 +82,7 @@ Apply each confirmed migration. Report each as it completes:
 Write the current plugin version to `.claude/x4-version`:
 
 ```bash
-echo "3.13.0" > .claude/x4-version
+echo "3.13.1" > .claude/x4-version
 ```
 
 Create `.claude/` if it doesn't exist.

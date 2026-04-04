@@ -34,8 +34,11 @@ Read these — do not deep-read, just scan for relevance to the idea:
 
 - The status file — current build phase, what is complete, build order
 - The planning directory — skim filenames, open the one most relevant to the idea (if any)
-- Check if a related entry already exists in the backlog file — if so, consider extending it
-  instead of creating a duplicate
+- Check if a semantically similar entry already exists in the backlog file. Look for overlap
+  in meaning and intent, not just title — "add dark mode" and "theme switching" describe the
+  same feature. If a substantially overlapping entry exists, extend it with the new idea's
+  details rather than creating a second entry. Note the overlap in your one-line confirmation:
+  `Extended existing entry: "<title>" with new details.`
 
 **2. Write the entry**
 
@@ -85,8 +88,8 @@ Use the scope definitions from the config. If config is missing, use:
 ## Rules
 
 - Never deep-read the whole codebase — scan only what is relevant
-- If the idea duplicates something already in the backlog file, extend the existing entry
-  rather than creating a second one
+- If the idea substantially overlaps with something already in the backlog (by meaning and
+  intent, not just title), extend the existing entry rather than creating a second one
 - Do not ask clarifying questions — write the best entry possible from what was given,
   note unknowns in the open decisions section
 - Do not interrupt active work — this is a capture command, not a planning session

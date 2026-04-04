@@ -2,6 +2,11 @@
 
 ## x4
 
+### 3.13.1 (2026-04-04)
+
+- `/plan-backlog` Step 1.5: Backlog Intelligence Pass — cross-item semantic analysis before the triage menu; detects duplicates (same feature, different wording), natural groupings (items that belong in one PRD), and already-covered items (existing PRD handles it); presents a lettered action panel only when findings exist; silent for clean backlogs; user merges/combines/removes before triage proceeds
+- `/idea`: improved duplicate detection — now checks for semantic overlap in meaning and intent (not just title match); extends existing entry instead of creating a second one when overlap is found; confirmation line reports "Extended existing entry" when this occurs
+
 ### 3.13.0 (2026-04-04)
 
 - `/plan-bridge`: new skill — converts any planning session into a PRD; detects context from plan mode output (`.claude/plans/`), superpowers `/brainstorming` or `/writing-plans` conversation output, or a manual description; confirms feature summary before writing; writes PRD to `docs/planning/todo/`, updates `STATUS.md`, removes item from `BACKLOG.md` if it originated there

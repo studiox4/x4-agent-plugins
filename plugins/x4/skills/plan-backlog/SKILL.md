@@ -43,6 +43,84 @@ Read the backlog file. Extract each `##` entry as an item. For each item note:
 Also read the status file's Feature Build Progress table to identify which backlog items
 (if any) are already tracked — exclude those from the menu.
 
+### Step 1.5: Backlog Intelligence Pass
+
+Before presenting the triage menu, perform a cross-item analysis to surface duplicates,
+groupings, and coverage overlaps. This gives the user a chance to clean up the backlog
+before deciding what to plan. The user still decides everything — this step only surfaces
+findings, never acts on them automatically.
+
+**1.5a: Scan existing PRDs**
+
+Read filenames from `docs/planning/todo/`, `docs/planning/in-progress/`, and
+`docs/planning/complete/`. For each PRD, read only the title line (`# PRD: ...`) and the
+`## Overview` section — skip everything else. This builds the coverage landscape quickly.
+
+**1.5b: Analyze backlog items**
+
+With all backlog items in memory and the PRD coverage landscape loaded, reason across the
+full set to identify any of these patterns:
+
+- **Semantic duplicates**: Two or more backlog items describing the same feature with
+  different wording (e.g., "dark mode support" + "theme customization options"). Detect by
+  meaning and intent, not keyword overlap alone.
+
+- **Natural groupings**: Two or more small items that would clearly ship as one cohesive
+  PRD — they share a data model, the same screen, or a user would naturally expect them
+  together (e.g., "user profile page" + "avatar upload" + "bio editing" → one PRD).
+
+- **Already covered**: A backlog item substantially addressed by an existing PRD in `todo/`
+  (planned but not started), `in-progress/` (currently being built), or `complete/`
+  (already shipped).
+
+Only flag findings with meaningful confidence. Don't flag items as similar just because
+they share one word. If the backlog is clean, proceed directly to Step 2 without showing
+the analysis panel — no noise for noise's sake.
+
+**1.5c: Present findings (only if any exist)**
+
+Use `AskUserQuestion` to show a pre-triage analysis panel. Show only the categories that
+have findings:
+
+```
+## Backlog Analysis — {N} items
+
+⚠ Possible duplicates:
+  A. "Dark mode support" + "Theme customization options"
+     These look like the same feature described twice.
+     → Merge into one entry?
+
+↔ Could be combined into one PRD:
+  B. "User profile page" + "Avatar upload" + "Bio editing"
+     These are closely related — likely one feature.
+     → Combine into one entry?
+
+✓ Already covered by existing PRDs:
+  C. "Search functionality" → PRD 03-prd-search.md [in-progress]
+     → Remove from backlog?
+
+Reply with letters to act on (e.g. "A, C"), or press enter to skip all and go to triage.
+```
+
+Wait for reply. For each letter the user confirms:
+
+- **Merge (duplicates):** Combine the items' content into a single, better-written backlog
+  entry — best title + merged description, retaining all unique details from both. Remove
+  the originals. Write the updated backlog file.
+
+- **Combine (groupings):** Merge the listed items into one entry with a broader title that
+  captures the group (e.g., "User Profile" covers all three). Write the updated backlog file.
+
+- **Remove (already covered):** Delete the entry from the backlog file. Note in your reply
+  which PRD covers it.
+
+After processing all confirmed actions, re-parse the updated backlog and continue to Step 2
+with the cleaned item list.
+
+**If the user skips all (or no findings were found):** Proceed directly to Step 2 as normal.
+
+---
+
 ### Step 2: Present the triage menu
 
 Use `AskUserQuestion` with this format:
