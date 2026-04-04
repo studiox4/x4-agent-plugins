@@ -1,6 +1,9 @@
 # Generated briefs — regenerate anytime with Claude
 .briefs/
 
+# Skill-creator evaluation workspaces — generated output, not source
+skill-creator-workspace/
+
 # Local Claude Code settings
 .claude/settings.local.json
 
