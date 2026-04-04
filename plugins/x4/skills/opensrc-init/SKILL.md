@@ -82,7 +82,21 @@ Let the user deselect packages they don't need source for. Fetching full
 source can take time and disk space for large packages — the user should
 choose packages where implementation detail matters most for agents.
 
-### Step 4: Fetch source
+### Step 4: Ensure opensrc/ is gitignored
+
+Before fetching anything, guarantee `opensrc/` will never be committed.
+
+Check `.gitignore` for an `opensrc/` entry. If absent, add it:
+
+```bash
+echo "opensrc/" >> .gitignore
+```
+
+Also check any nested `.gitignore` files in monorepo apps (`apps/*/`) and add
+the entry there too if they exist. Stage `.gitignore` now so it's committed
+before any source lands on disk.
+
+### Step 5: Fetch source
 
 Run opensrc for the confirmed packages:
 
@@ -94,13 +108,16 @@ Run all packages in one command. opensrc will:
 - Resolve versions from `node_modules` or lockfiles automatically
 - Clone the source at the exact installed version
 - Store under `opensrc/<package-name>/`
-- Auto-update `.gitignore` to exclude `opensrc/`
 - Generate/update `opensrc/AGENTS.md`
 
 Show progress as packages are fetched. If individual packages fail
 (no public repo, private registry), note them in the report but continue.
 
-### Step 5: Update CLAUDE.md
+After fetching, verify `opensrc/` does not appear in `git status` as untracked.
+If it does, the `.gitignore` entry didn't take effect — investigate and fix
+before proceeding.
+
+### Step 6: Update CLAUDE.md
 
 If `CLAUDE.md` exists, add or update a "Source Code References" section:
 
@@ -123,16 +140,16 @@ Populate the table with the packages that were successfully fetched. Generate
 If a "Reference Docs" section already exists (from old llmstxt setup), replace
 it with "Source Code References" pointing to `opensrc/`.
 
-### Step 6: Commit
+### Step 7: Commit
 
 ```bash
-git add CLAUDE.md
+git add .gitignore CLAUDE.md
 git commit -m "feat: add opensrc source code context for AI agents"
 ```
 
-(opensrc/ is gitignored — only CLAUDE.md is committed)
+(opensrc/ is gitignored — `.gitignore` and `CLAUDE.md` are committed, source is not)
 
-### Step 7: Report
+### Step 8: Report
 
 ```
 ## opensrc-init Complete
