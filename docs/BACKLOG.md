@@ -4,6 +4,18 @@ Captured during development. Review during planning sessions.
 
 ---
 
+## Technical Debt Scanner — `/x4:debt-scan`
+
+**Captured:** 2026-04-05
+
+Post-build audit skill for x4-mono projects that detects duplicated code, redundant utilities, naming inconsistencies, and structural mistakes introduced during agent team builds. Two entry points: runs automatically as part of `/work` Phase 6 (post-ship memory sweep), and available standalone as `/x4:debt-scan`. 
+
+Checks to include: duplicate utility functions across apps/packages, component naming inconsistencies, dead exports, near-identical API route handlers, copy-pasted logic that should be shared, and any patterns the reviewer agent flagged but didn't block on.
+
+Open questions: should it produce a report only, or also open PRs with suggested fixes? Integration with `code-simplifier` plugin?
+
+---
+
 ## x4 Cloud — One-Click Deploy Wizard
 
 **Captured:** 2026-04-04
