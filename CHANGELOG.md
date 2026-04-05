@@ -2,6 +2,10 @@
 
 ## x4
 
+### 3.13.2 (2026-04-04)
+
+- `/e2e-setup` Step 5: when the `.claude/agent-team.config.md` write is blocked by a file-protection hook, print manual instructions instead of failing silently
+
 ### 3.13.1 (2026-04-04)
 
 - `/plan-backlog` Step 1.5: Backlog Intelligence Pass — cross-item semantic analysis before the triage menu; detects duplicates (same feature, different wording), natural groupings (items that belong in one PRD), and already-covered items (existing PRD handles it); presents a lettered action panel only when findings exist; silent for clean backlogs; user merges/combines/removes before triage proceeds

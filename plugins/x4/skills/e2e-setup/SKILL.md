@@ -126,6 +126,15 @@ test_commands:
 
 If already set, leave it unchanged.
 
+If the write is blocked by a file-protection hook, print this instead of failing silently:
+
+```
+Manual step required — add to .claude/agent-team.config.md:
+
+  test_commands:
+    e2e: turbo run e2e
+```
+
 ### Step 6: Install dependencies
 
 Detect package manager: check for `bun.lockb` → bun, `pnpm-lock.yaml` → pnpm, else npm.
