@@ -59,7 +59,7 @@ For missing tracking files: suggest `/x4:init-tracker`.
 | Performance is read-only | Check performance.md frontmatter | No Write/Edit in tools |
 
 For missing agents: suggest `/x4:init-agents`.
-For unresolved templates: suggest re-running `/x4:init-agents`.
+For unresolved templates: show as ⚠ WARN (agents exist but may malfunction) and suggest re-running `/x4:init-agents`.
 
 ### 5. Check environment
 

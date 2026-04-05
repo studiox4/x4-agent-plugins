@@ -187,7 +187,9 @@ For each page in the approved write queue:
 
 2. **If section markers are present** (`{/* market-update:<section>:start */}` /
    `{/* market-update:<section>:end */}`):
-   Replace the content between the markers with the new copy. Leave the markers in place.
+   Replace ALL content between the markers with the new copy — discard the old content
+   entirely. Leave the markers themselves in place. Do not preserve or append alongside
+   existing cards; the new copy is the full authoritative replacement for that section.
 
 3. **If no markers are present:**
    Append new content before the closing JSX tag of the page component, wrapped in markers:

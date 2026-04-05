@@ -34,9 +34,15 @@ Before asking anything, verify the environment is ready:
    Stop.
 
 4. **Existing railway.toml**: If `railway.toml` exists in the project root, read it and
-   note the currently configured services. Tell the user:
-   "Found existing railway.toml with {N} services. This wizard will update it.
-   Existing service config will be preserved unless you choose to regenerate it."
+   note the currently configured services. Ask the user:
+   ```
+   Found existing railway.toml with {N} service(s): {service names}.
+
+   1. Update it — add missing services, sync env vars (existing services preserved)
+   2. Skip — keep railway.toml as-is and exit the wizard
+   ```
+   If the user picks 2, stop. If they pick 1, continue and treat existing service
+   blocks as already-configured (don't regenerate them unless they're missing).
 
 5. **Existing Railway link**: Run `railway status` to check if the project is already
    linked. If linked, note the project name and skip Step 1's "create" path — go

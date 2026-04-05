@@ -30,7 +30,14 @@ Before asking anything, scan the project for signals:
   `.gitlab-ci.yml` → GitLab CI. If none found, mark as unknown.
 
 - **Existing config:** If `.claude/agent-team.config.md` already exists, read it
-  and present current values as defaults for each question.
+  and ask the user:
+  ```
+  Found existing config. What would you like to do?
+  1. Update — walk through setup again with current values pre-filled as defaults
+  2. Cancel — keep existing config as-is
+  ```
+  If they pick 2, stop. If they pick 1, continue with current values as defaults
+  for each question — only overwrite values the user actively changes.
 
 ### Step 2: Database provider
 

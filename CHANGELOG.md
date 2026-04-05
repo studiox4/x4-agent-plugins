@@ -2,6 +2,14 @@
 
 ## x4
 
+### 3.13.3 (2026-04-05)
+
+- `/market-update` Step 5: clarify that section marker replacement discards existing content entirely — new copy is the full authoritative replacement, not an append
+- `/deploy-setup` Step 0: existing `railway.toml` detection now shows explicit Update/Skip choice dialog instead of silently proceeding
+- `/init-setup` Step 1: existing config detection now shows explicit Update/Cancel choice dialog instead of silently updating
+- `/doctor`: unresolved agent template variables now classified as ⚠ WARN (not ✗ FAIL) — agents exist but may malfunction; suggests re-running `/x4:init-agents`
+- `/upgrade` Step 1: fix stale hardcoded version reference in prose (was `3.13.0`, now reads from `CURRENT_VERSION` comment correctly)
+
 ### 3.13.2 (2026-04-04)
 
 - `/e2e-setup` Step 5: when the `.claude/agent-team.config.md` write is blocked by a file-protection hook, print manual instructions instead of failing silently
