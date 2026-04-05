@@ -2,6 +2,10 @@
 
 ## x4
 
+### 3.14.0 (2026-04-04)
+
+- `/debt-scan`: new post-build technical debt audit skill — scans for TODOs, dead code, oversized files, complexity hotspots, and dependency drift; produces a prioritized debt register
+
 ### 3.13.4 (2026-04-05)
 
 - `/idea`: improve description with concrete trigger phrases ("btw we should...", "I have an idea", "add to backlog", etc.) so it reliably activates on casual mid-conversation mentions

@@ -21,7 +21,7 @@ fi
 
 # --- x4 version check ---
 # X4_VERSION is updated automatically by /release — do not edit manually
-X4_VERSION="3.13.4"
+X4_VERSION="3.14.0"
 UPGRADE_MSG=""
 
 PROJECT_VERSION_FILE=".claude/x4-version"
