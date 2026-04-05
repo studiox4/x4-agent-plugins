@@ -1,6 +1,6 @@
 ---
 name: idea
-description: Use when the user wants to capture a feature idea, improvement, or note into the project backlog without interrupting active work
+description: Use when the user wants to capture a feature idea, improvement, bug note, or future consideration into the project backlog. Always use this skill when a user says something like "btw we should...", "I have an idea", "let me capture this", "add this to the backlog", "we should also...", "idea:", or any throwaway mention of a potential feature or improvement — even mid-conversation. Checks for semantic duplicates before creating a new entry.
 version: 1.0.0
 license: MIT
 ---

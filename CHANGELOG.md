@@ -2,6 +2,10 @@
 
 ## x4
 
+### 3.13.4 (2026-04-05)
+
+- `/idea`: improve description with concrete trigger phrases ("btw we should...", "I have an idea", "add to backlog", etc.) so it reliably activates on casual mid-conversation mentions
+
 ### 3.13.3 (2026-04-05)
 
 - `/market-update` Step 5: clarify that section marker replacement discards existing content entirely — new copy is the full authoritative replacement, not an append
