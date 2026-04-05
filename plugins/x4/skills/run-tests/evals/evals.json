@@ -1,0 +1,43 @@
+{
+  "skill_name": "run-tests",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run e2e tests for this project.",
+      "expected_output": "Detects web app via apps/web/ + packages/playwright-web/, loads e2e-web.md reference, mentions storageState auth prerequisite, routes to turbo run e2e --filter=playwright-web",
+      "files": [],
+      "expectations": [
+        "The response reads or references the e2e-detection.md reference file to determine app type",
+        "The response identifies the project as a web app (Next.js) based on apps/web/ and packages/playwright-web/",
+        "The response mentions storageState.json as a prerequisite or auth setup concern",
+        "The response includes or proposes the command turbo run e2e --filter=playwright-web",
+        "The response does NOT route to a marketing or desktop e2e strategy"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Run e2e tests. The tests ran and there were snapshot comparison failures in packages/playwright-marketing/.",
+      "expected_output": "Does NOT suggest auto-fixing snapshots. Escalates to user with explanation of how to manually update baselines using --update-snapshots. Shows playwright-report/ path for diff review.",
+      "files": [],
+      "expectations": [
+        "The response explicitly states it will NOT auto-fix or auto-update the snapshots",
+        "The response mentions playwright-report/ as the location for the diff",
+        "The response provides the manual update command (npx playwright test --update-snapshots or equivalent)",
+        "The response explains the user should review the diff before updating baselines",
+        "The response does NOT run any snapshot update command automatically"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Run e2e tests.",
+      "expected_output": "Detects web app exists (apps/web/) but no packages/playwright-web/ config. Skips e2e gracefully. Offers to run /x4:e2e-setup to scaffold it.",
+      "files": [],
+      "expectations": [
+        "The response detects that apps/web/ exists but packages/playwright-web/ does not",
+        "The response does NOT attempt to run e2e tests for the unconfigured web app",
+        "The response offers to run /e2e-setup or /x4:e2e-setup to scaffold e2e for the web app",
+        "The response gives the user options: scaffold now, skip, or continue without e2e"
+      ]
+    }
+  ]
+}
