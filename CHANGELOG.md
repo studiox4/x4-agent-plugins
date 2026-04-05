@@ -2,6 +2,10 @@
 
 ## x4
 
+### 3.14.1 (2026-04-05)
+
+- `/work` Phase 3 & 4: explicit agent dispatch order — attempt `TeamCreate` (native agent teams) first, fall back to parallel `Agent` subagents if unavailable; never silently falls back to sequential execution
+
 ### 3.14.0 (2026-04-04)
 
 - `/debt-scan`: new post-build technical debt audit skill — scans for TODOs, dead code, oversized files, complexity hotspots, and dependency drift; produces a prioritized debt register
