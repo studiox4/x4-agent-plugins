@@ -224,14 +224,46 @@ PRD moved to `in-progress/`, status file updated.
 - Wait for user approval. Adjust plan if user suggests changes.
 
 3. **Spawn teammates.**
-- For each agent in the build team, spawn a teammate with:
-  - The agent's `.md` file (from `.claude/agents/<role>.md`)
-  - The build plan tasks assigned to that role
-  - The branch name to work on
-  - **[If `db_branching` is configured]** The database connection string
-  - Context: "You are the {role} agent for this feature. Your tasks are: {tasks}.
-    Work on branch {branch}. Stay within your owned directories: {owned_dirs}.
-    Do NOT edit files in: {off_limits_dirs}."
+
+   **Dispatch method — try native agent teams first, fall back to subagents:**
+
+   **Option A — Native agent teams (preferred):**
+   Use `TeamCreate` to spawn the build team. If `TeamCreate` is available and
+   succeeds, use it. Native teams can communicate via `SendMessage`, share
+   task lists, and are coordinated by the TeammateIdle hook.
+
+   ```
+   TeamCreate({
+     name: "x4-{feature-name-kebab}",
+     agents: [
+       { role: "backend",  file: ".claude/agents/backend.md",  tasks: [...] },
+       { role: "frontend", file: ".claude/agents/frontend.md", tasks: [...] },
+       { role: "tester",   file: ".claude/agents/tester.md",   tasks: [...] },
+     ]
+   })
+   ```
+
+   **Option B — Subagent fallback:**
+   If `TeamCreate` is not available (tool not found, env flag not set, or
+   returns an error), fall back to the `Agent` tool. Dispatch each role as a
+   parallel `Agent` call with `run_in_background: true`. Each agent gets the
+   same context as Option A.
+
+   **Detection logic:**
+   1. Attempt `TeamCreate`. If it succeeds → Option A, continue with team coordination.
+   2. If `TeamCreate` throws "tool not found" or "feature not available" →
+      immediately switch to Option B without re-prompting the user. Log:
+      `"Agent teams unavailable — dispatching as parallel subagents."`
+   3. Never silently fall through to single-agent sequential execution.
+
+   **Context to pass each agent (both options):**
+   - The agent's `.md` file (from `.claude/agents/<role>.md`)
+   - The build plan tasks assigned to that role
+   - The branch name to work on
+   - **[If `db_branching` is configured]** The database connection string
+   - `"You are the {role} agent for this feature. Your tasks are: {tasks}.
+     Work on branch {branch}. Stay within your owned directories: {owned_dirs}.
+     Do NOT edit files in: {off_limits_dirs}."`
 
 4. **[If `shared_packages` is configured] Shared package coordination.**
 - Include coordination instructions in teammate prompts:
@@ -272,6 +304,9 @@ on the feature branch.
 
 1. **Spawn reviewer and performance agents in parallel.**
 
+   Use the same dispatch strategy as Phase 3 (native teams preferred, subagent
+   fallback). Both agents run simultaneously to minimize review time.
+
    **Reviewer agent:**
    - Use the reviewer's `.md` file from `.claude/agents/reviewer.md`.
    - Provide context: "Review all changes on branch {branch} since it diverged
@@ -284,8 +319,6 @@ on the feature branch.
      issues. Check bundle size, re-renders, memory leaks, query patterns,
      and cache configuration."
    - The performance agent has read-only tools (no Write/Edit).
-
-   Both agents run simultaneously to minimize review time.
 
 2. **Agents execute checklists.**
    Each agent reports findings in the standard format:
