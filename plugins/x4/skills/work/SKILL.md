@@ -263,7 +263,13 @@ PRD moved to `in-progress/`, status file updated.
    - **[If `db_branching` is configured]** The database connection string
    - `"You are the {role} agent for this feature. Your tasks are: {tasks}.
      Work on branch {branch}. Stay within your owned directories: {owned_dirs}.
-     Do NOT edit files in: {off_limits_dirs}."`
+     Do NOT edit files in: {off_limits_dirs}.
+     Use conventional commit messages for all commits:
+       feat: <desc>     → new user-facing feature
+       fix: <desc>      → bug fix
+       chore: <desc>    → tooling, deps, non-user-facing changes
+       refactor: <desc> → code change with no behavior change
+     The CI release workflow reads these to determine version bumps."`
 
 4. **[If `shared_packages` is configured] Shared package coordination.**
 - Include coordination instructions in teammate prompts:
@@ -404,6 +410,9 @@ Always include:
 - **[If `ci.preview_url_command` is configured] Preview URLs:**
   Run `ci.preview_url_command` and include the output.
   **If NOT configured:** No preview URL section.
+- **[If `.github/workflows/release.yml` exists]** Add a note:
+  "When this PR merges to main, CI will auto-tag and create a GitHub Release
+  based on the conventional commits in this branch."
 
 ## Shipped!
 

@@ -1,0 +1,75 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Skip release commits themselves to prevent loops
+    if: "!startsWith(github.event.head_commit.message, 'chore: release')"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest tag
+        id: latest_tag
+        run: |
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=${TAG#v}" >> $GITHUB_OUTPUT
+
+      - name: Determine bump type from conventional commits
+        id: bump
+        run: |
+          COMMITS=$(git log "${{ steps.latest_tag.outputs.tag }}..HEAD" --pretty=format:"%s" 2>/dev/null || git log --pretty=format:"%s")
+          if echo "$COMMITS" | grep -qE "BREAKING CHANGE|^.+!:"; then
+            echo "type=major" >> $GITHUB_OUTPUT
+          elif echo "$COMMITS" | grep -qE "^feat(\(.+\))?:"; then
+            echo "type=minor" >> $GITHUB_OUTPUT
+          else
+            echo "type=patch" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Calculate new version
+        id: version
+        run: |
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ steps.latest_tag.outputs.version }}"
+          case "${{ steps.bump.outputs.type }}" in
+            major) NEW="$((MAJOR+1)).0.0" ;;
+            minor) NEW="${MAJOR}.$((MINOR+1)).0" ;;
+            patch) NEW="${MAJOR}.${MINOR}.$((PATCH+1))" ;;
+          esac
+          echo "version=v${NEW}" >> $GITHUB_OUTPUT
+          echo "Bumping ${{ steps.latest_tag.outputs.tag }} → v${NEW} (${{ steps.bump.outputs.type }})"
+
+      - name: Tag and release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tag = '${{ steps.version.outputs.version }}';
+
+            // Create the tag
+            const sha = context.sha;
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${tag}`,
+              sha,
+            });
+
+            // Create the GitHub release with auto-generated notes
+            const { data } = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tag,
+              name: tag,
+              generate_release_notes: true,
+            });
+
+            console.log(`Released: ${data.html_url}`);

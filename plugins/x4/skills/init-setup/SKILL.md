@@ -111,6 +111,129 @@ Set `ci.watch_command` based on selection:
 - GitLab CI: `glab ci view`
 - None: omit `ci` section
 
+### Step 4b: Auto-release on merge
+
+Only ask this step if the user selected **GitHub Actions** in Step 4.
+
+Use `AskUserQuestion`:
+
+```
+## Auto-Release on Merge
+
+Scaffold a GitHub Actions workflow that automatically creates a versioned
+release every time a PR merges to main?
+
+It reads conventional commit messages to determine the bump type:
+  feat: ...     → minor bump  (new feature)
+  fix: ...      → patch bump  (bug fix)
+  chore/docs:   → patch bump
+  BREAKING CHANGE / !: → major bump
+
+The workflow tags the commit and creates a GitHub Release with
+auto-generated release notes. No manual steps needed.
+
+1. Yes — scaffold .github/workflows/release.yml
+2. Skip — I'll handle releases manually
+```
+
+If yes:
+1. Check if `.github/workflows/` exists. If not, create it.
+2. Check if `.github/workflows/release.yml` already exists. If so, ask:
+   ```
+   .github/workflows/release.yml already exists. Overwrite it?
+   1. Yes — replace with x4 release workflow
+   2. No — keep existing
+   ```
+3. Copy `plugins/x4/templates/workflows/release.yml` to `.github/workflows/release.yml`.
+   (If running in a user project where the plugin is installed, read the template
+   from the plugin's installed location. If the template is not found, write it
+   inline from the canonical template below.)
+4. Tell the user:
+   ```
+   ✓ .github/workflows/release.yml scaffolded
+
+   Every PR merged to main will now:
+   - Parse conventional commits since the last tag
+   - Bump the version (major/minor/patch)
+   - Create a git tag
+   - Create a GitHub Release with auto-generated notes
+
+   /x4:work writes conventional commit messages automatically.
+   Your first release will be v0.0.1 (or bump from your latest existing tag).
+   ```
+
+**Canonical template** (write this if the template file is not found):
+
+```yaml
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: "!startsWith(github.event.head_commit.message, 'chore: release')"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest tag
+        id: latest_tag
+        run: |
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=${TAG#v}" >> $GITHUB_OUTPUT
+
+      - name: Determine bump type from conventional commits
+        id: bump
+        run: |
+          COMMITS=$(git log "${{ steps.latest_tag.outputs.tag }}..HEAD" --pretty=format:"%s" 2>/dev/null || git log --pretty=format:"%s")
+          if echo "$COMMITS" | grep -qE "BREAKING CHANGE|^.+!:"; then
+            echo "type=major" >> $GITHUB_OUTPUT
+          elif echo "$COMMITS" | grep -qE "^feat(\(.+\))?:"; then
+            echo "type=minor" >> $GITHUB_OUTPUT
+          else
+            echo "type=patch" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Calculate new version
+        id: version
+        run: |
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ steps.latest_tag.outputs.version }}"
+          case "${{ steps.bump.outputs.type }}" in
+            major) NEW="$((MAJOR+1)).0.0" ;;
+            minor) NEW="${MAJOR}.$((MINOR+1)).0" ;;
+            patch) NEW="${MAJOR}.${MINOR}.$((PATCH+1))" ;;
+          esac
+          echo "version=v${NEW}" >> $GITHUB_OUTPUT
+
+      - name: Tag and release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tag = '${{ steps.version.outputs.version }}';
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${tag}`,
+              sha: context.sha,
+            });
+            const { data } = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tag,
+              name: tag,
+              generate_release_notes: true,
+            });
+            console.log(`Released: ${data.html_url}`);
+```
+
 ### Step 5: Package manager
 
 Use `AskUserQuestion` (skip if auto-detected and user confirms):
