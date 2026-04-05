@@ -2,6 +2,12 @@
 
 ## x4
 
+### 3.15.0 (2026-04-05)
+
+- `/init-setup` Step 4b: new auto-release wizard — scaffolds `.github/workflows/release.yml` when GitHub Actions is selected; workflow triggers on merge to main, parses conventional commits for bump type (feat→minor, fix→patch, BREAKING→major), tags the commit, and creates a GitHub Release with auto-generated notes
+- `/work` Phase 3: build agents now write conventional commit messages (`feat:`, `fix:`, `chore:`, `refactor:`) so the release workflow parses them correctly
+- `/work` Phase 5: shows a note when `.github/workflows/release.yml` is present, informing the user that CI will auto-release on merge
+
 ### 3.14.1 (2026-04-05)
 
 - `/work` Phase 3 & 4: explicit agent dispatch order — attempt `TeamCreate` (native agent teams) first, fall back to parallel `Agent` subagents if unavailable; never silently falls back to sequential execution
