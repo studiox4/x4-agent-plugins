@@ -65,11 +65,32 @@ Report findings with severity and location:
 
 - [STYLE] General observation
 
+## Delegating to Specialized Agents
+
+### Security Review
+
+When changes touch any of the following, spawn a `security-reviewer` agent to
+handle that portion of the review instead of doing it inline:
+
+- Authentication or session logic (e.g. Better Auth, middleware, cookies)
+- API key handling, secrets management, or credential storage
+- tRPC procedure authorization (`publicProcedure` vs `protectedProcedure` vs
+  `adminProcedure`)
+- Security-sensitive code: CORS config, input validation boundaries, SQL
+  queries, or XSS-prone React patterns
+
+### Full PR-Level Reviews
+
+For full PR reviews (all changed files, multiple concerns), recommend the user
+run `/code-review:code-review` rather than doing it inline. That command runs
+5 parallel Sonnet agents via the Anthropic official code-review plugin and
+produces a more thorough result than a single inline pass.
+
 ## Companion Plugins
 
 If installed, leverage these plugins for better results:
-- `code-review@claude-plugins-official` — Use for structured review patterns
-  and common vulnerability detection.
+- `code-review@claude-plugins-official` — Use `/code-review:code-review` for
+  full PR-level reviews (5 parallel Sonnet agents).
 - `typescript-lsp@claude-plugins-official` — Use for type checking and diagnostics.
 
 ## Rules
@@ -79,3 +100,4 @@ If installed, leverage these plugins for better results:
 3. Use `git diff <base>...HEAD` to see the full diff.
 4. Be specific: include file paths and line numbers.
 5. Distinguish blockers (must fix) from warnings (nice to fix).
+6. Delegate security-sensitive changes to the `security-reviewer` agent.

@@ -1,7 +1,7 @@
 {
   "name": "x4",
   "description": "Complete AI-powered development workflow: project scaffolding, backlog management, agent team coordination, llms.txt reference docs, and hook-based guardrails",
-  "version": "3.15.0",
+  "version": "3.15.1",
   "author": {
     "name": "Corban Baxter",
     "email": "corban@example.com"

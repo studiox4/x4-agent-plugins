@@ -2,6 +2,11 @@
 
 ## x4
 
+### 3.15.1 (2026-04-07)
+
+- `agents/security-reviewer`: new read-only agent — audits tRPC procedure authorization (`publicProcedure` vs `protectedProcedure` vs `adminProcedure`), Better Auth session/token handling, API key exposure in client bundles, input validation at Hono + tRPC boundaries, CORS wildcard on credentialed routes, Drizzle raw SQL injection, and XSS via `dangerouslySetInnerHTML`; reports only confirmed issues with file:line references, no style opinions
+- `agents/reviewer`: added "Delegating to Specialized Agents" section — spawns `security-reviewer` when changes touch auth, API keys, tRPC authorization, or security-sensitive code; recommends `/code-review:code-review` for full PR-level reviews instead of doing them inline; rule #6 added accordingly
+
 ### 3.15.0 (2026-04-05)
 
 - `/init-setup` Step 4b: new auto-release wizard — scaffolds `.github/workflows/release.yml` when GitHub Actions is selected; workflow triggers on merge to main, parses conventional commits for bump type (feat→minor, fix→patch, BREAKING→major), tags the commit, and creates a GitHub Release with auto-generated notes

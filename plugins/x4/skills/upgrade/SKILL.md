@@ -10,14 +10,14 @@ license: MIT
 Detects gaps between the current plugin version and what's been applied to
 this project. Applies only what's missing — idempotent, always safe to re-run.
 
-<!-- CURRENT_VERSION: 3.15.0 -->
+<!-- CURRENT_VERSION: 3.15.1 -->
 <!-- Updated automatically by /release — do not edit this line manually -->
 
 ## Process
 
 ### Step 1: Detect project state
 
-1. Read the current plugin version from the `CURRENT_VERSION` comment above: `3.15.0`
+1. Read the current plugin version from the `CURRENT_VERSION` comment above: `3.15.1`
 
 2. Read the project's last-applied version from `.claude/x4-version`:
    - If the file exists, read its contents (trim whitespace)
@@ -82,7 +82,7 @@ Apply each confirmed migration. Report each as it completes:
 Write the current plugin version to `.claude/x4-version`:
 
 ```bash
-echo "3.15.0" > .claude/x4-version
+echo "3.15.1" > .claude/x4-version
 ```
 
 Create `.claude/` if it doesn't exist.
