@@ -16,6 +16,11 @@
       "name": "code-simplifier",
       "marketplace": "claude-plugins-official",
       "reason": "Runs code quality simplification during /work Phase 4 review"
+    },
+    {
+      "name": "pr-review-toolkit",
+      "marketplace": "claude-plugins-official",
+      "reason": "Provides specialized parallel review agents for /pr-review (code, security, silent failures, test coverage)"
     }
   ]
 }
