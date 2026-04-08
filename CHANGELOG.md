@@ -2,6 +2,11 @@
 
 ## x4
 
+### 3.16.0 (2026-04-07)
+
+- `/pr-review`: new command — reviews an open pull request after it's been pushed; resolves PR from current branch or optional number/URL, fetches full diff via `gh pr diff`, dispatches code reviewer and security reviewer agents in parallel, consolidates findings into a merge-readiness report with `[SECURITY]`, `[BUG]`, `[QUALITY]` blockers separated from warnings; uses `pr-review-toolkit@claude-plugins-official` when installed for richer parallel passes
+- `plugin.json`: added `pr-review-toolkit@claude-plugins-official` to `recommendations` so users are prompted to install it alongside x4
+
 ### 3.15.1 (2026-04-07)
 
 - `agents/security-reviewer`: new read-only agent — audits tRPC procedure authorization (`publicProcedure` vs `protectedProcedure` vs `adminProcedure`), Better Auth session/token handling, API key exposure in client bundles, input validation at Hono + tRPC boundaries, CORS wildcard on credentialed routes, Drizzle raw SQL injection, and XSS via `dangerouslySetInnerHTML`; reports only confirmed issues with file:line references, no style opinions
