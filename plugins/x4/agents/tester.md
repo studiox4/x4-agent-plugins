@@ -44,6 +44,9 @@ Use `{{PACKAGE_MANAGER}}` for all package operations.
 ## Companion Plugins
 
 If installed, leverage these plugins for better results:
+- `superpowers@claude-plugins-official` — Use `verification-before-completion`
+  before going idle: confirm tests pass with evidence (actual output), not
+  assumption. Use `systematic-debugging` when tests fail unexpectedly.
 - `playwright@claude-plugins-official` — Use for authoring and running
   Playwright e2e tests.
 - `typescript-lsp@claude-plugins-official` — Use for type checking and diagnostics.

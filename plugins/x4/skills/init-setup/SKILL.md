@@ -320,6 +320,13 @@ pr:
   convert_on_ship: true
   labels: []
 
+# Agent dispatch mode:
+#   auto     — try native agent teams, fall back to parallel subagents (default)
+#   teams    — require native agent teams; stop with guidance if unavailable
+#   subagents — always use parallel Agent subagents, skip TeamCreate
+# To enable native agent teams: set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+team_mode: auto
+
 # [Only include if user configured marketing in Step 6b]
 marketing:
   enabled: true
@@ -561,6 +568,10 @@ Show the user a summary of what was configured and tell them:
 - They can re-run `/init-setup` anytime to reconfigure
 - They can edit `.claude/agent-team.config.md` directly
 - Run `/init-agents` next to generate agent files
+- **To enable native agent teams** (faster, inter-agent messaging): set
+  `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in your shell, then set
+  `team_mode: teams` in `.claude/agent-team.config.md`. Without this,
+  `/work` falls back to parallel subagents automatically.
 - Run `/e2e-setup` to scaffold Playwright suites for each app (if skipped during setup)
 - Use `/idea` to capture features and `/plan-backlog` to write PRDs
 - Run `/opensrc-update` anytime to refresh source code references
