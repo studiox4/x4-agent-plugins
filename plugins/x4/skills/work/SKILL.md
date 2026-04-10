@@ -225,12 +225,17 @@ PRD moved to `in-progress/`, status file updated.
 
 3. **Spawn teammates.**
 
-   **Dispatch method — try native agent teams first, fall back to subagents:**
+   **Read `team_mode` from config first:**
 
-   **Option A — Native agent teams (preferred):**
-   Use `TeamCreate` to spawn the build team. If `TeamCreate` is available and
-   succeeds, use it. Native teams can communicate via `SendMessage`, share
-   task lists, and are coordinated by the TeammateIdle hook.
+   | `team_mode` | Behavior |
+   |-------------|----------|
+   | `"auto"` (default) | Try `TeamCreate`; fall back to subagents only on tool-not-found |
+   | `"teams"` | Require `TeamCreate`; stop with env var guidance if unavailable |
+   | `"subagents"` | Skip `TeamCreate`; always use parallel Agent subagents |
+
+   **Option A — Native agent teams:**
+   Use `TeamCreate` to spawn the build team. Native teams can communicate via
+   `SendMessage`, share task lists, and are coordinated by the TeammateIdle hook.
 
    ```
    TeamCreate({
@@ -244,17 +249,27 @@ PRD moved to `in-progress/`, status file updated.
    ```
 
    **Option B — Subagent fallback:**
-   If `TeamCreate` is not available (tool not found, env flag not set, or
-   returns an error), fall back to the `Agent` tool. Dispatch each role as a
-   parallel `Agent` call with `run_in_background: true`. Each agent gets the
-   same context as Option A.
+   Use the `Agent` tool. Dispatch each role as a parallel `Agent` call with
+   `run_in_background: true`. Each agent gets the same context as Option A.
 
-   **Detection logic:**
-   1. Attempt `TeamCreate`. If it succeeds → Option A, continue with team coordination.
-   2. If `TeamCreate` throws "tool not found" or "feature not available" →
-      immediately switch to Option B without re-prompting the user. Log:
-      `"Agent teams unavailable — dispatching as parallel subagents."`
-   3. Never silently fall through to single-agent sequential execution.
+   **Dispatch logic:**
+   1. Read `team_mode` from `.claude/agent-team.config.md` (default: `"auto"`).
+   2. **If `team_mode: "teams"`:** Attempt `TeamCreate`. If it fails for any
+      reason, stop and tell the user:
+      > "Agent teams are required (`team_mode: teams`) but `TeamCreate` is
+      > unavailable. To enable native agent teams:
+      > 1. Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in your shell
+      > 2. Restart Claude Code
+      > 3. Re-run `/work`
+      > Or set `team_mode: auto` in `.claude/agent-team.config.md` to allow
+      > subagent fallback."
+   3. **If `team_mode: "auto"`:** Attempt `TeamCreate`. Fall back to Option B
+      **only** if the error message contains "tool not found", "not available",
+      or "unknown tool" — these indicate the feature flag is off. Any other error
+      (permissions, malformed input, etc.) should be reported to the user, not
+      silently swallowed. Log: `"Agent teams unavailable — falling back to parallel subagents."`
+   4. **If `team_mode: "subagents"`:** Use Option B directly. Skip `TeamCreate`.
+   5. Never silently fall through to single-agent sequential execution.
 
    **Context to pass each agent (both options):**
    - The agent's `.md` file (from `.claude/agents/<role>.md`)
@@ -270,6 +285,13 @@ PRD moved to `in-progress/`, status file updated.
        chore: <desc>    → tooling, deps, non-user-facing changes
        refactor: <desc> → code change with no behavior change
      The CI release workflow reads these to determine version bumps."`
+
+   **[If `superpowers@claude-plugins-official` is installed]** Append to each
+   build agent's prompt:
+   `"Use the superpowers \`test-driven-development\` skill when writing new
+   code — write a failing test first, implement until it passes, then refactor
+   (RED → GREEN → REFACTOR). Use \`verification-before-completion\` before
+   going idle to confirm your work is actually done with evidence."`
 
 4. **[If `shared_packages` is configured] Shared package coordination.**
 - Include coordination instructions in teammate prompts:
@@ -308,10 +330,16 @@ on the feature branch.
 
 ### Steps
 
+0. **[If `superpowers@claude-plugins-official` is installed] Pre-review gate.**
+   Invoke the `requesting-code-review` skill before spawning reviewer agents.
+   This runs the pre-review checklist — tests passing, no debug artifacts,
+   formatting clean — and may surface quick self-fixes before reviewers see
+   the diff. If the checklist surfaces issues, fix them first, then proceed.
+
 1. **Spawn reviewer and performance agents in parallel.**
 
-   Use the same dispatch strategy as Phase 3 (native teams preferred, subagent
-   fallback). Both agents run simultaneously to minimize review time.
+   Use the same `team_mode` dispatch strategy as Phase 3. Both agents run
+   simultaneously to minimize review time.
 
    **Reviewer agent:**
    - Use the reviewer's `.md` file from `.claude/agents/reviewer.md`.
@@ -601,9 +629,9 @@ After Phase 7 completes for the current PRD:
 
 ### Parallel Execution
 
-Requires agent teams (`team_mode: "auto"` or `"teams"` with
-`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` set). If not available, this
-mode does not appear in the Phase 1 menu.
+Requires `team_mode: "auto"` or `"teams"` with
+`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` set. If `TeamCreate` is unavailable
+under `auto`, this mode does not appear in the Phase 1 menu.
 
 **Wave execution:**
 

@@ -45,6 +45,15 @@ Use `{{PACKAGE_MANAGER}}` for all package operations.
 
 {{REFERENCE_DOCS}}
 
+## Companion Plugins
+
+If installed, leverage these plugins for better results:
+- `superpowers@claude-plugins-official` — Use the `test-driven-development`
+  skill when writing new code: write a failing test first, implement until it
+  passes, then refactor (RED → GREEN → REFACTOR). Use
+  `verification-before-completion` before going idle.
+- `typescript-lsp@claude-plugins-official` — Use for type checking and diagnostics.
+
 ## Rules
 
 1. Stay within your owned directories. Never touch frontend code.
