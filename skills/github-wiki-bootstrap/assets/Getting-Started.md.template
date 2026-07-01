@@ -1,0 +1,23 @@
+# Getting Started
+
+_This is a stub — replace it with real setup steps for {{REPO_NAME}}._
+
+## Prerequisites
+
+- _List runtimes, tools, or accounts someone needs before they start._
+
+## Install
+
+```bash
+git clone {{REPO_URL}}.git
+cd {{REPO_NAME}}
+# install steps here
+```
+
+## Run it
+
+- _What command starts it? What should someone see if it worked?_
+
+## Common setup issues
+
+- _Add real gotchas here as people hit them — that's what this section is for._

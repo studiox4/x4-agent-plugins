@@ -1,0 +1,15 @@
+# Architecture
+
+_This is a stub — replace it with a real overview of how {{REPO_NAME}} is put together._
+
+## Components
+
+- _Name the major pieces and what each one owns._
+
+## Data flow
+
+- _How does a request or a piece of data move through the system, start to finish?_
+
+## Key decisions
+
+- _Anything a new contributor would otherwise have to ask in Slack — put it here instead._

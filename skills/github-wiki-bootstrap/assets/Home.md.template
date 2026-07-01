@@ -1,0 +1,27 @@
+# {{REPO_NAME}}
+
+{{REPO_DESC}}
+
+Welcome to the wiki for **{{REPO_NAME}}**. This page is the front door — keep it short and point people to the right place rather than trying to explain everything here.
+
+## Start here
+
+- [Getting Started](Getting-Started) — install, configure, and run it for the first time
+- [Architecture](Architecture) — how the pieces fit together
+- [FAQ](FAQ) — common questions and gotchas, added as they come up
+
+## Contributing to this wiki
+
+Anyone with write access to this repo can edit these pages — either right here in the browser (click **New Page** or the pencil icon), or locally:
+
+```bash
+git clone {{REPO_URL}}.wiki.git
+cd {{REPO_NAME}}.wiki
+# edit, then:
+git add . && git commit -m "Update docs" && git push origin master
+```
+
+`_Sidebar.md` controls the navigation on the left, and `_Footer.md` controls what shows up at the bottom of every page.
+
+---
+_Starter pages generated {{DATE}}. Replace this note and the stub pages with real project content._
