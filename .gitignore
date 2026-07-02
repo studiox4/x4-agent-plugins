@@ -1,0 +1,12 @@
+# Generated briefs — regenerate anytime with Claude
+.briefs/
+
+# Skill-creator evaluation workspaces and eval definitions — generated output, not source
+skill-creator-workspace/
+plugins/x4/skills/*/evals/
+
+# Local Claude Code settings
+.claude/settings.local.json
+
+# Superpowers design specs (session artifacts)
+docs/superpowers/
