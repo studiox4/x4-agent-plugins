@@ -2,6 +2,11 @@
 
 ## x4
 
+### 3.16.0 (2026-07-02)
+
+- Consolidated the `x4` plugin repo onto this working copy (`x4-skills`), superseding the separately-cloned `studiox4/x4-agent-plugins` checkout as source of truth
+- `skills/github-wiki-bootstrap`: new user-invoked skill — bootstraps and maintains a GitHub repo's wiki from the command line (enable + seed starter pages, or sync pages against a merged/open PR)
+
 ### 3.15.1 (2026-04-07)
 
 - `agents/security-reviewer`: new read-only agent — audits tRPC procedure authorization (`publicProcedure` vs `protectedProcedure` vs `adminProcedure`), Better Auth session/token handling, API key exposure in client bundles, input validation at Hono + tRPC boundaries, CORS wildcard on credentialed routes, Drizzle raw SQL injection, and XSS via `dangerouslySetInnerHTML`; reports only confirmed issues with file:line references, no style opinions
