@@ -7,6 +7,3 @@ plugins/x4/skills/*/evals/
 
 # Local Claude Code settings
 .claude/settings.local.json
-
-# Superpowers design specs (session artifacts)
-docs/superpowers/
