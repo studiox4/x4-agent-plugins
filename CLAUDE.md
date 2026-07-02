@@ -103,3 +103,22 @@ GitHub Actions (`.github/workflows/validate.yml`) runs on push and PR:
 The x4 plugin integrates with these when installed (degrades gracefully without them):
 - `superpowers@claude-plugins-official` — `/brainstorming` and `/writing-plans` in `/x4:plan-backlog`
 - `code-simplifier@claude-plugins-official` — Code quality in `/x4:work` Phase 4
+
+## Adding a new skill
+
+Every skill lives at `plugins/x4/skills/<skill-name>/SKILL.md` — flat, no
+category subfolders. Because this repo ships exactly one plugin named `x4`,
+every skill automatically resolves as `/x4:<skill-name>` with no collision
+risk from other marketplaces.
+
+1. Create `plugins/x4/skills/<skill-name>/SKILL.md` with YAML frontmatter
+   (`name`, `description`; add `disable-model-invocation: true` if it should
+   only ever be user-invoked via `/x4:<skill-name>`, never auto-triggered).
+2. Put any supporting scripts/templates/references in
+   `plugins/x4/skills/<skill-name>/{scripts,assets,references}/` as needed —
+   see `plugins/x4/skills/github-wiki-bootstrap/` for the pattern.
+3. Run `bash tests/validate.sh` before committing.
+4. Bump the version with `/release [patch|minor|major]` (new skill = `minor`).
+5. If skill count in `plugins/x4/skills/` grows large enough that flat listing
+   becomes hard to navigate, revisit bucket folders (`engineering/`,
+   `productivity/`, etc., mirroring `mattpocock/skills`) — not needed yet.
