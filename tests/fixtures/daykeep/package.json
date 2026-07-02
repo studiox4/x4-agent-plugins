@@ -1,0 +1,17 @@
+{
+  "name": "daykeep",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "hono": "^4.0.0",
+    "drizzle-orm": "^0.30.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "typescript": "^5.0.0",
+    "prettier": "^3.0.0"
+  }
+}
